@@ -1,0 +1,25 @@
+dev:
+  propel:
+    param:
+      classname:  DebugPDO
+      hostspec:   www.skule.ca
+      username:   webdev_client
+      password:   b33pb00p
+      database:   webdev_staging
+
+test:
+  propel:
+    param:
+      classname:  DebugPDO
+
+all:
+  propel:
+    class:        sfPropelDatabase
+    param:
+      classname:  PropelPDO
+      dsn:        mysql:dbname=webdev_staging;host=www.skule.ca
+      username:   webdev_client
+      password:   b33pb00p
+      encoding:   utf8
+      persistent: true
+      pooling:    true

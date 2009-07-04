@@ -1,0 +1,21 @@
+#searchbar
+{
+	border: 1px solid #000;
+	position: fixed;
+	top:80%;
+	right:10%;
+	width: 250px;
+	height: 50px;
+	padding: 2px;
+	font: 9pt verdana;
+}
+
+#searchbar input
+{
+	margin-top: 5px;
+	font: 9pt verdana;
+	border: #000 1px solid;
+	background-color: #ffffff;
+	height: 20px;
+	vertical-align:middle;
+}
