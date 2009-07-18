@@ -1,19 +1,22 @@
 <?PHP
 
-class SearchBar
+class searchBar
 {
   public static function get()
   {
+    sfProjectConfiguration::getActive()->loadHelpers(array("Url"));
+    sfProjectConfiguration::getActive()->loadHelpers(array("Tag"));
+    
     return "<div id='searchbar'>
-      <form name='frmSearchBar' method=post action=''>
+      <form name='frmSearchBar' method='get' action='".url_for("search/fuzzySearch")."'>
         Quick course search
         <table>
           <tr>
             <td>
-              <input type='text' value='dfdf' style='width:200px' />
+              <input name='query' type='text' style='width:200px' />
             </td>
             <td>
-              <input type='submit' value='GO'/>
+              <a class='find' onclick='return document.frmSearchBar.submit();'></a>
             </td>
           </tr>
         </table>

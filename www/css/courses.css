@@ -7,7 +7,9 @@
 	width: 250px;
 	height: 50px;
 	padding: 2px;
-	font: 9pt verdana;
+	background-color: #fff;
+	z-index: 100;
+	text-align: left;
 }
 
 #searchbar input
@@ -19,3 +21,67 @@
 	height: 20px;
 	vertical-align:middle;
 }
+
+#wrapper{
+	position: relative;
+	text-align: center;
+	width: 1000px;
+}
+
+#submenu
+{
+	text-align: right;
+	position: relative;
+	width:200px;
+	float: left;
+}
+#submenu li { padding:2px;}
+
+#content
+{
+	position: relative;
+	width:700px;
+	text-align: left;
+	float: left;
+	padding: 10px;
+	border: solid 1px #000;
+}
+
+div.resultset
+{
+	border: solid 1px #000;
+	overflow: auto;
+	width: 400px;
+	height: 500px;
+}
+
+table.description{}
+table.description td { vertical-align:top;}
+table.description td.title { width:150px;}
+
+li
+{
+ list-style: none;
+}
+
+a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../images/reload.gif);}
+a.reload:hover {background: url(../images/reload.on.gif);}
+
+a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../images/find.gif);}
+a.find:hover {background: url(../images/find.on.gif);}
+
+div.popupmenu
+{
+	position: absolute;
+	background-color: #fff;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	right:-80px;
+	float: right;
+	z-index: 100;
+	border: solid 1px #000;
+	width: 80px;
+	text-align: center;
+}
+div.popupmenu a {position: relative; display: block;}

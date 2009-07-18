@@ -1,3 +1,5 @@
-#Sat Jul 04 10:49:12 EDT 2009
+#Tue Jul 14 08:49:53 EDT 2009
 eclipse.preferences.version=1
 include_path=0;/skule_courses
+org.eclipse.php.core.phpForamtterIndentationSize=2
+org.eclipse.php.core.phpForamtterUseTabs=false

@@ -7,8 +7,12 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/courses.css" />
+    <script type='text/javascript' src='/js/popupMenu.js'></script>
   </head>
   <body>
-    <?php echo $sf_content ?>
+  	<div id='wrapper'>
+  	<?php echo searchBar::get(); ?>
+	<?php echo $sf_content ?>
+	</div>
   </body>
 </html>

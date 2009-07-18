@@ -627,7 +627,6 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
           {
             $dir = str_replace('%SF_ROOT_DIR%', sfConfig::get('sf_root_dir'), $dir);
           }
-
           throw new InvalidArgumentException(sprintf('Unable to load "%sHelper.php" helper in: %s.', $helperName, implode(', ', $dirs)));
         }
       }

@@ -10,15 +10,157 @@
  */
 class searchActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
+  //TODO: need to check malicious strings
+  const SEARCH_BY_DEPARTMENT = 1;
+  const SEARCH_BY_INSTRUCTOR = 2;
+  const SEARCH_BY_PROGRAM = 3;
+  
   public function executeIndex(sfWebRequest $request)
   {
-    $this->searchBar = SearchBar::get();
-
-    $this->enum = EnumItemPeer::retrieveByPK(100, Propel::getConnection());
+    if ($request->hasParameter("selSearchType")){
+      $param = $request->getParameter("selSearchType");
+      
+	    switch ($param){
+	      case searchActions::SEARCH_BY_DEPARTMENT:
+	        $this->forward("search", "searchByDepartment");
+	        break;
+	      case searchActions::SEARCH_BY_INSTRUCTOR:
+	        $this->forward("search", "searchByInstructor");
+	        break;
+	      case searchActions::SEARCH_BY_PROGRAM:
+	        $this->forward("search", "searchByProgram");
+	        break;
+	    }
+      
+    } else {
+      $this->forward("search", "searchByDepartment");
+    }
+  }
+  
+  public function executeSearchByInstructor(sfWebRequest $request)
+  {
+    $conn = Propel::getConnection();
+    $today = getdate();
+    
+    $this->searchType = searchActions::SEARCH_BY_INSTRUCTOR;
+    $rawInstrList = InstructorPeer::getAll($conn);
+    $this->instructorList = array();
+    foreach ($rawInstrList as $obj){
+      $this->instructorList[$obj->getId()] = $obj->getLastName().", ".$obj->getFirstName();
+    }
+    
+    if ($request->hasParameter("instructor")){
+      $this->instructorId = $request->getParameter("instructor");
+      
+      // get result set
+      $instrObj = InstructorPeer::retrieveByPK($this->instructorId, $conn);
+      $this->resultTitle = "Results for ".$instrObj->getLastName().", ".$instrObj->getFirstName();
+      
+      $this->results = CoursePeer::findCoursesByInstructorId($this->instructorId, $conn);
+      
+    } else {
+      $this->instructorId = $rawInstrList[0]->getId();
+    }
+  }
+  
+  public function executeSearchByDepartment(sfWebRequest $request)
+  {
+    $conn = Propel::getConnection();
+    
+    $this->searchType = searchActions::SEARCH_BY_DEPARTMENT;
+    
+    $rawDeptList = DepartmentPeer::getAll($conn);
+    $deptList = array();
+    foreach ($rawDeptList as $obj){
+      $deptList[$obj->getId()] = $obj->getId();
+    }
+    $this->deptList = $deptList;
+    
+    if ($request->hasParameter("deptId")){
+      $deptId = $request->getParameter("deptId");
+      $this->deptId = $deptId;
+      
+      $deptObj = DepartmentPeer::retrieveByPK($deptId, $conn);
+      $this->resultTitle = "Results for ".$deptObj->getId()." (".$deptObj->getDescr().")";
+      
+      $this->results = $deptObj->getCourses(null, $conn);
+    } else {
+      $this->deptId = $rawDeptList[0]->getId();
+    }
+  }
+  
+  public function executeSearchByProgram(sfWebRequest $request)
+  {
+    $conn = Propel::getConnection();
+    $today = getdate();
+    
+    $this->searchType = searchActions::SEARCH_BY_PROGRAM;
+    $rawProgList = EnumItemPeer::getAllForParentNodeId(EnumItemPeer::DISCIPLINES_NODE_ID, $conn);
+    $this->programList = array();
+    foreach ($rawProgList as $obj){
+      $this->programList[$obj->getId()] = $obj->getDescr();
+    }
+    $this->yearList = array("1"=>"First Year", "2"=>"Second Year", "3"=>"Third Year", "4"=>"Fourth Year");
+    
+    if ($request->hasParameter("year") && $request->hasParameter("program")){
+      $this->programId = $request->getParameter("program");
+      $this->year = $request->getParameter("year");
+      
+      // get result set
+      $enum = EnumItemPeer::retrieveByPK($this->programId, $conn);
+      $this->resultTitle = "Results for ".$enum->getDescr();
+      
+      $this->results = CoursePeer::findCoursesByDisciplineIdAndYear($this->programId, $this->year, $conn);
+      
+    } else {
+      $this->programId = $rawProgList[0]->getId();
+      $this->year = 1;
+    }
+  }
+  
+  public function executeFuzzySearch(sfWebRequest $request)
+  {
+    if (!$request->hasParameter("query")) $this->forward("search", "index");
+    
+    $conn = Propel::getConnection();
+    $query = $request->getParameter("query");
+    $this->query = $query;
+    
+    $fuzzySearch = new fuzzySearch();
+    try {
+      $fuzzySearch->query($query, $conn);
+    } catch (Exception $e){
+      $this->error = $e;
+      return;
+    }
+    
+    $countCourseList = count($fuzzySearch->getCourseList());
+    $countInstrList = count($fuzzySearch->getInstructorList());
+    if (($countCourseList+$countInstrList)<1){
+      $this->error = "No result found.";
+    } else if ($countCourseList==1){
+      $list = $fuzzySearch->getCourseList();
+      $this->redirect("course/index?id=".$list[0]->getId());
+    } else {
+      $this->courseList = $fuzzySearch->getCourseList();
+      $this->instructorList = $fuzzySearch->getInstructorList();
+    }
+  }
+  
+  public function preExecute()
+  {
+    $submenu = new subMenu(subMenuOptions::BLANK);
+    $this->submenu = $submenu->get();
+    $this->searchTypeList = $this->getSearchTypeList();
+    $this->searchTypeFormName = "searchTypeForm";
+  }
+  
+  private function getSearchTypeList()
+  {
+    $list = array (
+      searchActions::SEARCH_BY_DEPARTMENT => 'Department',
+      searchActions::SEARCH_BY_PROGRAM => 'Program',
+      searchActions::SEARCH_BY_INSTRUCTOR => 'Instructor' );
+    return $list;
   }
 }

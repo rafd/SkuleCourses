@@ -6,6 +6,7 @@ dev:
       username:   webdev_client
       password:   b33pb00p
       database:   webdev_staging
+      phptype:    mysql
 
 test:
   propel:
@@ -23,3 +24,4 @@ all:
       encoding:   utf8
       persistent: true
       pooling:    true
+      phptype:    mysql
