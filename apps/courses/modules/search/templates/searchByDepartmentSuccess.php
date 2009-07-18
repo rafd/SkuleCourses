@@ -4,7 +4,7 @@
 	<h3>Course Search</h3>
 	<table>
 		<tr>
-			<td width="100">Search By: </td>
+			<td width="150">Search By: </td>
 			<td>
 				<form name="<?php echo $searchTypeFormName ?>" method="get" action="<?php echo url_for('search/index')?>">
 					<?php echo select_tag('selSearchType', options_for_select($searchTypeList, $searchType), array(
