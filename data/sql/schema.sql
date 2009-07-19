@@ -21,7 +21,7 @@ CREATE TABLE `course`
 	CONSTRAINT `course_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `course` VALUES ('AER201H1', 'AER', 'Engineering Design', 1);
 INSERT INTO `course` VALUES ('MAT194H1', 'MAT', 'Calculus I', 1);
@@ -57,7 +57,7 @@ CREATE TABLE `course_comment`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_detail
@@ -79,7 +79,7 @@ CREATE TABLE `course_detail`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `course_detail` VALUES (1, 'VGhpcyBjb3Vyc2UgYWRkcmVzc2VzIG9wZW4tZW5kZWQgYW5kIG11bHRpZGlzY2lwbGluYXJ5IGRlc2lnbiBwcm9ibGVtcywgd2l0aCB0aGUgb2JqZWN0aXZlIG9mIGludGVncmF0aW5nIGRlc2lnbiwgZW5naW5lZXJpbmcgYW5hbHlzaXMsIGFuZCBoYXJkd2FyZSBpbXBsZW1lbnRhdGlvbi4gVGhlIGVtcGhhc2lzIGluIHRoaXMgY291cnNlIGlzIG5vdCBvbiBzdHVkeWluZyBpbiBhIGNsYXNzcm9vbSBmcm9tIGEgbGlzdCBvZiB0b3BpY3MsIGJ1dCByYXRoZXIgaXQgaXMgYSBwcm9qZWN0IGNvdXJzZSwgYWx0aG91Z2ggdGhlIGZ1bmRhbWVudGFscyBvZiBkZXNpZ24gYXMgd2VsbCBhcyBzb21lIHByYWN0aWNhbCB0ZWNobmljYWwgbm90ZXMgd2lsbCBhbHNvIGJlIHRhdWdodCB0aHJvdWdoIHdlZWtseSBsZWN0dXJlcy4gQWZ0ZXIgYSBzZXJpZXMgb2YgbGVjdHVyZXMgc3R1ZGVudHMgd29yayBpbiB0ZWFtcyBvbiBhIHJlYWxpc3RpYyBwcm9qZWN0LiBUaGUgcHJvamVjdHMgYXJlIG9wZW4tZW5kZWQgZGVzaWduIHByb2JsZW1zIHJlbGF0aW5nIHRvIGZpZWxkcyBvZiBlbGVjdHJvbWVjaGFuaWNhbCwgY29tcHV0ZXIgaGFyZHdhcmUgYW5kIHNvZnR3YXJlLCBhbmQgaW5zdHJ1bWVudGF0aW9uIGFuZCBpbnRlcmZhY2luZy4=', 
 '1982-01-01', NULL, 'AER201H1');
@@ -106,7 +106,7 @@ CREATE TABLE `course_instructor_assoc`
 	CONSTRAINT `course_instructor_assoc_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `course_instructor_assoc` VALUES (1, 3, 'MAT194H1', 2008);
 INSERT INTO `course_instructor_assoc` VALUES (2, 2, 'CIV102H1', 2008);
@@ -141,7 +141,7 @@ CREATE TABLE `course_discipline_assoc`
 	CONSTRAINT `course_discipline_assoc_FK_2`
 		FOREIGN KEY (`discipline_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `course_discipline_assoc` VALUES (1, 'MAT194H1', 105, 1);
 INSERT INTO `course_discipline_assoc` VALUES (2, 'CIV102H1', 105, 1);
@@ -180,7 +180,7 @@ CREATE TABLE `course_rating_data`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- auto_course_rating_data
@@ -205,7 +205,7 @@ CREATE TABLE `auto_course_rating_data`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- department
@@ -220,7 +220,7 @@ CREATE TABLE `department`
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `department_I_1`(`descr`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `department` VALUES ('AER', 'Aerospace Science and Engineering');
 INSERT INTO `department` VALUES ('APS', 'Applied Science and Engineering');
@@ -261,7 +261,7 @@ CREATE TABLE `enum_item`
 	CONSTRAINT `enum_item_FK_1`
 		FOREIGN KEY (`parent_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `enum_item` VALUES (1, 1, '');
 INSERT INTO `enum_item` VALUES (10, 1, 'USER_TYPES');
@@ -324,7 +324,7 @@ CREATE TABLE `exam`
 	CONSTRAINT `exam_FK_2`
 		FOREIGN KEY (`type`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `exam` VALUES (1, 'ECE259H1', 61, 2008, 'Quiz 1', 'C#');
 
@@ -352,7 +352,7 @@ CREATE TABLE `exam_comment`
 	CONSTRAINT `exam_comment_FK_2`
 		FOREIGN KEY (`user_id`)
 		REFERENCES `user` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- instructor
@@ -374,7 +374,7 @@ CREATE TABLE `instructor`
 	CONSTRAINT `instructor_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `instructor` VALUES (1, 'Davis', 'Jim', 'AER');
 INSERT INTO `instructor` VALUES (2, 'Collins', 'Michael', 'CIV');
@@ -397,14 +397,14 @@ CREATE TABLE `instructor_detail`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`descr` TEXT  NOT NULL,
-	`instructor_id` VARCHAR(7)  NOT NULL,
+	`instructor_id` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `instructor_detail_FI_1` (`instructor_id`),
 	CONSTRAINT `instructor_detail_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- rating_field
@@ -423,7 +423,7 @@ CREATE TABLE `rating_field`
 	CONSTRAINT `rating_field_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `rating_field` VALUES (1, 'Q2xhcml0eSBvZiBpbnN0cnVjdG9yJ3MgbGVjdHVyZXM=', 23);
 
@@ -448,7 +448,7 @@ CREATE TABLE `user`
 	CONSTRAINT `user_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 INSERT INTO `user` VALUES (1, 'wildabyss', 'test', 11, 'wildabyss@gmail.com', '2009-06-19 00:00:00');
 

@@ -92,7 +92,7 @@ propel:
     _attributes:       { phpName: InstructorDetail }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
     descr:             { type: longvarchar, required: true }
-    instructor_id:     { type: varchar(7), required: true, foreignTable: instructor, foreignReference: id, onDelete: cascade }
+    instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id, onDelete: cascade }
 
   rating_field:
     _attributes:       { phpName: RatingField }
