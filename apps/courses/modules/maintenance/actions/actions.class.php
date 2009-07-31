@@ -17,6 +17,13 @@ class maintenanceActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    $this->forward('default', 'module');
+    if (helperFunctions::isLoggedIn())
+    {
+      
+    }
+    else
+    {
+      // redirect to log in page
+    }
   }
 }

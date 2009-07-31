@@ -37,4 +37,9 @@ class helperFunctions
         return "Fourth Year";
     }
   }
+  
+  public static function isLoggedIn()
+  {
+    return true;
+  }
 }

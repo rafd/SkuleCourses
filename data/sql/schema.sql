@@ -297,6 +297,49 @@ INSERT INTO `enum_item` VALUES (117, 100, 'Materials Engineering');
 INSERT INTO `enum_item` VALUES (118, 100, 'Mechanical Engineering');
 INSERT INTO `enum_item` VALUES (119, 100, 'Mineral Engineering');
 INSERT INTO `enum_item` VALUES (120, 100, 'Track One');
+INSERT INTO `enum_item` VALUES (200, 1, 'IMPORT_FILE_TYPES');
+INSERT INTO `enum_item` VALUES (201, 200, 'CSV');
+INSERT INTO `enum_item` VALUES (202, 200, 'XML');
+INSERT INTO `enum_item` VALUES (220, 1, 'MAPPING_ITEMS');
+INSERT INTO `enum_item` VALUES (221, 220, 'Ignore');
+INSERT INTO `enum_item` VALUES (222, 220, 'Course Code');
+INSERT INTO `enum_item` VALUES (223, 220, 'Course Name');
+INSERT INTO `enum_item` VALUES (224, 220, 'Instructor Name');
+INSERT INTO `enum_item` VALUES (225, 220, 'Number Enrolled');
+INSERT INTO `enum_item` VALUES (226, 220, 'Number Response');
+INSERT INTO `enum_item` VALUES (227, 220, 'Question');
+INSERT INTO `enum_item` VALUES (228, 220, 'Question Mean');
+INSERT INTO `enum_item` VALUES (229, 220, 'Question Median');
+INSERT INTO `enum_item` VALUES (230, 220, 'Department Name');
+
+#-----------------------------------------------------------------------------
+#-- import_mapping
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `import_mapping`;
+
+
+CREATE TABLE `import_mapping`
+(
+	`column` SMALLINT  NOT NULL,
+	`import_file_type` INTEGER  NOT NULL,
+	`mapping` INTEGER  NOT NULL,
+	`rating_field_id` INTEGER,
+	`question_rating` TINYINT,
+	PRIMARY KEY (`column`,`import_file_type`),
+	INDEX `import_mapping_FI_1` (`import_file_type`),
+	CONSTRAINT `import_mapping_FK_1`
+		FOREIGN KEY (`import_file_type`)
+		REFERENCES `enum_item` (`id`),
+	INDEX `import_mapping_FI_2` (`mapping`),
+	CONSTRAINT `import_mapping_FK_2`
+		FOREIGN KEY (`mapping`)
+		REFERENCES `enum_item` (`id`),
+	INDEX `import_mapping_FI_3` (`rating_field_id`),
+	CONSTRAINT `import_mapping_FK_3`
+		FOREIGN KEY (`rating_field_id`)
+		REFERENCES `rating_field` (`id`)
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- exam

@@ -94,6 +94,14 @@ propel:
     descr:             { type: longvarchar, required: true }
     instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id, onDelete: cascade }
 
+  import_mapping:
+    _attributes:       { phpName: ImportMapping }
+    column:            { type: smallint, required: true, primaryKey: true }
+    import_file_type:  { type: integer, required: true, primaryKey: true, foreignTable: enum_item, foreignReference: id }
+    mapping:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
+    rating_field_id:   { type: integer, required: false, foreignTable: rating_field, foreignReference: id }
+    question_rating:   { type: tinyint, required: false }
+
   rating_field:
     _attributes:       { phpName: RatingField }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
