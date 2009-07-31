@@ -32,6 +32,7 @@ INSERT INTO `course` VALUES ('ESC102H1', 'ESC', 'Praxis II', 1);
 INSERT INTO `course` VALUES ('ESC101H1', 'ESC', 'Praxis I', 1);
 INSERT INTO `course` VALUES ('ECE259H1', 'ECE', 'Electricity and Magnetism', 1);
 INSERT INTO `course` VALUES ('PHY190H1', 'PHY', 'Special Relativity', 1);
+INSERT INTO `course` VALUES ('STA286H1', 'STA', 'Probability and Statistics', 1);
 
 #-----------------------------------------------------------------------------
 #-- course_coment
@@ -300,6 +301,10 @@ INSERT INTO `enum_item` VALUES (120, 100, 'Track One');
 INSERT INTO `enum_item` VALUES (200, 1, 'IMPORT_FILE_TYPES');
 INSERT INTO `enum_item` VALUES (201, 200, 'CSV');
 INSERT INTO `enum_item` VALUES (202, 200, 'XML');
+INSERT INTO `enum_item` VALUES (210, 1, 'EXPORT_FILE_TYPES');
+INSERT INTO `enum_item` VALUES (211, 210, 'CSV');
+INSERT INTO `enum_item` VALUES (212, 210, 'PDF');
+INSERT INTO `enum_item` VALUES (213, 210, 'XLS');
 INSERT INTO `enum_item` VALUES (220, 1, 'MAPPING_ITEMS');
 INSERT INTO `enum_item` VALUES (221, 220, 'Ignore');
 INSERT INTO `enum_item` VALUES (222, 220, 'Course Code');
@@ -340,6 +345,16 @@ CREATE TABLE `import_mapping`
 		FOREIGN KEY (`rating_field_id`)
 		REFERENCES `rating_field` (`id`)
 )Type=InnoDB;
+
+INSERT INTO `import_mapping` VALUES (1, 201, 221, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (2, 201, 221, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (3, 201, 221, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (4, 201, 222, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (5, 201, 221, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (6, 201, 223, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (7, 201, 224, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (8, 201, 225, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (9, 201, 226, NULL, NULL);
 
 #-----------------------------------------------------------------------------
 #-- exam

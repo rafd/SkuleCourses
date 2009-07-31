@@ -27,6 +27,8 @@ class helperFunctions
   {
     switch ($numerical)
     {
+      case 0:
+        return "All";
       case 1:
         return "First Year";
       case 2:

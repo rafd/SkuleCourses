@@ -2,9 +2,9 @@ dev:
   propel:
     param:
       classname:  DebugPDO
-      hostspec:   www.skule.ca
-      username:   webdev_client
-      password:   b33pb00p
+      hostspec:   localhost
+      username:   root
+      password:   
       database:   webdev_staging
       phptype:    mysql
 
@@ -18,9 +18,9 @@ all:
     class:        sfPropelDatabase
     param:
       classname:  PropelPDO
-      dsn:        mysql:dbname=webdev_staging;host=www.skule.ca
-      username:   webdev_client
-      password:   b33pb00p
+      dsn:        mysql:dbname=webdev_staging;host=localhost
+      username:   root
+      password:   
       encoding:   utf8
       persistent: true
       pooling:    true

@@ -11,8 +11,8 @@
   </head>
   <body>
   	<div id='wrapper'>
-  	<?php echo searchBar::get(); ?>
-	<?php echo $sf_content ?>
+	  	<?php echo searchBar::get(); ?>
+		<?php echo $sf_content ?>
 	</div>
   </body>
 </html>

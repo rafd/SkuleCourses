@@ -6,14 +6,16 @@ class subMenu
   private $_menuOption;
   private $_examYearArray;
   private $_ratingYearArray;
+  private $_subOrderSelection;
   
-  public function __construct($subMenuOption)
+  public function __construct($subMenuOption, $subOrderSelection=null)
   {
     // load helpers for url
     sfProjectConfiguration::getActive()->loadHelpers(array("Url"));
     sfProjectConfiguration::getActive()->loadHelpers(array("Tag"));
     
     $this->_menuOption=$subMenuOption;
+    $this->_subOrderSelection = $subOrderSelection;
   }
   
   public function setCourseId($id)
@@ -37,6 +39,7 @@ class subMenu
     switch ($this->_menuOption)
     {
       case subMenuOptions::BLANK:
+        $returnStr .= $this->getMenuStud();
         break;
       case subMenuOptions::SINGLE_COURSE:
         $returnStr .= "<li>".link_to($this->_courseId, "course/index?id=".$this->_courseId)."</li>";
@@ -67,16 +70,31 @@ class subMenu
         	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Tests/Exams</a>
         </li>";
         $returnStr .= "<br/>";
+        $returnStr .= $this->getMenuStud();
         break;
       case subMenuOptions::SEARCH_RESULT:
         //TODO
+        $returnStr .= $this->getMenuStud();
+        break;
+      case subMenuOptions::MAINTENANCE:
+        $returnStr .= $this->getMenuStud();
+        foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
+        {
+          $returnStr .= "<li>".link_to($key, $value)."</li>";
+        }
+        $returnStr.="<br/>";
         break;
     }
     
-    $returnStr .= "<li>".link_to("Search","search/index")."</li>
-    <li>".link_to("Maintenance","maintenance/index")."</li></div>";
+    $returnStr .= "</div>";
     
     return $returnStr;
+  }
+  
+  private function getMenuStud()
+  {
+    return "<li>".link_to("Search","search/index")."</li><br/>
+    <li>".link_to("Maintenance","maintenance/index")."</li>";
   }
 }
 
@@ -85,4 +103,16 @@ class subMenuOptions
   const BLANK = 1;
   const SINGLE_COURSE = 2;
   const SEARCH_RESULT = 3;
+  const MAINTENANCE = 4;
+  
+  public static function getMaintenanceSections()
+  {
+    return array("Courses"=>"maintenance/courses", 
+    "Instructors"=>"maintenance/instructors",
+    "Departments"=>"maintenance/departments",
+    "Disciplines"=>"maintenance/disciplines",
+    "Rating Criteria"=>"maintenance/ratingfields",
+    "Import History"=>"maintenance/importhistory",
+    "Import Ratings"=>"maintenance/importratings");
+  }
 }

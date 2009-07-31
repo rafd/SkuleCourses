@@ -9,38 +9,52 @@
 	</table>
 	<?php else:?>
 	<table>
+		<?php if (count($courseList)):?>
 		<tr>
-			<td>Course Results</td>
+			<td><h3>Courses</h3></td>
 		</tr>
 		<tr>
 			<td>
-				<div class='resultset'>
-	  				<ul>
-		  				<?php foreach ($courseList as $courseObj):?>
-		  				<li><?php echo link_to($courseObj->getId()." - ".$courseObj->getDescr(), "course/index?id=".$courseObj->getId())?></li>
-		  				<?php endforeach;?>
-	  				</ul>
-	  			</div>
+  				<ul>
+	  				<?php foreach ($courseList as $courseObj):?>
+	  				<li><?php echo link_to($courseObj->getId()." - ".$courseObj->getDescr(), "course/index?id=".$courseObj->getId())?></li>
+	  				<?php endforeach;?>
+  				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
+		<?php endif;?>
+		<?php if (count($instructorList)>0):?>
 		<tr>
-			<td>Instructor Results</td>
+			<td>Instructors</td>
 		</tr>
 		<tr>
 			<td>
-				<div class='resultset'>
-	  				<ul>
-		  				<?php foreach ($instructorList as $instrObj):?>
-		  				<li><?php echo link_to($instrObj->getLastName().", ".$instrObj->getFirstName(), 
-		  					"search/searchByInstructor?instructor=".$instrObj->getId())?></li>
-		  				<?php endforeach;?>
-	  				</ul>
-	  			</div>
+  				<ul>
+	  				<?php foreach ($instructorList as $instrObj):?>
+	  				<li><?php echo link_to($instrObj->getLastName().", ".$instrObj->getFirstName(), 
+	  					"search/searchByInstructor?instructor=".$instrObj->getId())?></li>
+	  				<?php endforeach;?>
+  				</ul>
 			</td>
 		</tr>
+		<?php endif;?>
+		<?php if (count($programList)>0):?>
+		<tr>
+			<td>Programs</td>
+		</tr>
+		<tr>
+			<td>
+				<ul>
+					<?php foreach ($programList as $enumObj):?>
+					<li><?php echo link_to($enumObj->getDescr(), "search/searchByProgram?program=".$enumObj->getId())?></li>
+					<?php endforeach;?>
+				</ul>
+			</td>
+		</tr>
+		<?php endif;?>
 	</table>
 	<?php endif;?>
 </div>

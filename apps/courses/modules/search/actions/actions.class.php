@@ -100,7 +100,7 @@ class searchActions extends sfActions
     foreach ($rawProgList as $obj){
       $this->programList[$obj->getId()] = $obj->getDescr();
     }
-    $this->yearList = array("1"=>"First Year", "2"=>"Second Year", "3"=>"Third Year", "4"=>"Fourth Year");
+    $this->yearList = array("0"=>"All", "1"=>"First Year", "2"=>"Second Year", "3"=>"Third Year", "4"=>"Fourth Year");
     
     if ($request->hasParameter("year") && $request->hasParameter("program")){
       $this->programId = $request->getParameter("program");
@@ -136,7 +136,8 @@ class searchActions extends sfActions
     
     $countCourseList = count($fuzzySearch->getCourseList());
     $countInstrList = count($fuzzySearch->getInstructorList());
-    if (($countCourseList+$countInstrList)<1){
+    $countProgList = count($fuzzySearch->getProgramList());
+    if (($countCourseList+$countInstrList+$countProgList)<1){
       $this->error = "No result found.";
     } else if ($countCourseList==1){
       $list = $fuzzySearch->getCourseList();
@@ -144,6 +145,7 @@ class searchActions extends sfActions
     } else {
       $this->courseList = $fuzzySearch->getCourseList();
       $this->instructorList = $fuzzySearch->getInstructorList();
+      $this->programList = $fuzzySearch->getProgramList();
     }
   }
   

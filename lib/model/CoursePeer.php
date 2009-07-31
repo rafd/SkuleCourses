@@ -28,9 +28,13 @@ class CoursePeer extends BaseCoursePeer
     $c = new Criteria();
     $c->addJoin(CoursePeer::ID, CourseDisciplineAssociationPeer::COURSE_ID);
     $crit1 = $c->getNewCriterion(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $disciplineId);
-    $crit2 = $c->getNewCriterion(CourseDisciplineAssociationPeer::YEAR_OF_STUDY, $year);
     $c->addAnd($crit1);
-    $c->addAnd($crit2);
+    
+    if ($year>0){
+	    $crit2 = $c->getNewCriterion(CourseDisciplineAssociationPeer::YEAR_OF_STUDY, $year);
+	    $c->addAnd($crit2);
+    }
+    
     $c->setDistinct();
     $c->addAscendingOrderByColumn(CoursePeer::ID);
     return CoursePeer::doselect($c, $propelConnection);

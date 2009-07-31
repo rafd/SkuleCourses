@@ -9,6 +9,7 @@ class fuzzySearch
 {
   private $_profList;
   private $_courseList;
+  private $_programList;
   
   public function getInstructorList()
   {
@@ -18,6 +19,11 @@ class fuzzySearch
   public function getCourseList()
   {
     return $this->_courseList;
+  }
+  
+  public function getProgramList()
+  {
+    return $this->_programList;
   }
   
   public function query($query, $propelConnection)
@@ -48,6 +54,16 @@ class fuzzySearch
       $c->setDistinct();
       $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
       $this->_profList = InstructorPeer::doSelect($c, $propelConnection);
+      
+      // search for programs
+      $c = new Criteria();
+      $descrCrit = $c->getNewCriterion(EnumItemPeer::DESCR, "%".$refQuery."%");
+      $parentCrit = $c->getNewCriterion(EnumItemPeer::ID, EnumItemPeer::DISCIPLINES_NODE_ID);
+      $c->addAnd($parentCrit);
+      $c->addAnd($descrCrit);
+      $c->setDistinct();
+      $c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
+      $this->_programList = EnumItemPeer::doSelect($c, $propelConnection);
     }
   }
 }

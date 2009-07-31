@@ -24,13 +24,13 @@ CREATE TABLE `course`
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------
-#-- course_coment
+#-- course_comment
 #-----------------------------------------------------------------------------
 
-DROP TABLE IF EXISTS `course_coment`;
+DROP TABLE IF EXISTS `course_comment`;
 
 
-CREATE TABLE `course_coment`
+CREATE TABLE `course_comment`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`user_id` INTEGER  NOT NULL,
@@ -38,12 +38,12 @@ CREATE TABLE `course_coment`
 	`comment` TEXT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_coment_FI_1` (`user_id`),
-	CONSTRAINT `course_coment_FK_1`
+	INDEX `course_comment_FI_1` (`user_id`),
+	CONSTRAINT `course_comment_FK_1`
 		FOREIGN KEY (`user_id`)
 		REFERENCES `user` (`id`),
-	INDEX `course_coment_FI_2` (`course_id`),
-	CONSTRAINT `course_coment_FK_2`
+	INDEX `course_comment_FI_2` (`course_id`),
+	CONSTRAINT `course_comment_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
@@ -297,13 +297,42 @@ CREATE TABLE `instructor_detail`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`descr` TEXT  NOT NULL,
-	`instructor_id` VARCHAR(7)  NOT NULL,
+	`instructor_id` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `instructor_detail_FI_1` (`instructor_id`),
 	CONSTRAINT `instructor_detail_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`)
 		ON DELETE CASCADE
+)Type=MyISAM;
+
+#-----------------------------------------------------------------------------
+#-- import_mapping
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `import_mapping`;
+
+
+CREATE TABLE `import_mapping`
+(
+	`column` SMALLINT  NOT NULL,
+	`import_file_type` INTEGER  NOT NULL,
+	`mapping` INTEGER  NOT NULL,
+	`rating_field_id` INTEGER,
+	`question_rating` TINYINT,
+	PRIMARY KEY (`column`,`import_file_type`),
+	INDEX `import_mapping_FI_1` (`import_file_type`),
+	CONSTRAINT `import_mapping_FK_1`
+		FOREIGN KEY (`import_file_type`)
+		REFERENCES `enum_item` (`id`),
+	INDEX `import_mapping_FI_2` (`mapping`),
+	CONSTRAINT `import_mapping_FK_2`
+		FOREIGN KEY (`mapping`)
+		REFERENCES `enum_item` (`id`),
+	INDEX `import_mapping_FI_3` (`rating_field_id`),
+	CONSTRAINT `import_mapping_FK_3`
+		FOREIGN KEY (`rating_field_id`)
+		REFERENCES `rating_field` (`id`)
 )Type=MyISAM;
 
 #-----------------------------------------------------------------------------
