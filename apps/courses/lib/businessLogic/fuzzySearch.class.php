@@ -57,8 +57,8 @@ class fuzzySearch
       
       // search for programs
       $c = new Criteria();
-      $descrCrit = $c->getNewCriterion(EnumItemPeer::DESCR, "%".$refQuery."%");
-      $parentCrit = $c->getNewCriterion(EnumItemPeer::ID, EnumItemPeer::DISCIPLINES_NODE_ID);
+      $descrCrit = $c->getNewCriterion(EnumItemPeer::DESCR, "%".$refQuery."%", Criteria::LIKE);
+      $parentCrit = $c->getNewCriterion(EnumItemPeer::PARENT_ID, EnumItemPeer::DISCIPLINES_NODE_ID);
       $c->addAnd($parentCrit);
       $c->addAnd($descrCrit);
       $c->setDistinct();

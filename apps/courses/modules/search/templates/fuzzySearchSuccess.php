@@ -11,7 +11,7 @@
 	<table>
 		<?php if (count($courseList)):?>
 		<tr>
-			<td><h3>Courses</h3></td>
+			<td><b>Courses</b></td>
 		</tr>
 		<tr>
 			<td>
@@ -28,7 +28,7 @@
 		<?php endif;?>
 		<?php if (count($instructorList)>0):?>
 		<tr>
-			<td>Instructors</td>
+			<td><b>Instructors</b></td>
 		</tr>
 		<tr>
 			<td>
@@ -43,13 +43,13 @@
 		<?php endif;?>
 		<?php if (count($programList)>0):?>
 		<tr>
-			<td>Programs</td>
+			<td><b>Programs</b></td>
 		</tr>
 		<tr>
 			<td>
 				<ul>
 					<?php foreach ($programList as $enumObj):?>
-					<li><?php echo link_to($enumObj->getDescr(), "search/searchByProgram?program=".$enumObj->getId())?></li>
+					<li><?php echo link_to($enumObj->getDescr(), "search/searchByProgram?program=".$enumObj->getId()."&year=0")?></li>
 					<?php endforeach;?>
 				</ul>
 			</td>

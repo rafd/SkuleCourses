@@ -54,11 +54,67 @@ class courseActions extends sfActions
     
     if ($request->hasParameter("year"))
     {
+      $year = $request->getParameter("year");
       
+      // check if the year exists
+      $yearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
+      $err = true;
+      foreach ($yearArray as $y){
+        if ($year==$y) {
+          $err = false;
+          break;
+        }
+      }
+      if ($err) $this->forward404();
+      
+      $this->year = $year;
+      $this->instructorArr = CourseInstructorAssociationPeer::getInstructorsForCourseAndYear($id, $year, $conn);
+      
+      if ($request->hasParameter("instructor"))
+        $insId = $request->getParameter("instructor");
+      else
+        $insId = $this->instructorArr[0]->getId();
+      $this->currInstructor = InstructorPeer::retrieveByPK($insId, $conn);
+      
+      $dataObjArr = AutoCourseRatingPeer::getCourseDataArrayForInstructorAndYear($id, $insId, $year, $conn);
+      
+      $this->dataArr = array();
+      $arr = array();
+      foreach ($dataObjArr as $obj)
+      {
+        if ($obj->getFieldId() == RatingFieldPeer::NUMBER_ENROLLED)
+        {
+          $this->numberEnrolled = $obj->getNumber();
+        }
+        else if ($obj->getFieldId() == RatingFieldPeer::NUMBER_RESPONDED)
+        {
+          $this->numberResponded = $obj->getNumber();
+        }
+        else
+        {
+          if (!isset($currentNode)) {
+            $currentNode = $obj->getFieldId();
+            $arr["type"] = $obj->getRatingField()->getRatingTypeString();
+            $arr["field"] = $obj->getRatingField()->getDescr();
+            $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
+          }
+          
+          if ($currentNode!=$obj->getFieldId()){
+            $this->dataArr[] = $arr;
+            unset($arr);
+            $currentNode = $obj->getFieldId();
+            $arr["type"] = $obj->getRatingField()->getRatingTypeString();
+            $arr["field"] = $obj->getRatingField()->getDescr();
+            $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
+          }
+          $arr[$obj->getRating()] = $obj->getNumber();
+        }
+      }
+      $this->dataArr[] = $arr;
     }
     else
     {
-      // use the current year
+      $this->forward404();
     }
   }
   
@@ -72,12 +128,12 @@ class courseActions extends sfActions
     
     if ($request->hasParameter("year"))
     {
-      
+      $year = $request->getParameter("year");
+      //TODO
     }
     else
     {
-      // use the current year
-      
+      $this->forward404();
     }
   }
   

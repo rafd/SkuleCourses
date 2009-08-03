@@ -71,8 +71,8 @@ table.innerlayout { width: 100%; border: none; margin: none;}
 table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
 
 table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
-table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2;}
-table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2;}
+table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
 
 li
 {
@@ -88,6 +88,9 @@ a.find:hover {background: url(../images/find.on.gif);}
 
 a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../images/select.gif);}
 a.select:hover {background: url(../images/select.on.gif);}
+
+a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../images/help.gif) no-repeat;}
+a.help:hover {background: url(../images/help.on.gif);}
 
 div.popupmenu
 {

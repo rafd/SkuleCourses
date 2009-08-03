@@ -22,6 +22,12 @@ class EnumItemPeer extends BaseEnumItemPeer
   const MAPPING_NUMBER_RESPONSE = 226;
   const MAPPING_QUESTION = 227;
   
+  // question types
+  const RATING_BOOLEAN = 21;
+  const RATING_SCALE_FIVE = 22;
+  const RATING_SCALE_SEVEN = 23;
+  const RATING_NUMBER = 24;
+  
   public static function getAllForParentNodeId($parentId, PropelPDO $propelConnection=null)
   {
     $c = new Criteria();

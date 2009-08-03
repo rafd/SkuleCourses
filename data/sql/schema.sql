@@ -1,3 +1,4 @@
+﻿# This script creates the default database structure and establishes test data
 
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
@@ -35,7 +36,7 @@ INSERT INTO `course` VALUES ('PHY190H1', 'PHY', 'Special Relativity', 1);
 INSERT INTO `course` VALUES ('STA286H1', 'STA', 'Probability and Statistics', 1);
 
 #-----------------------------------------------------------------------------
-#-- course_coment
+#-- course_comment
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `course_comment`;
@@ -119,6 +120,7 @@ INSERT INTO `course_instructor_assoc` VALUES (7, 7, 'ECE259H1', 2008);
 INSERT INTO `course_instructor_assoc` VALUES (8, 9, 'PHY190H1', 2007);
 INSERT INTO `course_instructor_assoc` VALUES (9, 7, 'ECE259H1', 2007);
 INSERT INTO `course_instructor_assoc` VALUES (10, 7, 'ECE259H1', 2006);
+INSERT INTO `course_instructor_assoc` VALUES (11, 1, 'MAT195H1', 2008);
 
 #-----------------------------------------------------------------------------
 #-- course_discipline_assoc
@@ -164,10 +166,10 @@ CREATE TABLE `course_rating_data`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`user_id` INTEGER  NOT NULL,
 	`field_id` INTEGER  NOT NULL,
-	`course_id` VARCHAR(9)  NOT NULL,
+	`course_ins_id` INTEGER  NOT NULL,
 	`rating` TINYINT  NOT NULL,
-	`input_dt` DATETIME NOT NULL,
-	PRIMARY KEY (`id`),
+	`input_dt` DATETIME  NOT NULL,
+	PRIMARY KEY (`id`,`course_ins_id`),
 	INDEX `course_rating_data_FI_1` (`user_id`),
 	CONSTRAINT `course_rating_data_FK_1`
 		FOREIGN KEY (`user_id`)
@@ -176,10 +178,10 @@ CREATE TABLE `course_rating_data`
 	CONSTRAINT `course_rating_data_FK_2`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
-	INDEX `course_rating_data_FI_3` (`course_id`),
+	INDEX `course_rating_data_FI_3` (`course_ins_id`),
 	CONSTRAINT `course_rating_data_FK_3`
-		FOREIGN KEY (`course_id`)
-		REFERENCES `course` (`id`)
+		FOREIGN KEY (`course_ins_id`)
+		REFERENCES `course_instructor_assoc` (`id`)
 		ON DELETE CASCADE
 )Type=InnoDB;
 
@@ -193,20 +195,37 @@ DROP TABLE IF EXISTS `auto_course_rating_data`;
 CREATE TABLE `auto_course_rating_data`
 (
 	`field_id` INTEGER  NOT NULL,
-	`rating` TINYINT  NOT NULL,
+	`rating` SMALLINT  NOT NULL,
 	`import_dt` DATETIME  NOT NULL,
-	`course_id` VARCHAR(9)  NOT NULL,
+	`course_ins_id` INTEGER  NOT NULL,
 	`number` SMALLINT  NOT NULL,
-	PRIMARY KEY (`field_id`,`rating`,`import_dt`,`course_id`),
+	PRIMARY KEY (`field_id`,`rating`,`import_dt`,`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
-	INDEX `auto_course_rating_data_FI_2` (`course_id`),
+	INDEX `auto_course_rating_data_FI_2` (`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_2`
-		FOREIGN KEY (`course_id`)
-		REFERENCES `course` (`id`)
+		FOREIGN KEY (`course_ins_id`)
+		REFERENCES `course_instructor_assoc` (`id`)
 		ON DELETE CASCADE
 )Type=InnoDB;
+
+INSERT INTO `auto_course_rating_data` VALUES (3, 1, CURDATE(), 3, 3);
+INSERT INTO `auto_course_rating_data` VALUES (3, 2, CURDATE(), 3, 5);
+INSERT INTO `auto_course_rating_data` VALUES (3, 3, CURDATE(), 3, 16);
+INSERT INTO `auto_course_rating_data` VALUES (3, 4, CURDATE(), 3, 27);
+INSERT INTO `auto_course_rating_data` VALUES (3, 5, CURDATE(), 3, 81);
+INSERT INTO `auto_course_rating_data` VALUES (3, 6, CURDATE(), 3, 17);
+INSERT INTO `auto_course_rating_data` VALUES (3, 7, CURDATE(), 3, 4);
+INSERT INTO `auto_course_rating_data` VALUES (4, 1, CURDATE(), 3, 1);
+INSERT INTO `auto_course_rating_data` VALUES (4, 2, CURDATE(), 3, 8);
+INSERT INTO `auto_course_rating_data` VALUES (4, 3, CURDATE(), 3, 54);
+INSERT INTO `auto_course_rating_data` VALUES (4, 4, CURDATE(), 3, 31);
+INSERT INTO `auto_course_rating_data` VALUES (4, 5, CURDATE(), 3, 42);
+INSERT INTO `auto_course_rating_data` VALUES (4, 6, CURDATE(), 3, 7);
+INSERT INTO `auto_course_rating_data` VALUES (4, 7, CURDATE(), 3, 10);
+INSERT INTO `auto_course_rating_data` VALUES (1, 0, CURDATE(), 3, 225);
+INSERT INTO `auto_course_rating_data` VALUES (2, 0, CURDATE(), 3, 197);
 
 #-----------------------------------------------------------------------------
 #-- department
@@ -273,6 +292,7 @@ INSERT INTO `enum_item` VALUES (20, 1, 'RATING_TYPES');
 INSERT INTO `enum_item` VALUES (21, 20, 'Boolean');
 INSERT INTO `enum_item` VALUES (22, 20, 'ScaleFive');
 INSERT INTO `enum_item` VALUES (23, 20, 'ScaleSeven');
+INSERT INTO `enum_item` VALUES (24, 20, 'Number');
 INSERT INTO `enum_item` VALUES (60, 1, 'EXAM_TYPES');
 INSERT INTO `enum_item` VALUES (61, 60, 'Quiz');
 INSERT INTO `enum_item` VALUES (62, 60, 'Test');
@@ -298,6 +318,7 @@ INSERT INTO `enum_item` VALUES (117, 100, 'Materials Engineering');
 INSERT INTO `enum_item` VALUES (118, 100, 'Mechanical Engineering');
 INSERT INTO `enum_item` VALUES (119, 100, 'Mineral Engineering');
 INSERT INTO `enum_item` VALUES (120, 100, 'Track One');
+INSERT INTO `enum_item` VALUES (121, 100, 'Unknown');
 INSERT INTO `enum_item` VALUES (200, 1, 'IMPORT_FILE_TYPES');
 INSERT INTO `enum_item` VALUES (201, 200, 'CSV');
 INSERT INTO `enum_item` VALUES (202, 200, 'XML');
@@ -476,6 +497,7 @@ CREATE TABLE `rating_field`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`descr` VARCHAR(255)  NOT NULL,
 	`type_id` INTEGER  NOT NULL,
+	`is_reserved` TINYINT  NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `rating_field_FI_1` (`type_id`),
 	CONSTRAINT `rating_field_FK_1`
@@ -483,7 +505,10 @@ CREATE TABLE `rating_field`
 		REFERENCES `enum_item` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `rating_field` VALUES (1, 'Q2xhcml0eSBvZiBpbnN0cnVjdG9yJ3MgbGVjdHVyZXM=', 23);
+INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 24, 1);
+INSERT INTO `rating_field` VALUES (2, 'How many responded?', 24, 1);
+INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 23, 0);
+INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 23, 0);
 
 #-----------------------------------------------------------------------------
 #-- user

@@ -26,4 +26,16 @@ class CourseInstructorAssociationPeer extends BaseCourseInstructorAssociationPee
     $resultset = $statement->fetchAll();
     return $resultset;
   }
+  
+  public static function getInstructorsForCourseAndYear($courseId, $year, PropelPDO $propelConnection)
+  {
+    $c = new Criteria();
+    $c->addJoin(CourseInstructorAssociationPeer::INSTRUCTOR_ID, InstructorPeer::ID);
+    $crit1 = $c->getNewCriterion(CourseInstructorAssociationPeer::COURSE_ID, $courseId);
+    $crit2 = $c->getNewCriterion(CourseInstructorAssociationPeer::YEAR, $year);
+    $c->addAnd($crit1);
+    $c->addAnd($crit2);
+    $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
+    return InstructorPeer::doSelect($c, $propelConnection);
+  }
 }

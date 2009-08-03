@@ -26,7 +26,7 @@ class subMenu
     //$courseObj = CoursePeer::retrieveByPK($id, $conn);
     
     // get rating data
-    $this->_ratingYearArray = CourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
+    $this->_ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
     
     // get exam data
     $this->_examYearArray = ExamPeer::getAvailableYearsForCourseId($id, $conn);
