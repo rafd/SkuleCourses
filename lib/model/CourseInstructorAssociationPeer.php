@@ -38,4 +38,32 @@ class CourseInstructorAssociationPeer extends BaseCourseInstructorAssociationPee
     $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
     return InstructorPeer::doSelect($c, $propelConnection);
   }
+  
+  public static function decipherCourseInsYear($year)
+  {
+    $arr = array();
+    $arr['year'] = substr($year, 0, 4);
+    $arr['term'] = helperFunctions::translateTerm(substr($year, 4));
+    return $arr;
+  }
+  
+  public static function findForYearAndInstructorIdAndCourseId($year, $courseId, $instrId, PropelPDO $conn)
+  {
+    $c = new Criteria();
+    $crit1 = $c->getNewCriterion(self::COURSE_ID, $courseId);
+    $crit2 = $c->getNewCriterion(self::YEAR, $year);
+    $crit3 = $c->getNewCriterion(self::INSTRUCTOR_ID, $instrId);
+    $c->addAnd($crit1);
+    $c->addAnd($crit2);
+    $c->addAnd($crit3);
+    $results = self::doSelect($c, $conn);
+    
+    if (!isset($results) && count($results) == 0){
+      throw new Exception("no association found", 1);
+    } elseif (count($results) == 1){
+      return $results[0];
+    } else {
+      throw new Exception("duplicate associations found", 2);
+    }
+  }
 }

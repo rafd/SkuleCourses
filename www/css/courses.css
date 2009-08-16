@@ -46,6 +46,7 @@
 	float: left;
 	padding: 10px;
 	border: solid 1px #000;
+	min-height: 500px
 }
 
 div.resultset
@@ -58,7 +59,7 @@ div.resultset
 
 table.description{}
 table.description td { vertical-align:top;}
-table.description td.title { width:150px;}
+table.description td.title { width:150px; }
 
 table.layout { width:100%; border:none;}
 table.layout tr { vertical-align:top;}
@@ -74,10 +75,8 @@ table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
 table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
 table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
 
-li
-{
- list-style: none;
-}
+ul {margin: 2px; padding-left: 10px}
+li {list-style: none;}
 
 /* buttons */
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../images/reload.gif);}
@@ -91,6 +90,21 @@ a.select:hover {background: url(../images/select.on.gif);}
 
 a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../images/help.gif) no-repeat;}
 a.help:hover {background: url(../images/help.on.gif);}
+a.help span {display:none}
+a.help:hover span{
+	display:block;
+	width: 200px;
+	position: absolute;
+	top: 25px;
+	border: 1px solid #0cf;
+	background-color: #cff;
+	color: #000;
+	text-align: left;
+	font: 8pt/14pt verdana;
+	padding: 5px;
+}
+
+.hidden {display:none}
 
 div.popupmenu
 {

@@ -1,3 +1,4 @@
+<script language='javascript' src='/js/FusionCharts.js'></script>
 <?php echo $submenu ?>
 <div id="content">
 	<h3>Course Critique for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)<br/><?php echo $year?> Edition</h3>
@@ -32,12 +33,13 @@
 				<tr>
 					<th width="150">Number Enrolled</th>
 					<th width="150">Number Responded</th>
-					<th width="150">Aggregated Rating<a class="help" style="float: right"></a></th>
+					<th width="150">Aggregated Rating<a class="help" style="float: right">
+					<span>The aggregated rating is the arithmetic average of the mean ratings of all questions below.</span></a></th>
 				</tr>
 				<tr>
 					<td><?php if (isset($numberEnrolled)) echo $numberEnrolled; else echo "?";?></td>
 					<td><?php if (isset($numberResponded)) echo $numberResponded; else echo "?";?></td>
-					<td>75%</td>
+					<td><?php echo $aggregatedRating ?></td>
 				</tr>
 			</table>
 			</td>
@@ -55,30 +57,40 @@
 			<td>
 				<table class="disptable">
 					<tr>
-						<th width="60">1</th>
-						<th width="60">2</th>
-						<th width="60">3</th>
-						<th width="60">4</th>
-						<th width="60">5</th>
-						<th width="60">6</th>
-						<th width="60">7</th>
-						<th width="60">Mean</th>
-						<th width="60">Median</th>
+						<?php if ($arr["typeObj"]->getId() == EnumItemPeer::RATING_BOOLEAN):?>
+							<th width="60">N/R</th>
+							<th width="60">True</th>
+							<th width="60">False</th>
+						<?php elseif ($arr["typeObj"]->getParentId() == EnumItemPeer::RATING_SCALE):?>
+							<th width="60">N/R</th>
+							<?php for ($i=1; $i<$arr["typeObj"]->getDescr(); $i++):?>
+							<th width="60"><?php echo $i?></th>
+							<?php endfor;?>
+							<th width="60">Mean</th>
+							<th width="60">Median</th>
+						<?php endif;?>
 					</tr>
 					<tr>
-						<td><?php echo $arr[1]?></td>
-						<td><?php echo $arr[2]?></td>
-						<td><?php echo $arr[3]?></td>
-						<td><?php echo $arr[4]?></td>
-						<td><?php echo $arr[5]?></td>
-						<td><?php echo $arr[6]?></td>
-						<td><?php echo $arr[7]?></td>
-						<td>?</td>
-						<td>?</td>
+						<?php if ($arr["typeObj"]->getId() == EnumItemPeer::RATING_BOOLEAN):?>
+							<td><?php echo $arr[0]?></td>
+							<td><?php echo $arr[1]?></td>
+							<td><?php echo $arr[2]?></td>
+						<?php elseif ($arr["typeObj"]->getParentId() == EnumItemPeer::RATING_SCALE):?>
+							<td><?php echo $arr[0]?></td>
+							<?php for ($i=1; $i<$arr["typeObj"]->getDescr(); $i++):?>
+							<td><?php echo $arr[$i]?></td>
+							<?php endfor;?>
+							<td><?php echo $arr["mean"]?></td>
+							<td><?php echo $arr["median"]?></td>
+						<?php endif;?>
 					</tr>
 				</table>
 			</td>
 		</tr>
+		<tr>
+			<td><?php $arr["chart"]->renderChart()?></td>
+		</tr>
 		<?php endforeach;?>
 	</table>
 </div>
+<img class='hidden' src='/images/help.on.gif' />

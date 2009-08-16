@@ -16,73 +16,89 @@ class subMenu
     
     $this->_menuOption=$subMenuOption;
     $this->_subOrderSelection = $subOrderSelection;
+    
+    $courseId = sfContext::getInstance()->getRequest()->getCookie('courseId');
+    if ($courseId) $this->_courseId = $courseId;
   }
   
   public function setCourseId($id)
   {
     $this->_courseId = $id;
-    
-    $conn = Propel::getConnection();
-    //$courseObj = CoursePeer::retrieveByPK($id, $conn);
-    
-    // get rating data
-    $this->_ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
-    
-    // get exam data
-    $this->_examYearArray = ExamPeer::getAvailableYearsForCourseId($id, $conn);
+  }
+  
+  public function setExamYearArray($arr)
+  {
+    $this->_examYearArray = $arr;
+  }
+  
+  public function setRatingYearArray($arr)
+  {
+    $this->_ratingYearArray = $arr;
   }
   
   public function get()
   {
     $returnStr = "<div id='submenu'>";
+    $returnStr .= $this->getMenuStud();
     
     switch ($this->_menuOption)
     {
-      case subMenuOptions::BLANK:
-        $returnStr .= $this->getMenuStud();
-        break;
-      case subMenuOptions::SINGLE_COURSE:
-        $returnStr .= "<li>".link_to($this->_courseId, "course/index?id=".$this->_courseId)."</li>";
+      case subMenuOptions::TYPICAL:
         
-        // critique
-        $returnStr .= "<li><div class='popupmenu' id='subCritique' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
-        if (count($this->_ratingYearArray)==0){
-          $returnStr .= "<a>None Available</a>";
-        } else {
-          foreach ($this->_ratingYearArray as $year){
-            $returnStr .= link_to($year, "course/critique?id=".$this->_courseId."&year=".$year);
-          }
-        }
-        $returnStr .= "</div>
-        	<a onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()'>Course Critique</a>
-        </li>";
+	    $conn = Propel::getConnection();
+	    
+	    if (isset($this->_courseId)) {
+	        if (!isset($this->_ratingYearArray)) {
+		      // get rating data
+	          $this->_ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($this->_courseId, $conn);
+		    }
+		    if (!isset($this->_examYearArray)) {
+		      // get exam data
+		      $this->_examYearArray = ExamPeer::getAvailableYearsForCourseId($this->_courseId, $conn);
+		    }
+	        
+	        $returnStr .= "<li>".link_to($this->_courseId, "course/index?id=".$this->_courseId)."</li>";
+	        
+	        // critique
+	        $returnStr .= "<li><div class='popupmenu' id='subCritique' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
+	        if (count($this->_ratingYearArray)==0){
+	          $returnStr .= "<a>None Available</a>";
+	        } else {
+	          foreach ($this->_ratingYearArray as $year){
+	            $returnStr .= link_to($year, "course/critique?id=".$this->_courseId."&year=".$year);
+	          }
+	        }
+	        $returnStr .= "</div>
+	        	<a onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()'>Course Critiques</a>
+	        </li>";
+	        
+	        // exams
+	        $returnStr .= "<li><div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
+	        if (count($this->_examYearArray)==0){
+	          $returnStr .= "<a>None Available</a>";
+	        } else {
+	          foreach ($this->_examYearArray as $year){
+	            $returnStr .= link_to($year, "course/exam?id=".$this->_courseId."&year=".$year);
+	          }
+	        }
+	        $returnStr .= "</div>
+	        	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a>
+	        </li><br/>";
+	    }
         
-        // exams
-        $returnStr .= "<li><div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
-        if (count($this->_examYearArray)==0){
-          $returnStr .= "<a>None Available</a>";
-        } else {
-          foreach ($this->_examYearArray as $year){
-            $returnStr .= link_to($year, "course/exam?id=".$this->_courseId."&year=".$year);
-          }
-        }
-        $returnStr .= "</div>
-        	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Tests/Exams</a>
-        </li>";
-        $returnStr .= "<br/>";
-        $returnStr .= $this->getMenuStud();
-        break;
-      case subMenuOptions::SEARCH_RESULT:
-        //TODO
-        $returnStr .= $this->getMenuStud();
         break;
       case subMenuOptions::MAINTENANCE:
-        $returnStr .= $this->getMenuStud();
+        
+        $returnStr .= "<li>".link_to("Maintenance","maintenance/index")."</li>";
+        
         foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
         {
           $returnStr .= "<li>".link_to($key, $value)."</li>";
         }
         $returnStr.="<br/>";
+        
+        break;
+      case subMenuOptions::BLANK:
         break;
     }
     
@@ -93,17 +109,15 @@ class subMenu
   
   private function getMenuStud()
   {
-    return "<li>".link_to("Search","search/index")."</li><br/>
-    <li>".link_to("Maintenance","maintenance/index")."</li>";
+    return "<li>".link_to("Search","search/index")."</li><br/>";
   }
 }
 
 class subMenuOptions
 {
-  const BLANK = 1;
-  const SINGLE_COURSE = 2;
-  const SEARCH_RESULT = 3;
-  const MAINTENANCE = 4;
+  const TYPICAL = 1;
+  const MAINTENANCE = 2;
+  const BLANK = 3;
   
   public static function getMaintenanceSections()
   {

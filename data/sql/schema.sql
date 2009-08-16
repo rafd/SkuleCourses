@@ -18,7 +18,7 @@ CREATE TABLE `course`
 	`descr` VARCHAR(255)  NOT NULL,
 	`is_eng` TINYINT default 1 NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_FI_1` (`dept_id`),
+	KEY `course_I_1`(`dept_id`),
 	CONSTRAINT `course_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
@@ -76,7 +76,7 @@ CREATE TABLE `course_detail`
 	`last_offered` DATE,
 	`course_id` VARCHAR(9)  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_detail_FI_1` (`course_id`),
+	KEY `course_detail_I_1`(`course_id`),
 	CONSTRAINT `course_detail_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
@@ -98,29 +98,29 @@ CREATE TABLE `course_instructor_assoc`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`instructor_id` INTEGER  NOT NULL,
 	`course_id` VARCHAR(9)  NOT NULL,
-	`year` SMALLINT  NOT NULL,
+	`year` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_instructor_assoc_FI_1` (`instructor_id`),
+	KEY `course_instructor_assoc_I_1`(`instructor_id`),
+	KEY `course_instructor_assoc_I_2`(`course_id`),
 	CONSTRAINT `course_instructor_assoc_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`),
-	INDEX `course_instructor_assoc_FI_2` (`course_id`),
 	CONSTRAINT `course_instructor_assoc_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `course_instructor_assoc` VALUES (1, 3, 'MAT194H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (2, 2, 'CIV102H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (3, 5, 'AER201H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (4, 4, 'ESC102H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (5, 4, 'ESC101H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (6, 6, 'ESC101H1', 2007);
-INSERT INTO `course_instructor_assoc` VALUES (7, 7, 'ECE259H1', 2008);
-INSERT INTO `course_instructor_assoc` VALUES (8, 9, 'PHY190H1', 2007);
-INSERT INTO `course_instructor_assoc` VALUES (9, 7, 'ECE259H1', 2007);
-INSERT INTO `course_instructor_assoc` VALUES (10, 7, 'ECE259H1', 2006);
-INSERT INTO `course_instructor_assoc` VALUES (11, 1, 'MAT195H1', 2008);
+INSERT INTO `course_instructor_assoc` VALUES (1, 3, 'MAT194H1', 200812);
+INSERT INTO `course_instructor_assoc` VALUES (2, 2, 'CIV102H1', 200812);
+INSERT INTO `course_instructor_assoc` VALUES (3, 5, 'AER201H1', 20094);
+INSERT INTO `course_instructor_assoc` VALUES (4, 4, 'ESC102H1', 20094);
+INSERT INTO `course_instructor_assoc` VALUES (5, 4, 'ESC101H1', 200812);
+INSERT INTO `course_instructor_assoc` VALUES (6, 6, 'ESC101H1', 200712);
+INSERT INTO `course_instructor_assoc` VALUES (7, 7, 'ECE259H1', 200812);
+INSERT INTO `course_instructor_assoc` VALUES (8, 9, 'PHY190H1', 200712);
+INSERT INTO `course_instructor_assoc` VALUES (9, 7, 'ECE259H1', 200712);
+INSERT INTO `course_instructor_assoc` VALUES (10, 7, 'ECE259H1', 200612);
+INSERT INTO `course_instructor_assoc` VALUES (11, 1, 'MAT195H1', 20094);
 
 #-----------------------------------------------------------------------------
 #-- course_discipline_assoc
@@ -136,11 +136,11 @@ CREATE TABLE `course_discipline_assoc`
 	`discipline_id` INTEGER  NOT NULL,
 	`year_of_study` TINYINT  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_discipline_assoc_FI_1` (`course_id`),
+	KEY `course_discipline_assoc_I_1`(`course_id`),
+	KEY `course_discipline_assoc_I_2`(`discipline_id`),
 	CONSTRAINT `course_discipline_assoc_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`),
-	INDEX `course_discipline_assoc_FI_2` (`discipline_id`),
 	CONSTRAINT `course_discipline_assoc_FK_2`
 		FOREIGN KEY (`discipline_id`)
 		REFERENCES `enum_item` (`id`)
@@ -199,7 +199,7 @@ CREATE TABLE `auto_course_rating_data`
 	`import_dt` DATETIME  NOT NULL,
 	`course_ins_id` INTEGER  NOT NULL,
 	`number` SMALLINT  NOT NULL,
-	PRIMARY KEY (`field_id`,`rating`,`import_dt`,`course_ins_id`),
+	PRIMARY KEY (`field_id`,`rating`,`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
@@ -276,8 +276,8 @@ CREATE TABLE `enum_item`
 	`parent_id` INTEGER  NOT NULL,
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `enum_item_I_1`(`descr`),
-	INDEX `enum_item_FI_1` (`parent_id`),
+	KEY `enum_item_I_1`(`parent_id`),
+	KEY `enum_item_I_2`(`descr`),
 	CONSTRAINT `enum_item_FK_1`
 		FOREIGN KEY (`parent_id`)
 		REFERENCES `enum_item` (`id`)
@@ -288,11 +288,16 @@ INSERT INTO `enum_item` VALUES (10, 1, 'USER_TYPES');
 INSERT INTO `enum_item` VALUES (11, 10, 'Admin');
 INSERT INTO `enum_item` VALUES (12, 10, 'Moderator');
 INSERT INTO `enum_item` VALUES (13, 10, 'Guest');
-INSERT INTO `enum_item` VALUES (20, 1, 'RATING_TYPES');
+INSERT INTO `enum_item` VALUES (20, 1, 'META_RATING_TYPES');
 INSERT INTO `enum_item` VALUES (21, 20, 'Boolean');
-INSERT INTO `enum_item` VALUES (22, 20, 'ScaleFive');
-INSERT INTO `enum_item` VALUES (23, 20, 'ScaleSeven');
-INSERT INTO `enum_item` VALUES (24, 20, 'Number');
+INSERT INTO `enum_item` VALUES (22, 20, 'Scale');
+INSERT INTO `enum_item` VALUES (23, 20, 'Number');
+INSERT INTO `enum_item` VALUES (30, 1, 'RATING_TYPES');
+INSERT INTO `enum_item` VALUES (31, 22, '3');
+INSERT INTO `enum_item` VALUES (32, 22, '4');
+INSERT INTO `enum_item` VALUES (33, 22, '5');
+INSERT INTO `enum_item` VALUES (34, 22, '6');
+INSERT INTO `enum_item` VALUES (35, 22, '7');
 INSERT INTO `enum_item` VALUES (60, 1, 'EXAM_TYPES');
 INSERT INTO `enum_item` VALUES (61, 60, 'Quiz');
 INSERT INTO `enum_item` VALUES (62, 60, 'Test');
@@ -337,6 +342,10 @@ INSERT INTO `enum_item` VALUES (227, 220, 'Question');
 INSERT INTO `enum_item` VALUES (228, 220, 'Question Mean');
 INSERT INTO `enum_item` VALUES (229, 220, 'Question Median');
 INSERT INTO `enum_item` VALUES (230, 220, 'Department Name');
+INSERT INTO `enum_item` VALUES (250, 1, 'TERM_TYPE');
+INSERT INTO `enum_item` VALUES (251, 250, '4');
+INSERT INTO `enum_item` VALUES (252, 250, '8');
+INSERT INTO `enum_item` VALUES (253, 250, '12');
 
 #-----------------------------------------------------------------------------
 #-- import_mapping
@@ -393,8 +402,8 @@ CREATE TABLE `exam`
 	`descr` VARCHAR(255)  NOT NULL,
 	`file_path` TEXT  NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `exam_I_1`(`descr`),
-	INDEX `exam_FI_1` (`course_id`),
+	KEY `exam_I_1`(`course_id`),
+	KEY `exam_I_2`(`descr`),
 	CONSTRAINT `exam_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
@@ -449,7 +458,7 @@ CREATE TABLE `instructor`
 	PRIMARY KEY (`id`),
 	KEY `instructor_I_1`(`last_name`),
 	KEY `instructor_I_2`(`first_name`),
-	INDEX `instructor_FI_1` (`dept_id`),
+	KEY `instructor_I_3`(`dept_id`),
 	CONSTRAINT `instructor_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
@@ -478,7 +487,7 @@ CREATE TABLE `instructor_detail`
 	`descr` TEXT  NOT NULL,
 	`instructor_id` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `instructor_detail_FI_1` (`instructor_id`),
+	KEY `instructor_detail_I_1`(`instructor_id`),
 	CONSTRAINT `instructor_detail_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`)
@@ -499,16 +508,17 @@ CREATE TABLE `rating_field`
 	`type_id` INTEGER  NOT NULL,
 	`is_reserved` TINYINT  NOT NULL,
 	PRIMARY KEY (`id`),
+	KEY `rating_field_I_1`(`descr`),
 	INDEX `rating_field_FI_1` (`type_id`),
 	CONSTRAINT `rating_field_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 24, 1);
-INSERT INTO `rating_field` VALUES (2, 'How many responded?', 24, 1);
-INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 23, 0);
-INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 23, 0);
+INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
+INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
+INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 35, 0);
+INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 35, 0);
 
 #-----------------------------------------------------------------------------
 #-- user

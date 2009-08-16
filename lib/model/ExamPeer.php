@@ -11,4 +11,16 @@ class ExamPeer extends BaseExamPeer
     $resultset = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
     return $resultset;
   }
+  
+  public static function getExamsForYearAndCourseId($courseId, $year, PropelPDO $propelConnection)
+  {
+    $c = new Criteria();
+    $crit1 = $c->getNewCriterion(ExamPeer::COURSE_ID, $courseId);
+    $crit2 = $c->getNewCriterion(ExamPeer::YEAR, $year);
+    $c->addAnd($crit1);
+    $c->addAnd($crit2);
+    $c->addAscendingOrderByColumn(ExamPeer::TYPE);
+    $c->addAscendingOrderByColumn(ExamPeer::DESCR);
+    return ExamPeer::doSelect($c, $propelConnection);
+  }
 }

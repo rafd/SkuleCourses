@@ -32,19 +32,22 @@
 	<br/>
 	<table>
 		<tr>
-			<td><?php echo $resultTitle?></td>
+			<td><b><?php echo $resultTitle?>:</b></td>
 		</tr>
 	  	<tr>
 	  		<td>
-	  			<div class='resultset'>
-	  				<ul>
-		  				<?php foreach ($results as $courseObj):?>
-		  				<li><?php echo link_to($courseObj->getId()." - ".$courseObj->getDescr(), "course/index?id=".$courseObj->getId())?></li>
-		  				<?php endforeach;?>
-	  				</ul>
-	  			</div>
+  				<ul>
+  					<?php if (count($results) == 0):?>
+  					<li>No result found.</li>
+  					<?php else:?>
+	  				<?php foreach ($results as $courseObj):?>
+	  				<li><?php echo link_to($courseObj->getId()." - ".$courseObj->getDescr(), "course/index?id=".$courseObj->getId())?></li>
+	  				<?php endforeach;?>
+	  				<?php endif;?>
+  				</ul>
 	  		</td>
 	  	</tr>
 	</table>
 	<?php endif;?>
 </div>
+<img class='hidden' src='/images/reload.on.gif' />

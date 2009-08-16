@@ -54,4 +54,30 @@
 		</tr>
 	</table>
 	<?php endif;?>
+	<table width="100%">
+		<tr>
+			<td width="50%">&nbsp;</td>
+			<td width="50%">&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Course Critiques</td>
+			<td>Exams Repository</td>
+		</tr>
+		<tr>
+			<td>
+				<ul>
+					<?php foreach ($ratingYearArray as $year):?>
+					<li><?php echo link_to($year, "course/critique?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
+					<?php endforeach;?>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<?php foreach ($examYearArray as $year):?>
+					<li><?php echo link_to($year, "course/exam?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
+					<?php endforeach;?>
+				</ul>
+			</td>
+		</tr>
+	</table>
 </div>

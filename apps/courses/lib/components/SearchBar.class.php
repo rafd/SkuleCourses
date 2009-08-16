@@ -21,6 +21,7 @@ class searchBar
           </tr>
         </table>
       </form>
+      <img class='hidden' src='/images/find.on.gif' />
     </div>";
   }
 }

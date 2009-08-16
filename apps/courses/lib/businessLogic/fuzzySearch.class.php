@@ -11,21 +11,36 @@ class fuzzySearch
   private $_courseList;
   private $_programList;
   
+  /**
+   * Returns the list of instructors found from the query
+   *
+   */
   public function getInstructorList()
   {
     return $this->_profList;
   }
   
+  /**
+   * Returns the list of courses found from the query
+   */
   public function getCourseList()
   {
     return $this->_courseList;
   }
   
+  /**
+   * Returns the list of programs (disciplines) found from the query
+   */
   public function getProgramList()
   {
     return $this->_programList;
   }
   
+  /**
+   * Executes query and hydrate this object
+   *
+   * @param       string $query the query being searched for
+   */
   public function query($query, $propelConnection)
   {
     $refQuery = trim($query);

@@ -10,89 +10,89 @@
  */
 class maintenanceActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
+  /**
+   * Executes index action
+   *
+   * @param sfRequest $request A request object
+   */
   public function executeIndex(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
+      $this->buildSubmenu();
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeCourses(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/courses");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/courses", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeInstructors(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/instructors");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/instructors", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeDepartments(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/departments");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/departments", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeDisciplines(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/disciplines");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/disciplines", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeRatingfields(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/ratingfields");
-      
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/ratingfields", $request);
+
       $conn = Propel::getConnection();
-      
+
       $this->ratingTypeList = array();
       $ratingTypeList = EnumItemPeer::getAllForParentNodeId(EnumItemPeer::RATING_TYPES_NODE_ID, $conn);
       foreach ($ratingTypeList as $enumObj){
@@ -100,47 +100,46 @@ class maintenanceActions extends sfActions
         //TODO
         $this->selectedRatingType = $enumObj->getId();
       }
-      
+
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeImporthistory(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/importhistory");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/importhistory", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
+
   public function executeImportratings(sfWebRequest $request)
   {
-    if (helperFunctions::isLoggedIn())
+    if (helperFunctions::isLoggedIn($request))
     {
-      $this->buildSubmenu(true);
-      $this->form = new skuleForm("frm", "maintenance/importratings");
+      $this->buildSubmenu();
+      $this->form = new skuleForm("frm", "maintenance/importratings", $request);
     }
     else
     {
       // redirect to log in page
-      $this->buildSubmenu(false);
+      $this->buildSubmenu();
     }
   }
-  
-  private function buildSubmenu($isLoggedIn)
+
+  private function buildSubmenu()
   {
-    if ($isLoggedIn) $submenu = new subMenu(subMenuOptions::MAINTENANCE);
-    else $submenu = new subMenu(subMenuOptions::BLANK);
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE);
     //$submenu->setCourseId($request->getParameter("id"));
     $this->submenu = $submenu->get();
   }

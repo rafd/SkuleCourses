@@ -4,11 +4,13 @@ class skuleForm
 {
   private $_formName;
   private $_actionUrl;
+  private $_sid;
   
-  public function __construct($formName, $actionUrl)
+  public function __construct($formName, $actionUrl, sfWebRequest $request)
   {
     $this->_formName = $formName;
     $this->_actionUrl = $actionUrl;
+    $this->_sid = $request->getCookie("sid", -1);
   }
   
   public function getFormName()
@@ -26,9 +28,8 @@ class skuleForm
     sfProjectConfiguration::getActive()->loadHelpers(array("Url"));
     sfProjectConfiguration::getActive()->loadHelpers(array("Tag"));
     
-    //TODO: hidden element
     return "<form name='{$this->_formName}' method='post' action='".url_for($this->_actionUrl)."'>
-    	<input type='hidden' name='' value='"."'/>";
+    	<input type='hidden' name='' value='".$this->_sid."'/>";
   }
   
   public function getFooter()

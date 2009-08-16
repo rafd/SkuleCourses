@@ -2,17 +2,22 @@
 
 class RatingField extends BaseRatingField
 {
-  public function getRatingTypeString()
+  public function getRatingTypeString(PropelPDO $conn=null)
   {
-    switch ($this->getTypeId()){
-      case EnumItemPeer::RATING_BOOLEAN:
-        return "In terms of true and false";
-      case EnumItemPeer::RATING_SCALE_FIVE:
-        return "On a scale of 1 to 5, 1 being least and 5 being most";
-      case EnumItemPeer::RATING_SCALE_SEVEN:
-        return "On a scale of 1 to 7, 1 being least and 7 being most";
-      default:
-        return "";
+    if ($conn == null) $conn = Propel::getConnection();
+    $item = $this->getEnumItem($conn);
+    
+    if ($item->getId() == EnumItemPeer::RATING_BOOLEAN)
+      return "In terms of true and false";
+    else if ($item->getId() == EnumItemPeer::RATING_NUMBER)
+      return "In a numerical number";
+    else {
+      if ($item->getParentId() == EnumItemPeer::RATING_SCALE){
+        return "On a scale of 1 to ".$item->getDescr().", 1 being least and ".$item->getDescr()." being most";
+      } else {
+        // not a rating type
+        throw new Exception("not a rating type");
+      }
     }
   }
 }

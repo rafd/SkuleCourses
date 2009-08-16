@@ -2,7 +2,7 @@ propel:
   course:
     _attributes:       { phpName: Course }
     id:                { type: varchar(9), required: true, primaryKey: true }
-    dept_id:           { type: varchar(4), required: true, foreignTable: department, foreignReference: id }
+    dept_id:           { type: varchar(4), required: true, foreignTable: department, foreignReference: id, index: true }
     descr:             { type: varchar(255), required: true }
     is_eng:            { type: boolean, required: true, default: 1 }
     
@@ -20,20 +20,20 @@ propel:
     detail_descr:      { type: longvarchar, required: true }
     first_offered:     { type: date, required: false }
     last_offered:      { type: date, required: false }
-    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
     
   course_instructor_assoc:
     _attributes:       { phpName: CourseInstructorAssociation }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id }
-    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id }
-    year:              { type: smallint, required: true }
+    instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id, index: true }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, index: true }
+    year:              { type: integer, required: true }
     
   course_discipline_assoc:
     _attributes:       { phpName: CourseDisciplineAssociation }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id }
-    discipline_id:     { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, index: true }
+    discipline_id:     { type: integer, required: true, foreignTable: enum_item, foreignReference: id, index: true }
     year_of_study:     { type: tinyint, required: true }
     
   course_rating_data:
@@ -49,7 +49,7 @@ propel:
     _attributes:       { phpName: AutoCourseRating }
     field_id:          { type: integer, required: true, primaryKey: true, foreignTable: rating_field, foreignReference: id }
     rating:            { type: smallint, required: true, primaryKey: true }
-    import_dt:         { type: timestamp, required: true, primaryKey: true }
+    import_dt:         { type: timestamp, required: true }
     course_ins_id:     { type: integer, required: true, primaryKey: true, foreignTable: course_instructor_assoc, foreignReference: id, onDelete: cascade }
     number:            { type: smallint, required: true }
 
@@ -61,13 +61,13 @@ propel:
   enum_item:
     _attributes:       { phpName: EnumItem }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    parent_id:         { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
+    parent_id:         { type: integer, required: true, foreignTable: enum_item, foreignReference: id, index: true }
     descr:             { type: varchar(255), required: true, index: true }
     
   exam:
     _attributes:       { phpName: Exam }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
     type:              { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
     year:              { type: smallint, required: true }
     descr:             { type: varchar(255), required: true, index: true }
@@ -86,13 +86,13 @@ propel:
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
     last_name:         { type: varchar(30), required: true, index: true }
     first_name:        { type: varchar(30), required: true, index: true }
-    dept_id:           { type: varchar(4), required: true, foreignTable: department, foreignReference: id }
+    dept_id:           { type: varchar(4), required: true, foreignTable: department, foreignReference: id, index: true }
     
   instructor_detail:
     _attributes:       { phpName: InstructorDetail }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
     descr:             { type: longvarchar, required: true }
-    instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id, onDelete: cascade }
+    instructor_id:     { type: integer, required: true, foreignTable: instructor, foreignReference: id, onDelete: cascade, index: true }
 
   import_mapping:
     _attributes:       { phpName: ImportMapping }
@@ -105,7 +105,7 @@ propel:
   rating_field:
     _attributes:       { phpName: RatingField }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    descr:             { type: varchar(255), required: true }
+    descr:             { type: varchar(255), required: true, index: true }
     type_id:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
     is_reserved:       { type: tinyint, required: true }
     
