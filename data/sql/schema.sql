@@ -110,17 +110,17 @@ CREATE TABLE `course_instructor_assoc`
 		REFERENCES `course` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `course_instructor_assoc` VALUES (1, 3, 'MAT194H1', 200812);
-INSERT INTO `course_instructor_assoc` VALUES (2, 2, 'CIV102H1', 200812);
-INSERT INTO `course_instructor_assoc` VALUES (3, 5, 'AER201H1', 20094);
-INSERT INTO `course_instructor_assoc` VALUES (4, 4, 'ESC102H1', 20094);
-INSERT INTO `course_instructor_assoc` VALUES (5, 4, 'ESC101H1', 200812);
-INSERT INTO `course_instructor_assoc` VALUES (6, 6, 'ESC101H1', 200712);
-INSERT INTO `course_instructor_assoc` VALUES (7, 7, 'ECE259H1', 200812);
-INSERT INTO `course_instructor_assoc` VALUES (8, 9, 'PHY190H1', 200712);
-INSERT INTO `course_instructor_assoc` VALUES (9, 7, 'ECE259H1', 200712);
-INSERT INTO `course_instructor_assoc` VALUES (10, 7, 'ECE259H1', 200612);
-INSERT INTO `course_instructor_assoc` VALUES (11, 1, 'MAT195H1', 20094);
+INSERT INTO `course_instructor_assoc` VALUES (1, 3, 'MAT194H1', 20089);
+INSERT INTO `course_instructor_assoc` VALUES (2, 2, 'CIV102H1', 20089);
+INSERT INTO `course_instructor_assoc` VALUES (3, 5, 'AER201H1', 20091);
+INSERT INTO `course_instructor_assoc` VALUES (4, 4, 'ESC102H1', 20091);
+INSERT INTO `course_instructor_assoc` VALUES (5, 4, 'ESC101H1', 20089);
+INSERT INTO `course_instructor_assoc` VALUES (6, 6, 'ESC101H1', 20079);
+INSERT INTO `course_instructor_assoc` VALUES (7, 7, 'ECE259H1', 20089);
+INSERT INTO `course_instructor_assoc` VALUES (8, 9, 'PHY190H1', 20079);
+INSERT INTO `course_instructor_assoc` VALUES (9, 7, 'ECE259H1', 20079);
+INSERT INTO `course_instructor_assoc` VALUES (10, 7, 'ECE259H1', 20069);
+INSERT INTO `course_instructor_assoc` VALUES (11, 1, 'MAT195H1', 20091);
 
 #-----------------------------------------------------------------------------
 #-- course_discipline_assoc
@@ -194,38 +194,81 @@ DROP TABLE IF EXISTS `auto_course_rating_data`;
 
 CREATE TABLE `auto_course_rating_data`
 (
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`field_id` INTEGER  NOT NULL,
 	`rating` SMALLINT  NOT NULL,
 	`import_dt` DATETIME  NOT NULL,
 	`course_ins_id` INTEGER  NOT NULL,
 	`number` SMALLINT  NOT NULL,
-	PRIMARY KEY (`field_id`,`rating`,`course_ins_id`),
+	PRIMARY KEY (`id`),
+	KEY `auto_course_rating_data_I_1`(`field_id`),
+	KEY `auto_course_rating_data_I_2`(`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
-	INDEX `auto_course_rating_data_FI_2` (`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_2`
 		FOREIGN KEY (`course_ins_id`)
 		REFERENCES `course_instructor_assoc` (`id`)
 		ON DELETE CASCADE
 )Type=InnoDB;
 
-INSERT INTO `auto_course_rating_data` VALUES (3, 1, CURDATE(), 3, 3);
-INSERT INTO `auto_course_rating_data` VALUES (3, 2, CURDATE(), 3, 5);
-INSERT INTO `auto_course_rating_data` VALUES (3, 3, CURDATE(), 3, 16);
-INSERT INTO `auto_course_rating_data` VALUES (3, 4, CURDATE(), 3, 27);
-INSERT INTO `auto_course_rating_data` VALUES (3, 5, CURDATE(), 3, 81);
-INSERT INTO `auto_course_rating_data` VALUES (3, 6, CURDATE(), 3, 17);
-INSERT INTO `auto_course_rating_data` VALUES (3, 7, CURDATE(), 3, 4);
-INSERT INTO `auto_course_rating_data` VALUES (4, 1, CURDATE(), 3, 1);
-INSERT INTO `auto_course_rating_data` VALUES (4, 2, CURDATE(), 3, 8);
-INSERT INTO `auto_course_rating_data` VALUES (4, 3, CURDATE(), 3, 54);
-INSERT INTO `auto_course_rating_data` VALUES (4, 4, CURDATE(), 3, 31);
-INSERT INTO `auto_course_rating_data` VALUES (4, 5, CURDATE(), 3, 42);
-INSERT INTO `auto_course_rating_data` VALUES (4, 6, CURDATE(), 3, 7);
-INSERT INTO `auto_course_rating_data` VALUES (4, 7, CURDATE(), 3, 10);
-INSERT INTO `auto_course_rating_data` VALUES (1, 0, CURDATE(), 3, 225);
-INSERT INTO `auto_course_rating_data` VALUES (2, 0, CURDATE(), 3, 197);
+-- data for aer201
+INSERT INTO `auto_course_rating_data` VALUES (1, 3, 0, CURDATE(), 3, 0);
+INSERT INTO `auto_course_rating_data` VALUES (2, 3, 1, CURDATE(), 3, 6);
+INSERT INTO `auto_course_rating_data` VALUES (3, 3, 2, CURDATE(), 3, 9);
+INSERT INTO `auto_course_rating_data` VALUES (4, 3, 3, CURDATE(), 3, 25);
+INSERT INTO `auto_course_rating_data` VALUES (5, 3, 4, CURDATE(), 3, 41);
+INSERT INTO `auto_course_rating_data` VALUES (6, 3, 5, CURDATE(), 3, 31);
+INSERT INTO `auto_course_rating_data` VALUES (7, 3, 6, CURDATE(), 3, 9);
+INSERT INTO `auto_course_rating_data` VALUES (8, 3, 7, CURDATE(), 3, 2);
+INSERT INTO `auto_course_rating_data` VALUES (9, 4, 0, CURDATE(), 3, 1);
+INSERT INTO `auto_course_rating_data` VALUES (10, 4, 1, CURDATE(), 3, 2);
+INSERT INTO `auto_course_rating_data` VALUES (11, 4, 2, CURDATE(), 3, 4);
+INSERT INTO `auto_course_rating_data` VALUES (12, 4, 3, CURDATE(), 3, 20);
+INSERT INTO `auto_course_rating_data` VALUES (13, 4, 4, CURDATE(), 3, 42);
+INSERT INTO `auto_course_rating_data` VALUES (14, 4, 5, CURDATE(), 3, 36);
+INSERT INTO `auto_course_rating_data` VALUES (15, 4, 6, CURDATE(), 3, 16);
+INSERT INTO `auto_course_rating_data` VALUES (16, 4, 7, CURDATE(), 3, 2);
+INSERT INTO `auto_course_rating_data` VALUES (17, 1, 0, CURDATE(), 3, 261);
+INSERT INTO `auto_course_rating_data` VALUES (18, 2, 0, CURDATE(), 3, 124);
+
+-- data for ece259
+INSERT INTO `auto_course_rating_data` VALUES (19, 3, 0, CURDATE(), 7, 0);
+INSERT INTO `auto_course_rating_data` VALUES (20, 3, 1, CURDATE(), 7, 2);
+INSERT INTO `auto_course_rating_data` VALUES (21, 3, 2, CURDATE(), 7, 3);
+INSERT INTO `auto_course_rating_data` VALUES (22, 3, 3, CURDATE(), 7, 23);
+INSERT INTO `auto_course_rating_data` VALUES (23, 3, 4, CURDATE(), 7, 41);
+INSERT INTO `auto_course_rating_data` VALUES (24, 3, 5, CURDATE(), 7, 36);
+INSERT INTO `auto_course_rating_data` VALUES (25, 3, 6, CURDATE(), 7, 19);
+INSERT INTO `auto_course_rating_data` VALUES (26, 3, 7, CURDATE(), 7, 2);
+INSERT INTO `auto_course_rating_data` VALUES (27, 1, 0, CURDATE(), 7, 218);
+INSERT INTO `auto_course_rating_data` VALUES (28, 2, 0, CURDATE(), 7, 126);
+INSERT INTO `auto_course_rating_data` VALUES (29, 3, 0, CURDATE(), 7, 0);
+INSERT INTO `auto_course_rating_data` VALUES (30, 3, 1, CURDATE(), 7, 1);
+INSERT INTO `auto_course_rating_data` VALUES (31, 3, 2, CURDATE(), 7, 5);
+INSERT INTO `auto_course_rating_data` VALUES (32, 3, 3, CURDATE(), 7, 16);
+INSERT INTO `auto_course_rating_data` VALUES (33, 3, 4, CURDATE(), 7, 24);
+INSERT INTO `auto_course_rating_data` VALUES (34, 3, 5, CURDATE(), 7, 28);
+INSERT INTO `auto_course_rating_data` VALUES (35, 3, 6, CURDATE(), 7, 12);
+INSERT INTO `auto_course_rating_data` VALUES (36, 3, 7, CURDATE(), 7, 10);
+INSERT INTO `auto_course_rating_data` VALUES (37, 1, 0, CURDATE(), 7, 214);
+INSERT INTO `auto_course_rating_data` VALUES (38, 2, 0, CURDATE(), 7, 96);
+INSERT INTO `auto_course_rating_data` VALUES (39, 4, 0, CURDATE(), 7, 0);
+INSERT INTO `auto_course_rating_data` VALUES (40, 4, 1, CURDATE(), 7, 1);
+INSERT INTO `auto_course_rating_data` VALUES (41, 4, 2, CURDATE(), 7, 0);
+INSERT INTO `auto_course_rating_data` VALUES (42, 4, 3, CURDATE(), 7, 5);
+INSERT INTO `auto_course_rating_data` VALUES (43, 4, 4, CURDATE(), 7, 15);
+INSERT INTO `auto_course_rating_data` VALUES (44, 4, 5, CURDATE(), 7, 25);
+INSERT INTO `auto_course_rating_data` VALUES (45, 4, 6, CURDATE(), 7, 34);
+INSERT INTO `auto_course_rating_data` VALUES (46, 4, 7, CURDATE(), 7, 16);
+INSERT INTO `auto_course_rating_data` VALUES (47, 4, 0, CURDATE(), 7, 0);
+INSERT INTO `auto_course_rating_data` VALUES (48, 4, 1, CURDATE(), 7, 6);
+INSERT INTO `auto_course_rating_data` VALUES (49, 4, 2, CURDATE(), 7, 8);
+INSERT INTO `auto_course_rating_data` VALUES (50, 4, 3, CURDATE(), 7, 13);
+INSERT INTO `auto_course_rating_data` VALUES (51, 4, 4, CURDATE(), 7, 32);
+INSERT INTO `auto_course_rating_data` VALUES (52, 4, 5, CURDATE(), 7, 26);
+INSERT INTO `auto_course_rating_data` VALUES (53, 4, 6, CURDATE(), 7, 9);
+INSERT INTO `auto_course_rating_data` VALUES (54, 4, 7, CURDATE(), 7, 3);
 
 #-----------------------------------------------------------------------------
 #-- department
@@ -298,6 +341,7 @@ INSERT INTO `enum_item` VALUES (32, 22, '4');
 INSERT INTO `enum_item` VALUES (33, 22, '5');
 INSERT INTO `enum_item` VALUES (34, 22, '6');
 INSERT INTO `enum_item` VALUES (35, 22, '7');
+INSERT INTO `enum_item` VALUES (36, 22, '8');
 INSERT INTO `enum_item` VALUES (60, 1, 'EXAM_TYPES');
 INSERT INTO `enum_item` VALUES (61, 60, 'Quiz');
 INSERT INTO `enum_item` VALUES (62, 60, 'Test');
@@ -342,10 +386,6 @@ INSERT INTO `enum_item` VALUES (227, 220, 'Question');
 INSERT INTO `enum_item` VALUES (228, 220, 'Question Mean');
 INSERT INTO `enum_item` VALUES (229, 220, 'Question Median');
 INSERT INTO `enum_item` VALUES (230, 220, 'Department Name');
-INSERT INTO `enum_item` VALUES (250, 1, 'TERM_TYPE');
-INSERT INTO `enum_item` VALUES (251, 250, '4');
-INSERT INTO `enum_item` VALUES (252, 250, '8');
-INSERT INTO `enum_item` VALUES (253, 250, '12');
 
 #-----------------------------------------------------------------------------
 #-- import_mapping
@@ -385,6 +425,7 @@ INSERT INTO `import_mapping` VALUES (6, 201, 223, NULL, NULL);
 INSERT INTO `import_mapping` VALUES (7, 201, 224, NULL, NULL);
 INSERT INTO `import_mapping` VALUES (8, 201, 225, NULL, NULL);
 INSERT INTO `import_mapping` VALUES (9, 201, 226, NULL, NULL);
+INSERT INTO `import_mapping` VALUES (10, 201, 227, 3, NULL);
 
 #-----------------------------------------------------------------------------
 #-- exam
@@ -414,7 +455,7 @@ CREATE TABLE `exam`
 		REFERENCES `enum_item` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `exam` VALUES (1, 'ECE259H1', 61, 2008, 'Quiz 1', 'C#');
+INSERT INTO `exam` VALUES (1, 'ECE259H1', 61, 2008, 'Quiz 1', '/C/');
 
 #-----------------------------------------------------------------------------
 #-- exam_comment
@@ -517,8 +558,10 @@ CREATE TABLE `rating_field`
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
-INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 35, 0);
-INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 35, 0);
+INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 36, 0);
+INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 36, 0);
+INSERT INTO `rating_field` VALUES (5, 'Percent ratake', 23, 1);
+
 
 #-----------------------------------------------------------------------------
 #-- user

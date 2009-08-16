@@ -76,7 +76,7 @@ class helperFunctions
   {
     $total = 0;
     $weight = 0;
-    for ($i=$minIndex; $i<=$maxIndex; $i++){
+    for ($i=$minIndex; $i<$maxIndex; $i++){
       $total += $array[$i] * $i;
       $weight += $array[$i];
     }
@@ -96,7 +96,7 @@ class helperFunctions
   public static function findMedian($minIndex, $maxIndex, $array)
   {
     $total = 0;
-    for ($i=$minIndex; $i<=$maxIndex; $i++){
+    for ($i=$minIndex; $i<$maxIndex; $i++){
       $total += $array[$i];
     }
     $med = ($total+1)/2;

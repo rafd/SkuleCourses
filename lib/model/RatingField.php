@@ -13,7 +13,7 @@ class RatingField extends BaseRatingField
       return "In a numerical number";
     else {
       if ($item->getParentId() == EnumItemPeer::RATING_SCALE){
-        return "On a scale of 1 to ".$item->getDescr().", 1 being least and ".$item->getDescr()." being most";
+        return "On a scale of 0 to ".($item->getDescr()-1).", 0 being least and ".($item->getDescr()-1)." being most";
       } else {
         // not a rating type
         throw new Exception("not a rating type");

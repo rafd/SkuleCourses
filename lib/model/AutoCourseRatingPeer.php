@@ -13,7 +13,7 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     return $resultset;
   }
   
-  public static function getCourseDataArrayForInstructorAndYear($courseId, $instructorId, $year, PropelPDO $propelConnection)
+  public static function getCourseDataArrayForCourseAndInstructorAndYear($courseId, $instructorId, $year, PropelPDO $propelConnection)
   {
     $c = new Criteria();
     $c->addJoin(AutoCourseRatingPeer::COURSE_INS_ID, CourseInstructorAssociationPeer::ID);
@@ -24,6 +24,10 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     $c->addAnd($crit2);
     $c->addAnd($crit3);
     $c->addAscendingOrderByColumn(AutoCourseRatingPeer::FIELD_ID);
+    $c->addAscendingOrderByColumn(AutoCourseRatingPeer::ID);
+    $c->addAscendingOrderByColumn(AutoCourseRatingPeer::RATING);
     return AutoCourseRatingPeer::doSelect($c, $propelConnection);
   }
+  
+  
 }

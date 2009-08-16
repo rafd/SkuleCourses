@@ -47,10 +47,11 @@ propel:
     
   auto_course_rating_data:
     _attributes:       { phpName: AutoCourseRating }
-    field_id:          { type: integer, required: true, primaryKey: true, foreignTable: rating_field, foreignReference: id }
-    rating:            { type: smallint, required: true, primaryKey: true }
+    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    field_id:          { type: integer, required: true, foreignTable: rating_field, foreignReference: id, index: true }
+    rating:            { type: smallint, required: true }
     import_dt:         { type: timestamp, required: true }
-    course_ins_id:     { type: integer, required: true, primaryKey: true, foreignTable: course_instructor_assoc, foreignReference: id, onDelete: cascade }
+    course_ins_id:     { type: integer, required: true, foreignTable: course_instructor_assoc, foreignReference: id, onDelete: cascade, index: true }
     number:            { type: smallint, required: true }
 
   department:

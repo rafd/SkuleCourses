@@ -76,7 +76,9 @@ class courseActions extends sfActions
         $insId = $this->instructorArr[0]->getId();
       $this->currInstructor = InstructorPeer::retrieveByPK($insId, $conn);
       
-      $dataObjArr = AutoCourseRatingPeer::getCourseDataArrayForInstructorAndYear($id, $insId, $year, $conn);
+      // note that the below logic is predicated on getCourseDataArrayForCourseAndInstructorAndYear
+      // sorting by Field, Id, Rating, in the respective order
+      $dataObjArr = AutoCourseRatingPeer::getCourseDataArrayForCourseAndInstructorAndYear($id, $insId, $year, $conn);
       
       // $dataArr is an array of dictionaries (arr) that contain ratings/info
       $this->dataArr = array();
@@ -84,54 +86,57 @@ class courseActions extends sfActions
       $arr = array();
       foreach ($dataObjArr as $obj)
       {
-        if ($obj->getFieldId() == RatingFieldPeer::NUMBER_ENROLLED)
+        // this sytem does not differentiate between different sections
+        // when multiple sections with the SAME instructor is encountered, the data are aggregated
+        switch ($obj->getFieldId())
         {
-          // number enrolled, special field
-          $this->numberEnrolled = $obj->getNumber();
-        }
-        else if ($obj->getFieldId() == RatingFieldPeer::NUMBER_RESPONDED)
-        {
-          // number responded, special field
-          $this->numberResponded = $obj->getNumber();
-        }
-        else
-        {
-          // ordinary rating data
-          if (!isset($currentNode)) {
-            $currentNode = $obj->getFieldId();
-            $arr["type"] = $obj->getRatingField()->getRatingTypeString($conn);
-            $arr["field"] = $obj->getRatingField()->getDescr();
-            $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
-            $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
-          }
-          
-          if ($currentNode!=$obj->getFieldId()){
-            $arr = $this->setMeanAndMedian($arr);
-            if (!isset($arr[0])) {
-              // $arr[0] = number who did not respond to this question
-              $arr[0] = $this->calcNR($arr, $this->numberResponded);
+          case RatingFieldPeer::NUMBER_ENROLLED:
+            // number enrolled, special field
+            if (isset($this->numberEnrolled)) $this->numberEnrolled += $obj->getNumber();
+            else $this->numberEnrolled = $obj->getNumber();
+            break;
+          case RatingFieldPeer::NUMBER_RESPONDED:
+            // number responded, special field
+            if (isset($this->numberResponded)) $this->numberResponded += $obj->getNumber();
+            else $this->numberResponded = $obj->getNumber();
+            break;
+          case RatingFieldPeer::RETAKE:
+            // percent retake
+            if (isset($this->retake)) $this->retake += $obj->getNumber();
+            else $this->retake = $obj->getNumber();
+            break;
+          default:
+            // ordinary rating data
+            if (!isset($currentNode)) {
+              $currentNode = $obj->getFieldId();
+              $arr["type"] = $obj->getRatingField()->getRatingTypeString($conn);
+              $arr["field"] = $obj->getRatingField()->getDescr();
+              $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
+              $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
             }
-            $arr["chart"] = $this->getFusionChartFromDataArr($arr);
-            $this->dataArr[] = $arr;
-            
-            unset($arr);
-            $currentNode = $obj->getFieldId();
-            $arr["type"] = $obj->getRatingField()->getRatingTypeString($conn);
-            $arr["field"] = $obj->getRatingField()->getDescr();
-            $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
-            $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
-          }
           
-          $arr[$obj->getRating()] = $obj->getNumber();
+            if ($currentNode!=$obj->getFieldId()){
+              $arr = $this->setMeanAndMedian($arr);
+              $arr["chart"] = $this->getFusionChartFromDataArr($arr);
+              $this->dataArr[] = $arr;
+            
+              unset($arr);
+              $currentNode = $obj->getFieldId();
+              $arr["type"] = $obj->getRatingField()->getRatingTypeString($conn);
+              $arr["field"] = $obj->getRatingField()->getDescr();
+              $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
+              $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
+            }
+            
+            if (isset($arr[$obj->getRating()])) $arr[$obj->getRating()] += $obj->getNumber();
+            else $arr[$obj->getRating()] = $obj->getNumber();
+            break;
         }
       }
       
       // for the last critique field
       $arr = $this->setMeanAndMedian($arr);
-      if (!isset($arr[0])) {
-        // $arr[0] = number who did not respond to this question
-        $arr[0] = $this->calcNR($arr, $this->numberResponded);
-      }
+      // $arr["NA"] = number who did not respond to this question
       $arr["chart"] = $this->getFusionChartFromDataArr($arr);
       $this->dataArr[] = $arr;
       
@@ -217,7 +222,7 @@ class courseActions extends sfActions
       $arr["mean"] = "N/A";
       $arr["median"] = "N/A";
     } elseif ($item->getParentId() == EnumItemPeer::RATING_SCALE){
-      $arr["mean"] = round(helperFunctions::findMean(1, $item->getDescr(), $arr),1);
+      $arr["mean"] = helperFunctions::findMean(1, $item->getDescr(), $arr);
       $arr["median"] = helperFunctions::findMedian(1, $item->getDescr(), $arr);
     } else {
       throw new Exception ("type not supported");
@@ -230,18 +235,18 @@ class courseActions extends sfActions
     $FC = new FusionCharts("Column2D","500","350",null,true);
 	$FC->setSWFPath("/fusionCharts_swf/");
 	
-	$strParam="caption={$arr['field']};xAxisName=Rating;yAxisName=Number;decimalPrecision=0;formatNumberScale=1";
+	$strParam="xAxisName=Rating;yAxisName=Number;decimalPrecision=0;formatNumberScale=1";
 	$FC->setChartParams($strParam);
 	
-	if (isset($arr[0])) {
-	  $FC->addChartData($arr[0], "name=N/R");
+	if (isset($arr["NA"])) {
+	  $FC->addChartData($arr["NA"], "name=N/R");
 	}
 	
 	$item = $arr["typeObj"];
     if ($item->getId() == EnumItemPeer::RATING_BOOLEAN){
-      for ($i=1; $i<=2; $i++) $FC->addChartData($arr[$i], "name=$i");
+      for ($i=0; $i<2; $i++) $FC->addChartData($arr[$i], "name=$i");
     } elseif ($item->getParentId() == EnumItemPeer::RATING_SCALE){
-      for ($i=1; $i<=$item->getDescr(); $i++) $FC->addChartData($arr[$i], "name=$i");
+      for ($i=0; $i<$item->getDescr(); $i++) $FC->addChartData($arr[$i], "name=$i");
     } else {
       throw new Exception ("type not supported");
     }

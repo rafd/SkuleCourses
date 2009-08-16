@@ -31,15 +31,17 @@
 			<td>
 			<table class="disptable">
 				<tr>
-					<th width="150">Number Enrolled</th>
-					<th width="150">Number Responded</th>
+					<th width="100">Number Enrolled</th>
+					<th width="100">Number Responded</th>
 					<th width="150">Aggregated Rating<a class="help" style="float: right">
 					<span>The aggregated rating is the arithmetic average of the mean ratings of all questions below.</span></a></th>
+					<th width="100">Percent Retake</th>
 				</tr>
 				<tr>
 					<td><?php if (isset($numberEnrolled)) echo $numberEnrolled; else echo "?";?></td>
 					<td><?php if (isset($numberResponded)) echo $numberResponded; else echo "?";?></td>
-					<td><?php echo $aggregatedRating ?></td>
+					<td><?php echo round($aggregatedRating,2) ?></td>
+					<td><?php if (isset($retake)) echo $retake."%"; else echo "?";?></td>
 				</tr>
 			</table>
 			</td>
@@ -58,29 +60,25 @@
 				<table class="disptable">
 					<tr>
 						<?php if ($arr["typeObj"]->getId() == EnumItemPeer::RATING_BOOLEAN):?>
-							<th width="60">N/R</th>
-							<th width="60">True</th>
-							<th width="60">False</th>
+							<th width="55">True</th>
+							<th width="55">False</th>
 						<?php elseif ($arr["typeObj"]->getParentId() == EnumItemPeer::RATING_SCALE):?>
-							<th width="60">N/R</th>
-							<?php for ($i=1; $i<$arr["typeObj"]->getDescr(); $i++):?>
-							<th width="60"><?php echo $i?></th>
+							<?php for ($i=0; $i<$arr["typeObj"]->getDescr(); $i++):?>
+							<th width="55"><?php echo $i?></th>
 							<?php endfor;?>
-							<th width="60">Mean</th>
-							<th width="60">Median</th>
+							<th width="55">Mean</th>
+							<th width="55">Median</th>
 						<?php endif;?>
 					</tr>
 					<tr>
 						<?php if ($arr["typeObj"]->getId() == EnumItemPeer::RATING_BOOLEAN):?>
 							<td><?php echo $arr[0]?></td>
 							<td><?php echo $arr[1]?></td>
-							<td><?php echo $arr[2]?></td>
 						<?php elseif ($arr["typeObj"]->getParentId() == EnumItemPeer::RATING_SCALE):?>
-							<td><?php echo $arr[0]?></td>
-							<?php for ($i=1; $i<$arr["typeObj"]->getDescr(); $i++):?>
+							<?php for ($i=0; $i<$arr["typeObj"]->getDescr(); $i++):?>
 							<td><?php echo $arr[$i]?></td>
 							<?php endfor;?>
-							<td><?php echo $arr["mean"]?></td>
+							<td><?php echo round($arr["mean"], 2)?></td>
 							<td><?php echo $arr["median"]?></td>
 						<?php endif;?>
 					</tr>
@@ -88,7 +86,12 @@
 			</td>
 		</tr>
 		<tr>
-			<td><?php $arr["chart"]->renderChart()?></td>
+			<td>
+			<?php
+			$arr["chart"]->setChartParam("caption", "Fig.".$counter." ".$arr["field"]); 
+			$arr["chart"]->renderChart()
+			?>
+			</td>
 		</tr>
 		<?php endforeach;?>
 	</table>
