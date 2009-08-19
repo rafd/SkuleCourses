@@ -1,6 +1,6 @@
 prod:
   .settings:
-    no_script_name:         on
+    no_script_name:         off
     logging_enabled:        off
 
 dev:
@@ -10,6 +10,7 @@ dev:
     cache:                  off
     no_script_name:         off
     etag:                   off
+    logging_enabled:        on
 
 test:
   .settings:

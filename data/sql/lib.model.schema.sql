@@ -17,11 +17,11 @@ CREATE TABLE `course`
 	`descr` VARCHAR(255)  NOT NULL,
 	`is_eng` TINYINT default 1 NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_FI_1` (`dept_id`),
+	KEY `course_I_1`(`dept_id`),
 	CONSTRAINT `course_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_comment
@@ -47,7 +47,7 @@ CREATE TABLE `course_comment`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_detail
@@ -64,12 +64,12 @@ CREATE TABLE `course_detail`
 	`last_offered` DATE,
 	`course_id` VARCHAR(9)  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_detail_FI_1` (`course_id`),
+	KEY `course_detail_I_1`(`course_id`),
 	CONSTRAINT `course_detail_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_instructor_assoc
@@ -83,17 +83,17 @@ CREATE TABLE `course_instructor_assoc`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`instructor_id` INTEGER  NOT NULL,
 	`course_id` VARCHAR(9)  NOT NULL,
-	`year` SMALLINT  NOT NULL,
+	`year` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_instructor_assoc_FI_1` (`instructor_id`),
+	KEY `course_instructor_assoc_I_1`(`instructor_id`),
+	KEY `course_instructor_assoc_I_2`(`course_id`),
 	CONSTRAINT `course_instructor_assoc_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`),
-	INDEX `course_instructor_assoc_FI_2` (`course_id`),
 	CONSTRAINT `course_instructor_assoc_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_discipline_assoc
@@ -109,15 +109,15 @@ CREATE TABLE `course_discipline_assoc`
 	`discipline_id` INTEGER  NOT NULL,
 	`year_of_study` TINYINT  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_discipline_assoc_FI_1` (`course_id`),
+	KEY `course_discipline_assoc_I_1`(`course_id`),
+	KEY `course_discipline_assoc_I_2`(`discipline_id`),
 	CONSTRAINT `course_discipline_assoc_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`),
-	INDEX `course_discipline_assoc_FI_2` (`discipline_id`),
 	CONSTRAINT `course_discipline_assoc_FK_2`
 		FOREIGN KEY (`discipline_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- course_rating_data
@@ -131,10 +131,10 @@ CREATE TABLE `course_rating_data`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`user_id` INTEGER  NOT NULL,
 	`field_id` INTEGER  NOT NULL,
-	`course_id` VARCHAR(9)  NOT NULL,
+	`course_ins_id` INTEGER  NOT NULL,
 	`rating` TINYINT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
-	PRIMARY KEY (`id`),
+	PRIMARY KEY (`id`,`course_ins_id`),
 	INDEX `course_rating_data_FI_1` (`user_id`),
 	CONSTRAINT `course_rating_data_FK_1`
 		FOREIGN KEY (`user_id`)
@@ -143,12 +143,12 @@ CREATE TABLE `course_rating_data`
 	CONSTRAINT `course_rating_data_FK_2`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
-	INDEX `course_rating_data_FI_3` (`course_id`),
+	INDEX `course_rating_data_FI_3` (`course_ins_id`),
 	CONSTRAINT `course_rating_data_FK_3`
-		FOREIGN KEY (`course_id`)
-		REFERENCES `course` (`id`)
+		FOREIGN KEY (`course_ins_id`)
+		REFERENCES `course_instructor_assoc` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- auto_course_rating_data
@@ -159,21 +159,23 @@ DROP TABLE IF EXISTS `auto_course_rating_data`;
 
 CREATE TABLE `auto_course_rating_data`
 (
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`field_id` INTEGER  NOT NULL,
-	`rating` TINYINT  NOT NULL,
+	`rating` SMALLINT  NOT NULL,
 	`import_dt` DATETIME  NOT NULL,
-	`course_id` VARCHAR(9)  NOT NULL,
+	`course_ins_id` INTEGER  NOT NULL,
 	`number` SMALLINT  NOT NULL,
-	PRIMARY KEY (`field_id`,`rating`,`import_dt`,`course_id`),
+	PRIMARY KEY (`id`),
+	KEY `auto_course_rating_data_I_1`(`field_id`),
+	KEY `auto_course_rating_data_I_2`(`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
-	INDEX `auto_course_rating_data_FI_2` (`course_id`),
 	CONSTRAINT `auto_course_rating_data_FK_2`
-		FOREIGN KEY (`course_id`)
-		REFERENCES `course` (`id`)
+		FOREIGN KEY (`course_ins_id`)
+		REFERENCES `course_instructor_assoc` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- department
@@ -188,7 +190,7 @@ CREATE TABLE `department`
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `department_I_1`(`descr`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- enum_item
@@ -203,12 +205,12 @@ CREATE TABLE `enum_item`
 	`parent_id` INTEGER  NOT NULL,
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `enum_item_I_1`(`descr`),
-	INDEX `enum_item_FI_1` (`parent_id`),
+	KEY `enum_item_I_1`(`parent_id`),
+	KEY `enum_item_I_2`(`descr`),
 	CONSTRAINT `enum_item_FK_1`
 		FOREIGN KEY (`parent_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- exam
@@ -226,8 +228,8 @@ CREATE TABLE `exam`
 	`descr` VARCHAR(255)  NOT NULL,
 	`file_path` TEXT  NOT NULL,
 	PRIMARY KEY (`id`),
-	KEY `exam_I_1`(`descr`),
-	INDEX `exam_FI_1` (`course_id`),
+	KEY `exam_I_1`(`course_id`),
+	KEY `exam_I_2`(`descr`),
 	CONSTRAINT `exam_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
@@ -236,7 +238,7 @@ CREATE TABLE `exam`
 	CONSTRAINT `exam_FK_2`
 		FOREIGN KEY (`type`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- exam_comment
@@ -262,7 +264,7 @@ CREATE TABLE `exam_comment`
 	CONSTRAINT `exam_comment_FK_2`
 		FOREIGN KEY (`user_id`)
 		REFERENCES `user` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- instructor
@@ -280,11 +282,11 @@ CREATE TABLE `instructor`
 	PRIMARY KEY (`id`),
 	KEY `instructor_I_1`(`last_name`),
 	KEY `instructor_I_2`(`first_name`),
-	INDEX `instructor_FI_1` (`dept_id`),
+	KEY `instructor_I_3`(`dept_id`),
 	CONSTRAINT `instructor_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- instructor_detail
@@ -299,12 +301,12 @@ CREATE TABLE `instructor_detail`
 	`descr` TEXT  NOT NULL,
 	`instructor_id` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `instructor_detail_FI_1` (`instructor_id`),
+	KEY `instructor_detail_I_1`(`instructor_id`),
 	CONSTRAINT `instructor_detail_FK_1`
 		FOREIGN KEY (`instructor_id`)
 		REFERENCES `instructor` (`id`)
 		ON DELETE CASCADE
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- import_mapping
@@ -333,7 +335,7 @@ CREATE TABLE `import_mapping`
 	CONSTRAINT `import_mapping_FK_3`
 		FOREIGN KEY (`rating_field_id`)
 		REFERENCES `rating_field` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- rating_field
@@ -347,12 +349,14 @@ CREATE TABLE `rating_field`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`descr` VARCHAR(255)  NOT NULL,
 	`type_id` INTEGER  NOT NULL,
+	`is_reserved` TINYINT  NOT NULL,
 	PRIMARY KEY (`id`),
+	KEY `rating_field_I_1`(`descr`),
 	INDEX `rating_field_FI_1` (`type_id`),
 	CONSTRAINT `rating_field_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 #-----------------------------------------------------------------------------
 #-- user
@@ -375,7 +379,7 @@ CREATE TABLE `user`
 	CONSTRAINT `user_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
-)Type=MyISAM;
+)Type=InnoDB;
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;
