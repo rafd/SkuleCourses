@@ -4,6 +4,6 @@ class coursesConfiguration extends sfApplicationConfiguration
 {
   public function configure()
   {
-  	$this->setWebDir($this->getRootDir().'/www');
+  	$this->setWebDir($this->getRootDir().'/www');  	
   }
 }

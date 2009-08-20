@@ -1,0 +1,9 @@
+# This config file is used to store custom skule parameters
+
+mail_notification:
+  sender_address:        engscipraxis@gmail.com
+  sender_ssl:            true
+  sender_smtp:           smtp.gmail.com
+  sender_username:       engscipraxis
+  sender_password:       JasonFoster
+  receiver:              {1:wildabyss@gmail.com, 2:jimmy.lu@utoronto.ca}

@@ -45,7 +45,7 @@ class helperFunctions
   {
     return ($request->getCookie("username") && $request->getCookie("sid"));
   }
-  
+
   public static function translateTerm($term)
   {
     switch ($term)
@@ -63,7 +63,7 @@ class helperFunctions
 
 
   /**
-   * Finds the mean value from an array, with indices being values and 
+   * Finds the mean value from an array, with indices being values and
    * associated values being weights
    * e.g. {1=>31, 2=>53, 3=>15}
    *
@@ -110,5 +110,58 @@ class helperFunctions
         return $i;
       }
     }
+  }
+
+  /**
+   * This function is called from event handler in the front controller to realize
+   * custom php error handling (not sf app exception)
+   */
+  public static function errorHandler($errno, $errstr, $errfile, $errline)
+  {
+    $dt = date("Y-m-d, H:i:s");
+    $msg = $dt." - [error ".$errno." at line ".$errline." in ".$errfile."] ".$errstr;
+
+    switch ($errno) {
+      case E_ERROR:
+        // redirect to internal server error page and send email notification
+        self::sendEmailNotice($msg);
+        break;
+
+      case E_WARNING:
+        // continue execution and send email notification
+        self::sendEmailNotice($msg);
+        break;
+
+      case E_NOTICE:
+        // continue execution and send email notification
+        self::sendEmailNotice($msg);
+        break;
+
+      default:
+        //do nothing
+        break;
+    }
+  }
+
+  public static function sendEmailNotice($msg)
+  {
+    // register email notification parameters
+    include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
+
+    $connection = new Swift_Connection_SMTP($mailNotificationParams['sender_smtp'], 465, 
+      ($mailNotificationParams['sender_ssl']?Swift_Connection_SMTP::ENC_SSL:Swift_Connection_SMTP::ENC_OFF));
+    $connection->setUsername($mailNotificationParams['sender_username']);
+    $connection->setPassword($mailNotificationParams['sender_password']);
+    
+    $mailer = new Swift($connection);
+    $message = new Swift_Message("SkuleCourses PHP Error", $msg);
+    
+    $recipients = new Swift_RecipientList();
+    foreach ($mailNotificationParams['receiver'] as $address){
+      $recipients->addTo($address);
+    }
+
+    $mailer->send($message, $recipients, $mailNotificationParams['sender_address']);
+    $mailer->disconnect();
   }
 }

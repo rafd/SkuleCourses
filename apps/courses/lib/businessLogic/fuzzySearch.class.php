@@ -10,7 +10,7 @@ class fuzzySearch
   private $_profList;
   private $_courseList;
   private $_programList;
-  
+
   /**
    * Returns the list of instructors found from the query
    *
@@ -19,7 +19,7 @@ class fuzzySearch
   {
     return $this->_profList;
   }
-  
+
   /**
    * Returns the list of courses found from the query
    */
@@ -27,7 +27,7 @@ class fuzzySearch
   {
     return $this->_courseList;
   }
-  
+
   /**
    * Returns the list of programs (disciplines) found from the query
    */
@@ -35,7 +35,7 @@ class fuzzySearch
   {
     return $this->_programList;
   }
-  
+
   /**
    * Executes query and hydrate this object
    *
@@ -44,11 +44,12 @@ class fuzzySearch
   public function query($query, $propelConnection)
   {
     $refQuery = trim($query);
-    if (count_chars($refQuery) < 3)
+
+    if (strlen($refQuery) < 3)
     {
       throw new Exception("Too few characters in the query string");
     }
-    else 
+    else
     {
       // search for courses
       $c = new Criteria();
@@ -59,7 +60,7 @@ class fuzzySearch
       $c->setDistinct();
       $c->addAscendingOrderByColumn(CoursePeer::ID);
       $this->_courseList = CoursePeer::doselect($c, $propelConnection);
-      
+
       // search for professors
       $c = new Criteria();
       $firstNameCrit = $c->getNewCriterion(InstructorPeer::FIRST_NAME, "%".$refQuery."%", Criteria::LIKE);
@@ -69,7 +70,7 @@ class fuzzySearch
       $c->setDistinct();
       $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
       $this->_profList = InstructorPeer::doSelect($c, $propelConnection);
-      
+
       // search for programs
       $c = new Criteria();
       $descrCrit = $c->getNewCriterion(EnumItemPeer::DESCR, "%".$refQuery."%", Criteria::LIKE);
