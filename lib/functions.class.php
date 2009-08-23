@@ -124,18 +124,19 @@ class helperFunctions
     switch ($errno) {
       case E_ERROR:
         // redirect to internal server error page and send email notification
+        //TODO
         self::sendEmailNotice($msg);
         break;
 
-      case E_WARNING:
+      /*case E_WARNING:
         // continue execution and send email notification
         self::sendEmailNotice($msg);
-        break;
+        break;*/
 
-      case E_NOTICE:
+      /*case E_NOTICE:
         // continue execution and send email notification
         self::sendEmailNotice($msg);
-        break;
+        break;*/
 
       default:
         //do nothing
@@ -148,14 +149,14 @@ class helperFunctions
     // register email notification parameters
     include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
 
-    $connection = new Swift_Connection_SMTP($mailNotificationParams['sender_smtp'], 465, 
+    $connection = new Swift_Connection_SMTP($mailNotificationParams['sender_smtp'], 465,
       ($mailNotificationParams['sender_ssl']?Swift_Connection_SMTP::ENC_SSL:Swift_Connection_SMTP::ENC_OFF));
     $connection->setUsername($mailNotificationParams['sender_username']);
     $connection->setPassword($mailNotificationParams['sender_password']);
-    
+
     $mailer = new Swift($connection);
     $message = new Swift_Message("SkuleCourses PHP Error", $msg);
-    
+
     $recipients = new Swift_RecipientList();
     foreach ($mailNotificationParams['receiver'] as $address){
       $recipients->addTo($address);
