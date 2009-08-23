@@ -11,5 +11,10 @@ class ProjectConfiguration extends sfProjectConfiguration
   {
     // for compatibility / remove and enable only the plugins you want
     $this->enableAllPluginsExcept(array('sfDoctrinePlugin', 'sfCompat10Plugin'));
+
+    // this seems to be a bug in symfony
+    // we manually include the handler here
+    // bug report: http://trac.symfony-project.org/ticket/6566
+    require_once dirname(__FILE__).'/../lib/skuleGlobalConfigHandler.php';
   }
 }
