@@ -130,7 +130,7 @@ class searchActions extends sfActions
     try {
       $fuzzySearch->query($query, $conn);
     } catch (Exception $e){
-      $this->error = $e;
+      $this->error = $e->getMessage();
       return;
     }
     
