@@ -2,6 +2,11 @@
 
 class Course extends BaseCourse
 {
+  public function __toString()
+  {
+    return strval($this->getId());
+  }
+  
   public function delete(PropelPDO $con = null)
   {
     // delete course_discipline_assoc

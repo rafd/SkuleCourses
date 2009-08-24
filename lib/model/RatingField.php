@@ -20,4 +20,9 @@ class RatingField extends BaseRatingField
       }
     }
   }
+  
+  public function __toString()
+  {
+    return strval($this->getDescr());
+  }
 }

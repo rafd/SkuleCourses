@@ -2,6 +2,10 @@
 
 class Exam extends BaseExam
 {
+  public function __toString()
+  {
+    return $this->getCourseId().':'.$this->getDescr();
+  }
   /**
    * Checks if file path associated with this object actually exists
    * 

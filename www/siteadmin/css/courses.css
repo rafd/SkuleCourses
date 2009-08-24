@@ -1,0 +1,136 @@
+#searchbar
+{
+	border: 1px solid #000;
+	position: fixed;
+	top:80%;
+	right:10%;
+	width: 250px;
+	height: 50px;
+	padding: 2px;
+	background-color: #fff;
+	z-index: 100;
+	text-align: left;
+}
+
+#searchbar input
+{
+	margin-top: 5px;
+	font: 9pt verdana;
+	border: #000 1px solid;
+	background-color: #ffffff;
+	height: 20px;
+	vertical-align:middle;
+}
+
+#wrapper{
+	margin-left:auto;
+	margin-right:auto;
+	position: relative;
+	width: 1000px;
+}
+
+#submenu
+{
+	text-align: right;
+	position: relative;
+	width:150px;
+	float: left;
+}
+#submenu li { padding:2px;}
+
+#content
+{
+	position: relative;
+	width:770px;
+	text-align: left;
+	float: left;
+	padding: 10px;
+	border: solid 1px #000;
+}
+
+div.resultset
+{
+	border: solid 1px #000;
+	overflow: auto;
+	width: 400px;
+	height: 500px;
+}
+
+table.description{}
+table.description td { vertical-align:top;}
+table.description td.title { width:150px;}
+
+table.layout { width:100%; border:none;}
+table.layout tr { vertical-align:top;}
+table.layout td { padding: 2px;}
+table.layout td.separator { width:7px;}
+
+table.inputlayout { width: 100%; border: none;}
+table.inputlayout tr {vertical-align: middle;}
+table.innerlayout { width: 100%; border: none; margin: none;}
+table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
+
+table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
+table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+
+li
+{
+ list-style: none;
+}
+
+/* buttons */
+a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../images/reload.gif);}
+a.reload:hover {background: url(../images/reload.on.gif);}
+
+a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../images/find.gif);}
+a.find:hover {background: url(../images/find.on.gif);}
+
+a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../images/select.gif);}
+a.select:hover {background: url(../images/select.on.gif);}
+
+a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../images/help.gif) no-repeat;}
+a.help:hover {background: url(../images/help.on.gif);}
+
+div.popupmenu
+{
+	position: absolute;
+	background-color: #fff;
+	visibility: hidden;
+	margin: 0;
+	padding: 0;
+	right:-80px;
+	float: right;
+	z-index: 100;
+	border: solid 1px #000;
+	width: 80px;
+	text-align: center;
+}
+div.popupmenu a {position: relative; display: block;}
+
+div.selector
+{
+	width:100%;
+	height: 440px;
+	border: solid 1px #000;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+div.selector li {margin: 3px; display: block; min-width: 50px;}
+div.selector li.selected {border: solid 1px purple;}
+
+/* button field for editors */
+div.buttonfield
+{
+	width:100%;
+	text-align: right;
+}
+div.buttonfield a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../images/save.gif);}
+div.buttonfield a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 13px; height:16px; background: url(../images/delete.gif);}
+div.buttonfield a.deletebtn:hover {background: url(../images/delete.on.gif);}
+div.buttonfield a.addbtn {cursor: pointer; float: right; margin-left: 5px; display:block; width: 16px; height:16px; background: url(../images/add.gif);}
+div.buttonfield a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../images/refresh.gif);}
+
+img.btn {cursor: pointer; margin-left: 5px; }
+
+input[type=text].date {width:90px;}
