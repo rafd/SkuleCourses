@@ -20,7 +20,17 @@ function skuleErrorHandler($errno, $errstr, $errfile, $errline)
     return true;
 }
 
+function skuleShutdown()
+{
+  // this is used to register fatal error
+  if ($error = error_get_last()){
+    if ($error['type'] == E_ERROR)
+      helperFunctions::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
+  }
+}
+
 // set to the user defined error handler
-//$old_error_handler = set_error_handler("skuleErrorHandler");
+$old_error_handler = set_error_handler("skuleErrorHandler");
+register_shutdown_function('skuleShutdown');
 
 sfContext::createInstance($configuration)->dispatch();

@@ -10,11 +10,7 @@
  */
 class courseActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
+  
   public function executeIndex(sfWebRequest $request)
   {
     $this->buildSubmenu($request);
@@ -52,7 +48,7 @@ class courseActions extends sfActions
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
     
-    if ($request->hasParameter("year"))
+    if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $year = $request->getParameter("year");
       
@@ -156,7 +152,7 @@ class courseActions extends sfActions
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
     
-    if ($request->hasParameter("year"))
+    if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $this->year = $request->getParameter("year");
       
@@ -256,7 +252,7 @@ class courseActions extends sfActions
   
   private function buildSubmenu(sfWebRequest $request)
   {
-    if (!$request->hasParameter("id")) $this->redirect("search/index");
+    if (!$request->hasParameter("id") || trim($request->getParameter("id"))=="") $this->forward404();
     
     // set cookie to remember
     $id = $request->getParameter("id");
@@ -278,4 +274,5 @@ class courseActions extends sfActions
     
     $this->submenu = $submenu->get();
   }
+
 }

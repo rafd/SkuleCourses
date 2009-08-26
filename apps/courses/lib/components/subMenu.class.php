@@ -43,6 +43,8 @@ class subMenu
     
     switch ($this->_menuOption)
     {
+      case subMenuOptions::ERROR:
+        // go straight to next case
       case subMenuOptions::TYPICAL:
         
 	    $conn = Propel::getConnection();
@@ -85,6 +87,10 @@ class subMenu
 	        	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a>
 	        </li><br/>";
 	    }
+	    
+	    if ($this->_menuOption == subMenuOptions::ERROR){
+	      $returnStr .= "<li>Error</li>";
+	    }
         
         break;
       case subMenuOptions::MAINTENANCE:
@@ -118,6 +124,7 @@ class subMenuOptions
   const TYPICAL = 1;
   const MAINTENANCE = 2;
   const BLANK = 3;
+  const ERROR = 4;
   
   public static function getMaintenanceSections()
   {

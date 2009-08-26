@@ -122,24 +122,14 @@ class helperFunctions
     $msg = $dt." - [error ".$errno." at line ".$errline." in ".$errfile."] ".$errstr;
 
     switch ($errno) {
-      case E_ERROR:
-        // redirect to internal server error page and send email notification
-        //TODO
+      case E_WARNING:
         self::sendEmailNotice($msg);
         break;
-
-      /*case E_WARNING:
-        // continue execution and send email notification
+      case E_USER_ERROR:
+        // cascade down to E_ERROR
+      case E_ERROR:
         self::sendEmailNotice($msg);
-        break;*/
-
-      /*case E_NOTICE:
-        // continue execution and send email notification
-        self::sendEmailNotice($msg);
-        break;*/
-
-      default:
-        //do nothing
+        sfcontext::getInstance()->getActionStack()->getFirstEntry()->getActionInstance()->forward("error", "error500");
         break;
     }
   }
