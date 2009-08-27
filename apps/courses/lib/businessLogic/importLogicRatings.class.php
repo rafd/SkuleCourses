@@ -1,6 +1,6 @@
 <?php
 
-class importLogic
+class importLogicRatings
 {
   // _ratingArr[rowNumber][ratingField][rating] = number of people
   private $_ratingArr;
