@@ -51,6 +51,11 @@ class importLogicRatings
           $course->setDeptId(substr($this->_infoArr[$i]["courseCode"], 0, 3));
           $course->setId($this->_infoArr[$i]["courseCode"]);
           $course->save($conn);
+        } elseif ($course->getDescr() == $course->getId()){
+          // exam importer registers course description as course id
+          // if we encounter this situation, amend it with the proper description
+          $course->setDescr($this->_infoArr[$i]["courseName"]);
+          $course->save($conn);
         }
         
         try {

@@ -224,7 +224,7 @@ CREATE TABLE `exam`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`course_id` VARCHAR(9)  NOT NULL,
 	`type` INTEGER  NOT NULL,
-	`year` SMALLINT  NOT NULL,
+	`year` INTEGER  NOT NULL,
 	`descr` VARCHAR(255)  NOT NULL,
 	`file_path` TEXT  NOT NULL,
 	PRIMARY KEY (`id`),

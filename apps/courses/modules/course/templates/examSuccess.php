@@ -13,7 +13,7 @@
 			<td>
 				<ul>
 				  <?php foreach ($examArr as $subArr):?>
-				  <li><?php echo link_to($subArr["descr"], $subArr["path"])?></li>
+				  <li><a href='/<?php echo $subArr["path"]?>'><?php echo $subArr["descr"]?></a></li>
 				  <?php endforeach;?>
 				</ul>
 			</td>

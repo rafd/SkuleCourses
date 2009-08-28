@@ -50,11 +50,11 @@ class helperFunctions
   {
     switch ($term)
     {
-      case 4:
+      case 1:
         return "Winter";
-      case 8:
+      case 5:
         return "Summer";
-      case 12:
+      case 9:
         return "Fall";
       default:
         throw new Exception("unknown term");

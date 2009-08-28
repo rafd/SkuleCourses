@@ -1,4 +1,4 @@
-﻿# This script creates the default database structure and establishes test data
+# This script creates the default database structure and establishes test data
 
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
@@ -439,7 +439,7 @@ CREATE TABLE `exam`
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`course_id` VARCHAR(9)  NOT NULL,
 	`type` INTEGER  NOT NULL,
-	`year` SMALLINT  NOT NULL,
+	`year` INTEGER  NOT NULL,
 	`descr` VARCHAR(255)  NOT NULL,
 	`file_path` TEXT  NOT NULL,
 	PRIMARY KEY (`id`),
@@ -455,7 +455,7 @@ CREATE TABLE `exam`
 		REFERENCES `enum_item` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `exam` VALUES (1, 'ECE259H1', 61, 2008, 'Quiz 1', '/C/');
+INSERT INTO `exam` VALUES (1, 'ECE259H1', 61, 20089, 'Quiz 1', '/C/');
 
 #-----------------------------------------------------------------------------
 #-- exam_comment

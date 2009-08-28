@@ -53,7 +53,7 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td><h4><?php echo $counter?>. <?php echo $arr["type"]?>, <?php echo $arr["field"]?></h4></td>
+			<td><h4><?php echo $counter?>. <?php echo $arr["field"]?><br/>(<?php echo $arr["type"]?>)</h4></td>
 		</tr>
 		<tr>
 			<td>
