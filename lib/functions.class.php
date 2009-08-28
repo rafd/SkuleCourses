@@ -46,16 +46,24 @@ class helperFunctions
     return ($request->getCookie("username") && $request->getCookie("sid"));
   }
 
-  public static function translateTerm($term)
+  /**
+   * Translates the raw database year into something more conventional
+   *
+   * @param       raw year e.g. 20095
+   * @return      the translated year string e.g. 2009 Summer
+   */
+  public static function translateTerm($year)
   {
+    $actYear = substr($year, 0, 4);
+    $term = substr($year, 4);
     switch ($term)
     {
       case 1:
-        return "Winter";
+        return $actYear." Winter";
       case 5:
-        return "Summer";
+        return $actYear." Summer";
       case 9:
-        return "Fall";
+        return $actYear." Fall";
       default:
         throw new Exception("unknown term");
     }

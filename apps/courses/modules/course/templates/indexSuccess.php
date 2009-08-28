@@ -64,17 +64,17 @@
 			<td>Exams Repository</td>
 		</tr>
 		<tr>
-			<td>
+			<td valign="top">
 				<ul>
 					<?php foreach ($ratingYearArray as $year):?>
-					<li><?php echo link_to($year, "course/critique?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
+					<li><?php echo link_to(helperFunctions::translateTerm($year), "course/critique?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
 					<?php endforeach;?>
 				</ul>
 			</td>
-			<td>
+			<td valign="top">
 				<ul>
 					<?php foreach ($examYearArray as $year):?>
-					<li><?php echo link_to($year, "course/exam?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
+					<li><?php echo link_to(helperFunctions::translateTerm($year), "course/exam?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
 					<?php endforeach;?>
 				</ul>
 			</td>

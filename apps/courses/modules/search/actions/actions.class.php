@@ -10,7 +10,6 @@
  */
 class searchActions extends sfActions
 {
-  //TODO: need to check malicious strings
   const SEARCH_BY_DEPARTMENT = 1;
   const SEARCH_BY_INSTRUCTOR = 2;
   const SEARCH_BY_PROGRAM = 3;
@@ -20,17 +19,20 @@ class searchActions extends sfActions
     if ($request->hasParameter("selSearchType")){
       $param = $request->getParameter("selSearchType");
       
-	    switch ($param){
-	      case searchActions::SEARCH_BY_DEPARTMENT:
-	        $this->forward("search", "searchByDepartment");
-	        break;
-	      case searchActions::SEARCH_BY_INSTRUCTOR:
-	        $this->forward("search", "searchByInstructor");
-	        break;
-	      case searchActions::SEARCH_BY_PROGRAM:
-	        $this->forward("search", "searchByProgram");
-	        break;
-	    }
+	  switch ($param){
+	    case searchActions::SEARCH_BY_DEPARTMENT:
+	      $this->forward("search", "searchByDepartment");
+	      break;
+	    case searchActions::SEARCH_BY_INSTRUCTOR:
+	      $this->forward("search", "searchByInstructor");
+	      break;
+	    case searchActions::SEARCH_BY_PROGRAM:
+	      $this->forward("search", "searchByProgram");
+	      break;
+	    default:
+	      $this->forward404();
+	      break;
+	  }
       
     } else {
       $this->forward("search", "searchByDepartment");
@@ -51,6 +53,7 @@ class searchActions extends sfActions
     
     if ($request->hasParameter("instructor")){
       $this->instructorId = $request->getParameter("instructor");
+      if (helperFunctions::isMaliciousString($this->instructorId)) $this->forward404();
       
       // get result set
       $instrObj = InstructorPeer::retrieveByPK($this->instructorId, $conn);
@@ -78,6 +81,7 @@ class searchActions extends sfActions
     
     if ($request->hasParameter("deptId")){
       $deptId = $request->getParameter("deptId");
+      if (helperFunctions::isMaliciousString($deptId)) $this->forward404();
       $this->deptId = $deptId;
       
       $deptObj = DepartmentPeer::retrieveByPK($deptId, $conn);
@@ -104,7 +108,9 @@ class searchActions extends sfActions
     
     if ($request->hasParameter("year") && $request->hasParameter("program")){
       $this->programId = $request->getParameter("program");
+      if (helperFunctions::isMaliciousString($this->programId)) $this->forward404();
       $this->year = $request->getParameter("year");
+      if (helperFunctions::isMaliciousString($this->year)) $this->forward404();
       
       // get result set
       $enum = EnumItemPeer::retrieveByPK($this->programId, $conn);

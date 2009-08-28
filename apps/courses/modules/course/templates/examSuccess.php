@@ -1,6 +1,8 @@
 <?php echo $submenu ?>
 <div id="content">
-	<h3>Tests/Exams for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)<br/><?php echo $year?> Edition</h3></h3>
+	<h3>Tests/Exams for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)
+	<br/>
+	<?php echo helperFunctions::translateTerm($year)?> Edition</h3></h3>
 
 	<table class="layout">
 		<?php if (isset($examArr)):?>

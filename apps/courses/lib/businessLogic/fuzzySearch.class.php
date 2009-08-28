@@ -49,6 +49,10 @@ class fuzzySearch
     {
       throw new Exception("Too few characters in the query string");
     }
+    elseif (helperFunctions::isMaliciousString($refQuery))
+    {
+      throw new Exception("Malicious string detected. Are you trying to wreck our system?");
+    }
     else
     {
       // search for courses

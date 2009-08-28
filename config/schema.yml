@@ -70,7 +70,7 @@ propel:
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
     course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
     type:              { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
-    year:              { type: smallint, required: true }
+    year:              { type: integer, required: true }
     descr:             { type: varchar(255), required: true, index: true }
     file_path:         { type: longvarchar, required: true }
     

@@ -67,7 +67,7 @@ class subMenu
 	          $returnStr .= "<a>None Available</a>";
 	        } else {
 	          foreach ($this->_ratingYearArray as $year){
-	            $returnStr .= link_to($year, "course/critique?id=".$this->_courseId."&year=".$year);
+	            $returnStr .= link_to(helperFunctions::translateTerm($year), "course/critique?id=".$this->_courseId."&year=".$year);
 	          }
 	        }
 	        $returnStr .= "</div>
@@ -80,7 +80,7 @@ class subMenu
 	          $returnStr .= "<a>None Available</a>";
 	        } else {
 	          foreach ($this->_examYearArray as $year){
-	            $returnStr .= link_to($year, "course/exam?id=".$this->_courseId."&year=".$year);
+	            $returnStr .= link_to(helperFunctions::translateTerm($year), "course/exam?id=".$this->_courseId."&year=".$year);
 	          }
 	        }
 	        $returnStr .= "</div>

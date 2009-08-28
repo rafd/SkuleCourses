@@ -265,7 +265,6 @@ class courseActions extends sfActions
     $submenu->setCourseId($id);
     
     // get rating data
-    //TODO: translate the raw year to something more conventional, e.g. Summer, Winter
     $this->ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
     $submenu->setRatingYearArray($this->ratingYearArray);
     // get exam data
