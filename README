@@ -5,3 +5,16 @@ Skule Courses is a database of resources for the courses offered in University
 of Toronto that are of interest to the students of Department of Applied Science
 and Engineering. The resources include course critiques and a repository of past 
 exams and quizes. Skule Courses is expected to be hosted under Skule.ca.
+
+Initial Configuration
+---------
+
+1. Move the package to server, set www as the public directory
+2. Configure skuleGlobal.yml under /config, set the appropriate domain, etc.
+3. Configure databases.yml under /config, set the appropriate database
+4. Run lib.model.schema.sql under /data/sql to establish database structure
+5. Run system.data.sql under /data/sql to populate necessary system data
+6. Delete all files and subdirectories under /cache
+7. Change php.ini max_upload_size and max_form_size to 5M
+
+Start at: domain/index.php

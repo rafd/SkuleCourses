@@ -1,5 +1,6 @@
 /*
- * AppletPane.java
+ * BulkExamsUploader client
+ * Client.java
  *
  * Created on August 27, 2009, 10:27 PM
  */

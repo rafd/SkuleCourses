@@ -113,11 +113,11 @@ div.popupmenu
 	visibility: hidden;
 	margin: 0;
 	padding: 0;
-	right:-80px;
+	right:-92px;
 	float: right;
 	z-index: 100;
 	border: solid 1px #000;
-	width: 80px;
+	width: 90px;
 	text-align: center;
 }
 div.popupmenu a {position: relative; display: block;}

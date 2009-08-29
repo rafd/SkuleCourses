@@ -7,3 +7,12 @@ mail_notification:
   sender_username:       engscipraxis
   sender_password:       JasonFoster
   receiver:              {1:wildabyss@gmail.com, 2:jimmy.lu@utoronto.ca}
+  
+global:
+  domain:                localhost
+  port:                  81
+  login_redirect:        www.skule.ca/login.php
+  
+applet_uploader:
+  username:              skule_uploader
+  password:              3kULE

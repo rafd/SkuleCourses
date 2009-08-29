@@ -44,7 +44,7 @@ class importLogicOfficialExams
         $token = strtok($fileName, '_');
         $counter = 0;
 
-        while ($token != false)
+        while (false !== $token)
         {
           switch ($counter){
             case 0:
@@ -55,7 +55,16 @@ class importLogicOfficialExams
               if ($token != substr($this->_year, 0, 4)) $err = true;
               break;
             case 2:
-              if ($token != "EXAM") $err = true;
+              if ($token != "EXAM")
+              {
+                if (substr($token, 0, 5) == "EXAM(") {
+                  // name could have the following syntax: AER205S_2009_EXAM(2).pdf
+                  $count = strtok($token, '(');
+                  $count = strtok('(');
+                  $count = strtok($count, ')');
+                  if ($count===false || !is_numeric($count)) $err = true;
+                } else $err = true;
+              }
               break;
           }
           $token = strtok("_");
@@ -72,10 +81,11 @@ class importLogicOfficialExams
             case "F":
             case "S":
               $courseCode = $part1."H1";
-              $descr = $part1." ".$this->_year." Official Exam";
+              $descr = $part1." ".$this->_year." Official Exam".(isset($count)?' ('.$count.')':'');
               break;
             case "Y":
               $courseCode = $part1."Y1";
+              $descr = $part1." ".$this->_year." Official Exam".(isset($count)?' ('.$count.')':'');
               break;
             default:
               $err = true;
