@@ -13,7 +13,7 @@ class UserForm extends BaseUserForm
   public function configure()
   {
   	$c= new Criteria();
-    $c->add(EnumItemPeer::PARENT_ID, 10);
+    $c->add(EnumItemPeer::PARENT_ID, skuleadminConst::USERTYPE_PARENT_ID);
     //$c->add(EnumItemPeer::DESCR, '',Criteria::NOT_EQUAL);
     $this->setWidgets(array(
       'id'            => new sfWidgetFormInputHidden(),

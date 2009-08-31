@@ -13,7 +13,7 @@ class RatingFieldForm extends BaseRatingFieldForm
   public function configure()
   {
   	$c= new Criteria();
-    $c->add(EnumItemPeer::PARENT_ID, 22);
+    $c->add(EnumItemPeer::PARENT_ID, skuleadminConst::RATING_FIELD_PID);
     $this->setWidgets(array(
       'id'          => new sfWidgetFormInputHidden(),
       'descr'       => new sfWidgetFormInput(),

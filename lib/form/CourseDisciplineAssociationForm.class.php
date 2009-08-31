@@ -13,7 +13,7 @@ class CourseDisciplineAssociationForm extends BaseCourseDisciplineAssociationFor
   public function configure()
   {
   	$c= new Criteria();
-    $c->add(EnumItemPeer::PARENT_ID, 100);
+    $c->add(EnumItemPeer::PARENT_ID, skuleadminConst::DISCIPLINE_PARENT_ID);
     unset($this['course_id']);
     $this->setWidgets(array(
 	  'id'            => new sfWidgetFormInputHidden(),
