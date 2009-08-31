@@ -13,9 +13,18 @@ class EnumItemForm extends BaseEnumItemForm
   public function configure()
   {
   	$c= new Criteria();
-  	$c->add(EnumItemPeer::PARENT_ID, 1);
-    $c->add(EnumItemPeer::DESCR, '',Criteria::NOT_EQUAL);
-    
+  	//$c->add(EnumItemPeer::DESCR, '',Criteria::NOT_EQUAL);
+  	if($this->getOption('discipline')!==null){
+    $this->setWidgets(array(
+      'id'        => new sfWidgetFormInputHidden(),
+      'descr'     => new sfWidgetFormInput(),
+    ));
+
+    $this->setValidators(array(
+      'id'        => new sfValidatorPropelChoice(array('model' => 'EnumItem', 'column' => 'id', 'required' => false)),
+      'descr'     => new sfValidatorString(array('max_length' => 255)),
+    ));
+  	}else{ 
   	$this->setWidgets(array(
       'id'        => new sfWidgetFormInputHidden(),
       'parent_id' => new sfWidgetFormPropelChoice(array('model' => 'EnumItem', 'add_empty' => false, 'criteria'=>$c)),
@@ -27,7 +36,7 @@ class EnumItemForm extends BaseEnumItemForm
       'parent_id' => new sfValidatorPropelChoice(array('model' => 'EnumItem', 'column' => 'id')),
       'descr'     => new sfValidatorString(array('max_length' => 255)),
     ));
-
+  	}
     $this->widgetSchema->setNameFormat('enum_item[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
