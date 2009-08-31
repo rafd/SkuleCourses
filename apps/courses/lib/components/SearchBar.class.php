@@ -10,7 +10,7 @@ class searchBar
     return "<div id='searchbar'>
       <form name='frmSearchBar' method='get' action='".url_for("search/fuzzySearch")."'>
         Quick course search
-        <table>
+        <table style='margin-top:4px;'>
           <tr>
             <td>
               <input name='query' type='text' style='width:200px' />

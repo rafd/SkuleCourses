@@ -8,11 +8,14 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/css/courses.css" />
     <script type='text/javascript' src='/js/popupMenu.js'></script>
+    <script type='text/javascript' src='/js/toolkit.js'></script>
   </head>
   <body>
   	<div id='wrapper'>
 	  	<?php echo searchBar::get(); ?>
 		<?php echo $sf_content ?>
+	</div>
+	<div id='grayout'>
 	</div>
   </body>
 </html>

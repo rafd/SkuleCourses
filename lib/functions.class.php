@@ -131,18 +131,18 @@ class helperFunctions
 
     switch ($errno) {
       case E_WARNING:
-        self::sendEmailNotice($msg);
+        self::sendEmailNotice("SkuleCourses PHP Error", $msg);
         break;
       case E_USER_ERROR:
         // cascade down to E_ERROR
       case E_ERROR:
-        self::sendEmailNotice($msg);
+        self::sendEmailNotice("SkuleCourses PHP Error", $msg);
         sfcontext::getInstance()->getActionStack()->getFirstEntry()->getActionInstance()->forward("error", "error500");
         break;
     }
   }
 
-  public static function sendEmailNotice($msg)
+  public static function sendEmailNotice($subject, $msg)
   {
     // register email notification parameters
     include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
@@ -153,7 +153,7 @@ class helperFunctions
     $connection->setPassword($mailNotificationParams['sender_password']);
 
     $mailer = new Swift($connection);
-    $message = new Swift_Message("SkuleCourses PHP Error", $msg);
+    $message = new Swift_Message($subject, $msg);
 
     $recipients = new Swift_RecipientList();
     foreach ($mailNotificationParams['receiver'] as $address){

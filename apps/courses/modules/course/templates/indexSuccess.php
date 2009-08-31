@@ -61,7 +61,7 @@
 		</tr>
 		<tr>
 			<td>Course Critiques</td>
-			<td>Exams Repository</td>
+			<td valign="bottom">Exams Repository</td>
 		</tr>
 		<tr>
 			<td valign="top">

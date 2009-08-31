@@ -4,6 +4,9 @@ body{
 }
 
 input[type=text]{ font: 9pt verdana; width: 200px;}
+input[type=file]{ font: 9pt verdana; width: 200px;}
+input[type=button]{ font: 9pt verdana;}
+input[type=submit]{ font: 9pt verdana;}
 select { font: 9pt verdana; width: 200px;}
 
 h4 { color: #5a5b5b; font-size: 11px; font-weight: bold; margin-bottom: 5px; border-bottom: none !important; letter-spacing: 1px;text-transform: uppercase; margin-top: 5px;}

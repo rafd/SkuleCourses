@@ -83,6 +83,7 @@ class subMenu
 	            $returnStr .= link_to(helperFunctions::translateTerm($year), "course/exam?id=".$this->_courseId."&year=".$year);
 	          }
 	        }
+	        $returnStr .= "<a onclick='grayout(\"submitExam\");'>Submit Exams</a>";
 	        $returnStr .= "</div>
 	        	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a>
 	        </li><br/>";
@@ -115,7 +116,99 @@ class subMenu
   
   private function getMenuStud()
   {
-    return "<li>".link_to("Search","search/index")."</li><br/>";
+    $conn = Propel::getConnection();
+    $arr = EnumItemPeer::getAllForParentNodeId(EnumItemPeer::EXAM_TYPES_NODE_ID);
+    
+    $str = "<div class='grayout_dialog' id='submitExam'>
+    <script type='text/javascript'>
+    	function securityFrameOnLoad(){
+    		if (hidSecurityFrame.document.getElementById('status')) {
+    			var status = hidSecurityFrame.document.getElementById('status').value; 
+    			if (status == 'Success'){
+    				document.getElementById('inputButtons').style.display = 'none';
+    				document.getElementById('successButtons').style.display = 'block';
+    				dispStatus('Submission Successful');
+    			} else if (status == 'Security'){
+    				dispStatus('Security string does not match.');
+    			} else {
+    				dispStatus('An error occurred. Please try again later.');
+    			}
+    		}
+    	}
+    	
+    	function submitExamOnSubmit(){
+    		// check that everything has been filled in before submission
+    		var year = trim(document.exam_submission.year.value);
+    		if (year == ''){
+    			dispStatus('You must specify a year.');
+    			return false;
+    		}
+    		if (isNaN(year) || year < 1990 || year > 2020){
+    			dispStatus('Year must be bigger than 1990 and smaller than 2020.');
+    			return false;
+    		}
+    		if (trim(document.exam_submission.security.value) == ''){
+    			dispStatus('You must type in the security string.');
+    			return false;
+    		}
+    		var fileName = trim(document.exam_submission.file.value);
+    		if (fileName == ''){
+    			dispStatus('No file has been selected.');
+    			return false;
+    		}
+    		if (fileName.lastIndexOf('pdf')==-1 && fileName.lastIndexOf('PDF')==-1){
+    			dispStatus('Only a PDF file can be submitted.');
+    			return false;
+    		}
+
+    		return true;
+    	}
+    	
+    	function dispStatus(msg){
+    		document.getElementById('statusSpan').style.display = 'block';
+    		document.getElementById('statusSpan').innerHTML = msg;
+    	}
+    	
+    	function cancelAction(){
+    		grayout('submitExam');
+    		document.getElementById('statusSpan').style.display = 'none';
+    		document.getElementById('inputButtons').style.display = 'block';
+    		document.getElementById('successButtons').style.display = 'none';
+    		document.exam_submission.security.value='';
+    	}
+    </script>
+    <h3>Submit Exam</h3>
+    <form name='exam_submission' method='post' enctype='multipart/form-data' action='".url_for("invisible/submitExam")."' target='hidSecurityFrame'>
+	    <table>
+		    <tr><td width='100'>Course:</td><td align='left'>{$this->_courseId}
+		    <input type='hidden' name='course' value='{$this->_courseId}'/></td></tr>
+		    <tr><td>Type:</td><td align='left'><select name='type' style='width:100px'>";
+    
+    foreach ($arr as $enum){
+      $str .= "<option value='{$enum->getId()}'>{$enum->getDescr()}</option>";
+    }
+
+    $str .= "</select></td></tr>
+		    <tr><td>Year:</td><td align='left'><input type='text' name='year' style='width:100px'/></td></tr>
+		    <tr><td>Term:</td><td>
+		    	<input type='radio' name='term' id='radioFall' value='9' CHECKED><label for='radioFall'>Fall</label>
+		    	<input type='radio' name='term' id='radioSummer' value='5'><label for='radioSummer'>Summer</label>
+		    	<input type='radio' name='term' id='radioWinter' value='1'><label for='radioWinter'>Winter</label>
+		    </td></tr>
+		    <tr><td>File:</td><td align='left'><input type='file' name='file' /></td></tr>
+		    <tr><td>&nbsp;</td></tr>
+		    <tr><td></td><td align='left'><img src='".url_for('invisible/securityImage')."'/></td></tr>
+		    <tr><td>Security String:</td><td><input type='text' name='security' /></td></tr>
+	    </table><br/>
+    	<div id='inputButtons'><input type='submit' onclick='return submitExamOnSubmit();' value='Submit'/><input type='button' onclick='cancelAction()' value='Cancel'/></div>
+    	<div id='successButtons' style='display:none'><input type='button' onclick='cancelAction()' value='Close'/></div>
+    </form>
+    <iframe name='hidSecurityFrame' style='display:none' onload='securityFrameOnLoad()';></iframe>
+    <br/><span style='display:none' id='statusSpan'>Please wait...</span>
+    </div>
+    <li>".link_to("Search","search/index")."</li><br/>";
+    
+    return $str;
   }
 }
 
