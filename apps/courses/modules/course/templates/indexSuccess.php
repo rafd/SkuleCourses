@@ -1,6 +1,6 @@
 <?php echo $submenu ?>
-<div id="content">
-	<h3><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h3>
+<div id="main"><div id="critique_content">
+	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
 	<?php if (isset($courseDetail)):?>
 	<table class="description">
 		<tr>
@@ -54,7 +54,7 @@
 		</tr>
 	</table>
 	<?php endif;?>
-	<table width="100%">
+	<table style="width:100%">
 		<tr>
 			<td width="50%">&nbsp;</td>
 			<td width="50%">&nbsp;</td>
@@ -80,4 +80,4 @@
 			</td>
 		</tr>
 	</table>
-</div>
+</div></div>

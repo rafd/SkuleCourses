@@ -1,6 +1,6 @@
 <script language='javascript' src='/js/FusionCharts.js'></script>
 <?php echo $submenu ?>
-<div id="content">
+<div id="main"><div id="critique_content">
 	<h3>Course Critique for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)
 	<br/>
 	<?php echo helperFunctions::translateTerm($year)?> Edition</h3>
@@ -97,5 +97,5 @@
 		</tr>
 		<?php endforeach;?>
 	</table>
-</div>
+</div></div>
 <img class='hidden' src='/images/help.on.gif' />

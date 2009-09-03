@@ -38,17 +38,15 @@ class subMenu
   
   public function get()
   {
-    $returnStr = "<div id='submenu'>";
+    $returnStr = "<div id='left'>";
     $returnStr .= $this->getMenuStud();
     
-    switch ($this->_menuOption)
+    if ($this->_menuOption < subMenuOptions::MAINTENANCE)
     {
-      case subMenuOptions::ERROR:
-        // go straight to next case
-      case subMenuOptions::TYPICAL:
-        
-	    $conn = Propel::getConnection();
-	    
+        // courses and search menu styling
+      
+        $conn = Propel::getConnection();
+
 	    if (isset($this->_courseId)) {
 	        if (!isset($this->_ratingYearArray)) {
 		      // get rating data
@@ -59,10 +57,13 @@ class subMenu
 		      $this->_examYearArray = ExamPeer::getAvailableYearsForCourseId($this->_courseId, $conn);
 		    }
 	        
-	        $returnStr .= "<li>".link_to($this->_courseId, "course/index?id=".$this->_courseId)."</li>";
+		    if ($this->_menuOption == subMenuOptions::COURSE)
+		      $returnStr .= "<dl><dt>".$this->_courseId."</dt>";
+		    else
+	          $returnStr .= "<dl><dt>".link_to($this->_courseId, "course/index?id=".$this->_courseId)."</dt>";
 	        
 	        // critique
-	        $returnStr .= "<li><div class='popupmenu' id='subCritique' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
+	        $returnStr .= "<div class='popupmenu' id='subCritique' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
 	        if (count($this->_ratingYearArray)==0){
 	          $returnStr .= "<a>None Available</a>";
 	        } else {
@@ -71,11 +72,10 @@ class subMenu
 	          }
 	        }
 	        $returnStr .= "</div>
-	        	<a onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()'>Course Critiques</a>
-	        </li>";
+	        	<dd><a class='pointer' onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()'>Course Critiques</a></dd>";
 	        
 	        // exams
-	        $returnStr .= "<li><div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
+	        $returnStr .= "<div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
 	        if (count($this->_examYearArray)==0){
 	          $returnStr .= "<a>None Available</a>";
 	        } else {
@@ -85,28 +85,22 @@ class subMenu
 	        }
 	        $returnStr .= "<a onclick='grayout(\"submitExam\");'>Submit Exams</a>";
 	        $returnStr .= "</div>
-	        	<a onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a>
-	        </li><br/>";
+	        	<dd><a class='pointer' onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a></dd></dl>";
 	    }
-	    
-	    if ($this->_menuOption == subMenuOptions::ERROR){
-	      $returnStr .= "<li>Error</li>";
-	    }
-        
-        break;
-      case subMenuOptions::MAINTENANCE:
-        
-        $returnStr .= "<li>".link_to("Maintenance","maintenance/index")."</li>";
+    } 
+    elseif ($this->_menuOption == subMenuOptions::MAINTENANCE)
+    {
+        //TODO: make maintenance menu
+        $returnStr .= "<dl><dt>".link_to("Maintenance","maintenance/index")."</dt>";
         
         foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
         {
-          $returnStr .= "<li>".link_to($key, $value)."</li>";
+          $returnStr .= "<dd>".link_to($key, $value)."</dd>";
         }
-        $returnStr.="<br/>";
-        
-        break;
-      case subMenuOptions::BLANK:
-        break;
+    } 
+    elseif ($this->_menuOption == subMenuOptions::ERROR)
+    {
+        $returnStr .= "<dl><dt>Error</dt></dl>";
     }
     
     $returnStr .= "</div>";
@@ -149,6 +143,10 @@ class subMenu
     		}
     		if (trim(document.exam_submission.security.value) == ''){
     			dispStatus('You must type in the security string.');
+    			return false;
+    		}
+    		if (trim(document.exam_submission.descr.value) == ''){
+    			dispStatus('You must type in the display title.');
     			return false;
     		}
     		var fileName = trim(document.exam_submission.file.value);
@@ -195,6 +193,7 @@ class subMenu
 		    	<input type='radio' name='term' id='radioSummer' value='5'><label for='radioSummer'>Summer</label>
 		    	<input type='radio' name='term' id='radioWinter' value='1'><label for='radioWinter'>Winter</label>
 		    </td></tr>
+		    <tr><td>Display Title:</td><td align='left'><input type='text' name='descr' /></td></tr>
 		    <tr><td>File:</td><td align='left'><input type='file' name='file' /></td></tr>
 		    <tr><td>&nbsp;</td></tr>
 		    <tr><td></td><td align='left'><img src='".url_for('invisible/securityImage')."'/></td></tr>
@@ -205,8 +204,12 @@ class subMenu
     </form>
     <iframe name='hidSecurityFrame' style='display:none' onload='securityFrameOnLoad()';></iframe>
     <br/><span style='display:none' id='statusSpan'>Please wait...</span>
-    </div>
-    <li>".link_to("Search","search/index")."</li><br/>";
+    </div>";
+    
+    if ($this->_menuOption == subMenuOptions::SEARCH)
+      $str .= "<dl><dt>Search</dt></dl>";
+    else
+      $str .= "<dl><dt>".link_to("Search","search/index")."</dt></dl>";
     
     return $str;
   }
@@ -214,9 +217,9 @@ class subMenu
 
 class subMenuOptions
 {
-  const TYPICAL = 1;
-  const MAINTENANCE = 2;
-  const BLANK = 3;
+  const SEARCH = 1;
+  const COURSE = 2;
+  const MAINTENANCE = 3;
   const ERROR = 4;
   
   public static function getMaintenanceSections()

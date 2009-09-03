@@ -261,7 +261,7 @@ class courseActions extends sfActions
     
     $conn = Propel::getConnection();
     
-    $submenu = new subMenu(subMenuOptions::TYPICAL);
+    $submenu = new subMenu(subMenuOptions::COURSE);
     $submenu->setCourseId($id);
     
     // get rating data

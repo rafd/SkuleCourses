@@ -1,6 +1,6 @@
 <?php echo $submenu ?>
-<div id="content">
-	<h3>Search Results for "<?php echo $query?>"</h3>
+<div id="main"><div id="critique_content">
+	<h2>Search Results for "<?php echo $query?>"</h2>
 	<?php if (isset($error)):?>
 	<table>
 		<tr>
@@ -57,4 +57,4 @@
 		<?php endif;?>
 	</table>
 	<?php endif;?>
-</div>
+</div></div>

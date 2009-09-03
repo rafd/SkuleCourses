@@ -1,7 +1,7 @@
 <?php use_helper('Object')?>
 <?php echo $submenu ?>
-<div id="content">
-	<h3>Course Search</h3>
+<div id="main"><div id="critique_content">
+	<h2>Course Search</h2>
 	<table>
 		<tr>
 			<td width="150">Search By: </td>
@@ -49,5 +49,5 @@
 	  	</tr>
 	</table>
 	<?php endif;?>
-</div>
+</div></div>
 <img class='hidden' src='/images/reload.on.gif' />

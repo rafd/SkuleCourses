@@ -157,7 +157,7 @@ class searchActions extends sfActions
   
   public function preExecute()
   {
-    $submenu = new subMenu(subMenuOptions::TYPICAL);
+    $submenu = new subMenu(subMenuOptions::SEARCH);
     $this->submenu = $submenu->get();
     $this->searchTypeList = $this->getSearchTypeList();
     $this->searchTypeFormName = "searchTypeForm";

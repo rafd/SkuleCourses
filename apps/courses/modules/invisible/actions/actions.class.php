@@ -20,7 +20,8 @@ class invisibleActions extends sfActions
       $i++;
     }
     
-    $this->getUser()->setAttribute("securityImage", $code);
+    $_SESSION['securityImage'] = $code;
+    //$this->getUser()->setAttribute("securityImage", $code);
      
     //Set the image width and height
     $width = 100;
@@ -61,15 +62,16 @@ class invisibleActions extends sfActions
   public function executeSubmitExam(sfWebRequest $request)
   {
     if ($request->isMethod(sfRequest::POST) && $request->hasParameter('security') 
-      && $request->hasParameter('year'))
+      && $request->hasParameter('year') && $request->hasParameter('descr'))
     {
       
       $files = $request->getFiles();
       $file = $files['file'];
+      $descr = $request->getParameter('descr');
       
-      if (isset($file) && strtoupper(substr($file['name'], -3, 3)) == 'PDF') {
+      if (isset($file) && strtoupper(substr($file['name'], -3, 3)) == 'PDF' && !helperFunctions::isMaliciousString($descr)) {
         
-        if ($request->getParameter("security") != $this->getUser()->getAttribute("securityImage")){
+        if ($request->getParameter("security") != $_SESSION['securityImage']){
           echo "<input type='text' id='status' value='Security'/>";
           exit();
         }
@@ -102,11 +104,11 @@ class invisibleActions extends sfActions
 	      $exam->setFilePath($tgt_path."/".$fileName);
 	      $exam->setYear($year);
 	      $exam->setType($request->getParameter("type"));
-	      $exam->setDescr($request->getParameter("course")." ".$year." ".EnumItemPeer::retrieveByPK($request->getParameter("type"))->getDescr());
+	      $exam->setDescr($descr);
 	      $exam->save($conn);
 	      
 	      // send notification email
-	      $ip = $request->getHttpHeader("addr", "remote");
+	      $ip = $_SERVER['REMOTE_ADDR'];
           $msg = "Submitted by ".$ip." [id=".$exam->getId()."]";
 	      helperFunctions::sendEmailNotice("Exam Submission", $msg);
 	      
