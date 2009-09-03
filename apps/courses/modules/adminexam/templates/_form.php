@@ -34,10 +34,17 @@
         </td>
       </tr>
       <tr>
-        <th><?php echo $form['year']->renderLabel() ?></th>
+        <th>Year</th>
         <td>
-          <?php echo $form['year']->renderError() ?>
-          <?php echo $form['year'] ?>
+          <?php echo $form['years']->renderError() ?>
+          <?php echo $form['years'] ?>
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $form['semester']->renderLabel() ?></th>
+        <td>
+          <?php echo $form['semester']->renderError() ?>
+          <?php echo $form['semester'] ?>
         </td>
       </tr>
       <tr>
@@ -51,7 +58,7 @@
       <tr>
         <th>File</th>
         <td>
-          <?php echo link_to($form->getObject()->getFilePath(), $sf_request->getRelativeUrlRoot().'/'.$uploaddir.'/'.$form->getObject()->getFilePath())?>
+          <?php echo link_to(basename($form->getObject()->getFilePath()), $sf_request->getRelativeUrlRoot().$uploadpath.basename($form->getObject()->getFilePath()))?>
         </td>
       </tr>
       <?php endif; ?>

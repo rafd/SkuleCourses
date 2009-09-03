@@ -8,6 +8,10 @@ class skuleadminConst
   const EXAMTYPE_PARENT_ID = 60;
   const USERTYPE_PARENT_ID = 10;
   const RATING_FIELD_PID = 22;
-  const BASE_UPLOAD_FOLDER = 'uploads';
+  const INDIVIDUALEXAMFOLDER = '/exams/custom/';
+  const EXAM_FILE_DATEFORMAT = 'Y-m-d-H-i-s';
+  
+  const DEPARTMENT_RECORDNUMBER = 10;
+
 }
 ?>
