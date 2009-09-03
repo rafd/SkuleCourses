@@ -167,7 +167,7 @@ public class AppletPane extends javax.swing.JPanel {
 
         remoteScrollPanel.setViewportView(listRemote);
 
-        lblRemoteDescr.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblRemoteDescr.setFont(new java.awt.Font("Tahoma", 1, 12));
         lblRemoteDescr.setText("Remote");
 
         btnStart.setText("Start Transfering");
@@ -197,6 +197,11 @@ public class AppletPane extends javax.swing.JPanel {
         comboDriver.setSelectedItem(_roots.elementAt(0));
         comboDriver.setMinimumSize(new java.awt.Dimension(150, 18));
         comboDriver.setPreferredSize(new java.awt.Dimension(100, 20));
+        comboDriver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboDriverOnSelectChanged(evt);
+            }
+        });
         jSplitPane1.setTopComponent(comboDriver);
 
         treeLocal.setModel(new FileTreeModel(_roots.elementAt(0)));
@@ -330,6 +335,14 @@ private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     upl.setRedirectWhenUploadFinished(_appletContext, _redirectURL);
     upl.uploadFiles();
 }//GEN-LAST:event_btnStartActionPerformed
+
+private void comboDriverOnSelectChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDriverOnSelectChanged
+    JComboBox sender = (JComboBox)evt.getSource();
+    FileNode selected = (FileNode)sender.getSelectedItem();
+    treeLocal.setModel(new FileTreeModel(selected));
+    listLocal.setModel(new FileListModel(selected));
+    treeLocal.setSelectionPath(treeLocal.getPathForRow(0));
+}//GEN-LAST:event_comboDriverOnSelectChanged
 
 private void localTreeNodeSelection(TreeSelectionEvent e){
     TreePath path = e.getPath();
