@@ -61,17 +61,17 @@
 		</tr>
 		<tr>
 			<td>Course Critiques</td>
-			<td valign="bottom">Exams Repository</td>
+			<td>Exams Repository</td>
 		</tr>
 		<tr>
-			<td valign="top">
+			<td style="vertical-align:top">
 				<ul>
 					<?php foreach ($ratingYearArray as $year):?>
 					<li><?php echo link_to(helperFunctions::translateTerm($year), "course/critique?id=".$sf_request->getParameter('id')."&year=".$year)?></li>
 					<?php endforeach;?>
 				</ul>
 			</td>
-			<td valign="top">
+			<td style="vertical-align:top">
 				<ul>
 					<?php foreach ($examYearArray as $year):?>
 					<li><?php echo link_to(helperFunctions::translateTerm($year), "course/exam?id=".$sf_request->getParameter('id')."&year=".$year)?></li>

@@ -71,8 +71,10 @@ class subMenu
 	            $returnStr .= link_to(helperFunctions::translateTerm($year), "course/critique?id=".$this->_courseId."&year=".$year);
 	          }
 	        }
-	        $returnStr .= "</div>
-	        	<dd><a class='pointer' onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()'>Course Critiques</a></dd>";
+	        if ($this->_menuOption == subMenuOptions::COURSE_CRITIQUE)
+	          $returnStr .= "</div><dd onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()' class='pointer'>Course Critiques</dd>";
+	        else
+	          $returnStr .= "</div><dd onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()' class='pointer'><a>Course Critiques</a></dd>";
 	        
 	        // exams
 	        $returnStr .= "<div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
@@ -84,14 +86,16 @@ class subMenu
 	          }
 	        }
 	        $returnStr .= "<a onclick='grayout(\"submitExam\");'>Submit Exams</a>";
-	        $returnStr .= "</div>
-	        	<dd><a class='pointer' onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</a></dd></dl>";
+	        if ($this->_menuOption == subMenuOptions::COURSE_EXAM)
+	          $returnStr .= "</div><dd class='pointer' onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'>Exams Repository</dd></dl>";
+	        else
+	          $returnStr .= "</div><dd class='pointer' onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'><a>Exams Repository</a></dd></dl>";
 	    }
     } 
     elseif ($this->_menuOption == subMenuOptions::MAINTENANCE)
     {
         //TODO: make maintenance menu
-        $returnStr .= "<dl><dt>".link_to("Maintenance","maintenance/index")."</dt>";
+        $returnStr .= "<dl><dt>".link_to("Maintenance","siteadmin")."</dt>";
         
         foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
         {
@@ -219,17 +223,18 @@ class subMenuOptions
 {
   const SEARCH = 1;
   const COURSE = 2;
-  const MAINTENANCE = 3;
-  const ERROR = 4;
+  const COURSE_CRITIQUE = 3;
+  const COURSE_EXAM = 4;
+  const MAINTENANCE = 5;
+  const ERROR = 6;
   
   public static function getMaintenanceSections()
   {
-    return array("Courses"=>"maintenance/courses", 
-    "Instructors"=>"maintenance/instructors",
-    "Departments"=>"maintenance/departments",
-    "Disciplines"=>"maintenance/disciplines",
-    "Rating Criteria"=>"maintenance/ratingfields",
-    "Import History"=>"maintenance/importhistory",
-    "Import Ratings"=>"maintenance/importratings");
+    return array("Courses"=>"admincourse", 
+    "Instructors"=>"admininstructor",
+    "Departments"=>"admindepartment",
+    "Disciplines"=>"admindiscipline",
+    "Ratings"=>"",
+    "Exams"=>"");
   }
 }

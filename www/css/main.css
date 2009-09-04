@@ -1,5 +1,5 @@
 #main {min-height:450px}
-#main table{width: auto;margin:0;}
+#main table{width: auto;margin:0;vertical-align:baseline;}
 #main input[type=text], #left input[type=file], #main select { font: 10pt verdana; width: 200px;}
 #main input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #main ul {margin: 2px; padding-left: 10px}
@@ -53,7 +53,7 @@ table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
 table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
 table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
 
-a.pointer {cursor:pointer;}
+dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../images/reload.gif);}

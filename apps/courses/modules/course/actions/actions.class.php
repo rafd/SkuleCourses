@@ -42,7 +42,7 @@ class courseActions extends sfActions
   
   public function executeCritique(sfWebRequest $request)
   {
-    $this->buildSubmenu($request);
+    $this->buildSubmenu($request, subMenuOptions::COURSE_CRITIQUE);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
@@ -146,7 +146,7 @@ class courseActions extends sfActions
   
   public function executeExam(sfWebRequest $request)
   {
-    $this->buildSubmenu($request);
+    $this->buildSubmenu($request, subMenuOptions::COURSE_EXAM);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
@@ -250,7 +250,7 @@ class courseActions extends sfActions
 	return $FC;
   }
   
-  private function buildSubmenu(sfWebRequest $request)
+  private function buildSubmenu(sfWebRequest $request, $option=subMenuOptions::COURSE)
   {
     if (!$request->hasParameter("id") || trim($request->getParameter("id"))=="") $this->forward404();
     
@@ -261,7 +261,7 @@ class courseActions extends sfActions
     
     $conn = Propel::getConnection();
     
-    $submenu = new subMenu(subMenuOptions::COURSE);
+    $submenu = new subMenu($option);
     $submenu->setCourseId($id);
     
     // get rating data
