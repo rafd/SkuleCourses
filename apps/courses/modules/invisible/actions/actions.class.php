@@ -92,7 +92,8 @@ class invisibleActions extends sfActions
             exit();
           }
         }
-        $fileName = time().".pdf";
+        // unique filename
+        $fileName = $file['name'].time().".pdf";
         
 	    if (move_uploaded_file($file['tmp_name'], $tgt_path."/".$fileName))
 	    {
