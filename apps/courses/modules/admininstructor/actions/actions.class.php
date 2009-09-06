@@ -10,6 +10,7 @@
  */
 class admininstructorActions extends sfActions
 {
+	
   public function executeIndex(sfWebRequest $request)
   {
     $this->instructor_list = InstructorPeer::doSelect(new Criteria());
@@ -28,6 +29,9 @@ class admininstructorActions extends sfActions
     
     //$this->processForm($request, $this->form);
     $this->submitForm($request, $this->form, $this->form2);
+   
+    	$this->omiterror = true;		
+    
     $this->instructor_list = InstructorPeer::doSelect(new Criteria());
     $this->setTemplate('index');
   }
@@ -91,18 +95,37 @@ class admininstructorActions extends sfActions
   
   protected function submitForm(sfWebRequest $request, sfForm $form, sfForm $form2){
   //processform logic
-
+      $submit = true;
+     
       $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
       $form2->bind($request->getParameter($form2->getName()), $request->getFiles($form2->getName()));
       
-      if ($form2->isValid()){
-        if($form->isValid()){
-          $instructresult = $form->save();
-          $form2->getObject()->setInstructorId($instructresult->getId());
-          $instructdetailresult = $form2->save();
-          $this->redirect('admininstructor/edit?id='.$instructresult->getId());
-          //$this->redirect('course/index');
+      if ($form->isValid()){
+      	$instructresult = $form->save();
+        $form2->getObject()->setInstructorId($instructresult->getId());
+        
+        if($form2->getValue('descr') !== null && $form2->getValue('descr')!='' ){
+        	if($form2->isValid()){
+        	  $instructdetailresult = $form2->save();
+        	}else{
+        		$submit = false;
+        	}
+        }else{
+        	//its form DESCR null or empty, if previous exists then delete it
+        	$c_detail = new Criteria();
+        	$c_detail->add(InstructorDetailPeer::INSTRUCTOR_ID,$instructresult->getId());
+        	$detail = InstructorDetailPeer::doSelectOne($c_detail);
+        	if($detail!=null){
+        	  $detail->delete();
+        	}
+        	
         }
+      }else{
+      	$submit = false;
+      }
+      
+      if($submit){
+      	$this->redirect('admininstructor/edit?id='.$instructresult->getId());
       }
     
   }

@@ -1,24 +1,27 @@
-<h1>AdminCIA List</h1>
-
+<h1>Course Instructor Association List</h1>
 <table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Instructor</th>
-      <th>Course</th>
-      <th>Year</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach ($course_instructor_association_list as $course_instructor_association): ?>
-    <tr>
-      <td><a href="<?php echo url_for('adminCIA/edit?id='.$course_instructor_association->getId()) ?>"><?php echo $course_instructor_association->getId() ?></a></td>
-      <td><?php echo $course_instructor_association->getInstructorId() ?></td>
-      <td><?php echo $course_instructor_association->getCourseId() ?></td>
-      <td><?php echo $course_instructor_association->getYear() ?></td>
-    </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+<tr>
+<td>
+<!-- table listing starts -->
 
-  <a href="<?php echo url_for('adminCIA/new') ?>">New</a>
+      <?php if(!isset($instruct_id)): ?>
+      <?php $instruct_id=null ?>
+      <?php endif; ?>
+      <?php if(!isset($course_id)): ?>
+      <?php $course_id=null ?>
+      <?php endif; ?>
+      <?php include_partial('list', array('course_instructor_association_list' => $course_instructor_association_list, '$course_id' => $course_id, 'instruct_id' => $instruct_id)) ?>
+<!-- table listing ends -->
+</td>
+<td><?php include_partial('form', array('form' => $form)) ?></td>
+</tr>
+</table>
+   <?php if(isset($course_id)): ?>
+ <a href="<?php echo url_for('adminCIA/index?course='.$course_id) ?>">New Instructor</a>
+ <?php endif; ?>
+  <?php if(isset($instruct_id)): ?>
+ <a href="<?php echo url_for('adminCIA/index?instructor='.$instruct_id) ?>">New Course</a>
+ <?php endif; ?>
+ <?php if(!isset($instruct_id) && !isset($course_id)): ?>
+ <a href="<?php echo url_for('adminCIA/index') ?>">New Course</a>
+ <?php endif; ?>
