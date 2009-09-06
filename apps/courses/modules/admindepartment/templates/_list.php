@@ -1,25 +1,35 @@
-<fieldset>
+
 <table>
- <tr class="t_header">
-   <th>Abbreviations</th>
-   
-   
- </tr>
+<thead>
+    <tr>
+      <th></th>
+      <th>Abbreviations</th>
+      
+    </tr>
+  </thead>
+ <tbody>
  
     
     
     <?php foreach ($department_list->getResults() as $department): ?>
-    <tr class="t_body">  
-      <td><a href="<?php echo url_for('admindepartment/edit?id='.$department->getId()) ?>"><?php echo $department->getId() ?></a>
+    <tr>
+      <td>
+      <a href="<?php echo url_for('admindepartment/edit?id='.$department->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
+      <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'admindepartment/delete?id='.$department->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>  
+      </td>
+      <td>
+      
+      <?php echo $department->getId() ?></td>
 
-      <?php echo link_to('Delete', 'admindepartment/delete?id='.$department->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?></td>
+      
     </tr>
     <?php endforeach; ?>
-    <tr><td>
+    <tr><td style="text-align: center" colspan="2">
     <?php echo $department_list->getNbResults() ?> results found.<br />
     Displaying results <?php echo $department_list->getFirstIndice() ?> to  <?php echo $department_list->getLastIndice() ?>.
     </td></tr>
-    <tr><td>
+   
+    <tr><td colspan="2"style="text-align: center">
     <?php if ($department_list->haveToPaginate()): ?>
   <?php echo link_to('&laquo;', 'admindepartment/index?page='.$department_list->getFirstPage()) ?>
   <?php echo link_to('&lt;', 'admindepartment/index?page='.$department_list->getPreviousPage()) ?>
@@ -32,5 +42,5 @@
 <?php endif ?>
     </td>
     </tr>
+    </tbody>
 </table>
-</fieldset>

@@ -10,9 +10,8 @@
       <tr>
         <td colspan="2">
           <?php echo $form->renderHiddenFields() ?>
-          &nbsp;<a href="<?php echo url_for('adminCIA/index') ?>">Cancel</a>
           <?php if (!$form->getObject()->isNew()): ?>
-            &nbsp;<?php echo link_to('Delete', 'adminCIA/delete?id='.$form->getObject()->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
+          &nbsp;<a href="<?php echo url_for('adminCIA/index') ?>">Cancel</a>
           <?php endif; ?>
           <input type="submit" value="Save" />
         </td>
@@ -35,10 +34,17 @@
         </td>
       </tr>
       <tr>
-        <th><?php echo $form['year']->renderLabel() ?></th>
+        <th>Year</th>
         <td>
-          <?php echo $form['year']->renderError() ?>
-          <?php echo $form['year'] ?>
+          <?php echo $form['years']->renderError() ?>
+          <?php echo $form['years'] ?>
+        </td>
+      </tr>
+      <tr>
+        <th><?php echo $form['semester']->renderLabel() ?></th>
+        <td>
+          <?php echo $form['semester']->renderError() ?>
+          <?php echo $form['semester'] ?>
         </td>
       </tr>
     </tbody>
