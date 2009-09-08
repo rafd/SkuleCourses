@@ -12,7 +12,7 @@ class adminratingCriteriaActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->rating_field_list = RatingFieldPeer::doSelect(new Criteria());
+    $this->rating_field_list = $this->getRatingCriteriaList();
     $this->form = new RatingFieldForm();
   }
 
@@ -23,7 +23,7 @@ class adminratingCriteriaActions extends sfActions
     $this->form = new RatingFieldForm();
 
     $this->processForm($request, $this->form);
-
+    $this->rating_field_list = $this->getRatingCriteriaList();
     $this->setTemplate('index');
   }
 
@@ -31,7 +31,7 @@ class adminratingCriteriaActions extends sfActions
   {
     $this->forward404Unless($rating_field = RatingFieldPeer::retrieveByPk($request->getParameter('id')), sprintf('Object rating_field does not exist (%s).', $request->getParameter('id')));
     $this->form = new RatingFieldForm($rating_field);
-    $this->rating_field_list = RatingFieldPeer::doSelect(new Criteria());
+    $this->rating_field_list = $this->getRatingCriteriaList();
     $this->setTemplate('index');
   }
 
@@ -42,7 +42,7 @@ class adminratingCriteriaActions extends sfActions
     $this->form = new RatingFieldForm($rating_field);
 
     $this->processForm($request, $this->form);
-
+    $this->rating_field_list = $this->getRatingCriteriaList();
     $this->setTemplate('index');
   }
 
@@ -65,5 +65,20 @@ class adminratingCriteriaActions extends sfActions
 
       $this->redirect('adminratingCriteria/edit?id='.$rating_field->getId());
     }
+  }
+  
+  protected function getRatingCriteriaList(Criteria $c = null){
+  	$pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
+  	$pager = new sfPropelPager('RatingField', skuleadminConst::RATINGCRITERIA_RECORDNUMBER);
+  	if(!isset($c)){
+  	 $c = new Criteria();
+  	}
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
 }

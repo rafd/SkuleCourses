@@ -12,7 +12,7 @@ class adminCIAActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-  	$this->course_instructor_association_list = $this->getCIAlist($request);
+  	$this->course_instructor_association_list = $this->getCIAlist();
   	
   	$values=array('instructor'=>$request->getParameter('instructor'),'course'=>$request->getParameter('course'));
   	$this->form = new CourseInstructorAssociationForm(new CourseInstructorAssociation(),$values);
@@ -26,7 +26,7 @@ class adminCIAActions extends sfActions
     $this->form = new CourseInstructorAssociationForm(new CourseInstructorAssociation(),$values);
     
     $this->processForm($request, $this->form);
-    $this->course_instructor_association_list = $this->getCIAlist($request);
+    $this->course_instructor_association_list = $this->getCIAlist();
     $this->setTemplate('index');
   }
 
@@ -50,7 +50,7 @@ class adminCIAActions extends sfActions
     
     
     $this->form = new CourseInstructorAssociationForm($course_instructor_association, $values);
-    $this->course_instructor_association_list = $this->getCIAlist($request);
+    $this->course_instructor_association_list = $this->getCIAlist();
     $this->setTemplate('index');
   }
 
@@ -72,7 +72,7 @@ class adminCIAActions extends sfActions
     $this->form = new CourseInstructorAssociationForm($course_instructor_association, $values);
     
     $this->processForm($request, $this->form);
-    $this->course_instructor_association_list = $this->getCIAlist($request);
+    $this->course_instructor_association_list = $this->getCIAlist();
     $this->setTemplate('index');
   }
 
@@ -103,17 +103,27 @@ class adminCIAActions extends sfActions
     }
   }
   
-  protected function getCIAlist(sfWebRequest $request){
+  protected function getCIAlist(){
+    $pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
+    
+    $pager = new sfPropelPager('CourseInstructorAssociation', skuleadminConst::COURSEINSTRUCTOR_ASSOCNUMBER);
   	$c = new Criteria();
-  	if($request->getParameter('course')!==null || $request->getParameter('course')!=''){
-  	  $c->add(CourseInstructorAssociationPeer::COURSE_ID,$request->getParameter('course'));
-  	  $this->course_id = $request->getParameter('course'); 
+  	if($this->getRequestParameter('course')!==null || $this->getRequestParameter('course')!=''){
+  	  $c->add(CourseInstructorAssociationPeer::COURSE_ID,$this->getRequestParameter('course'));
+  	  $this->course_id = $this->getRequestParameter('course'); 
   	}
   	//check for instructor info
-  	if($request->getParameter('instructor')!==null || $request->getParameter('instructor')!=''){
-  	  $c->add(CourseInstructorAssociationPeer::INSTRUCTOR_ID,$request->getParameter('instructor'));
-  	  $this->instruct_id = $request->getParameter('instructor');	
+  	if($this->getRequestParameter('instructor')!==null || $this->getRequestParameter('instructor')!=''){
+  	  $c->add(CourseInstructorAssociationPeer::INSTRUCTOR_ID,$this->getRequestParameter('instructor'));
+  	  $this->instruct_id = $this->getRequestParameter('instructor');	
   	}
-  	return CourseInstructorAssociationPeer::doSelect($c);
+  	$pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
+  	//return CourseInstructorAssociationPeer::doSelect($c);
   }
 }

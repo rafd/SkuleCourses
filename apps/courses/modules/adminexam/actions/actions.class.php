@@ -135,11 +135,18 @@ class adminexamActions extends sfActions
   }
   
   protected function getExamList(Criteria $c = null){
-    if(isset($c)){
-      return ExamPeer::doSelect($c); 	
-    }else{
-      return ExamPeer::doSelect(new Criteria());
+  	$pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
     }
+  	$pager = new sfPropelPager('Exam', skuleadminConst::EXAM_RECORDNUMBER);
+  	if(!isset($c)){
+  	 $c = new Criteria();
+  	}
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
   
   protected function delExam($myfile){

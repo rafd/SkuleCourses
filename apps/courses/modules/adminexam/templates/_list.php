@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($exam_list as $exam): ?>
+    <?php foreach ($exam_list->getResults() as $exam): ?>
     <tr>
       <td>
       <a href="<?php echo url_for('adminexam/edit?id='.$exam->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
@@ -31,5 +31,6 @@
       </td>
     </tr>
     <?php endforeach; ?>
+    <?php include_partial('global/paging', array('pagelist' => $exam_list, 'location' => 'adminexam')) ?>
   </tbody>
 </table>

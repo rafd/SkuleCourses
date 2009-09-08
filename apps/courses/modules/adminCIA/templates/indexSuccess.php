@@ -1,4 +1,6 @@
+<?php include_partial('global/siteadminmenu') ?>
 <h1>Course Instructor Association List</h1>
+
 <table>
 <tr>
 <td>

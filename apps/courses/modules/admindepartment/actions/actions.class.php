@@ -12,11 +12,7 @@ class admindepartmentActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $page = 1;
-    if($this->getRequestParameter('page')!==null){
-    	$page = $this->getRequestParameter('page');
-    }
-    $this->department_list = $this->getDepartmentList($page);
+    $this->department_list = $this->getDepartmentList();
     $this->form = new DepartmentForm();
   }
 
@@ -73,8 +69,12 @@ class admindepartmentActions extends sfActions
     }
   }
 
-  protected function getDepartmentList($pagenumber = 1, Criteria $c = null){
+  protected function getDepartmentList(Criteria $c = null){
   	
+    $pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
   	$pager = new sfPropelPager('Department', skuleadminConst::DEPARTMENT_RECORDNUMBER);
   	if(!isset($c)){
   	 $c = new Criteria();

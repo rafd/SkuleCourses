@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($course_list as $course): ?>
+    <?php foreach ($course_list->getResults() as $course): ?>
     <tr>
       <td>
       <a href="<?php echo url_for('admincourse/edit?id='.$course->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
@@ -16,5 +16,7 @@
       <td><a href="<?php echo url_for('admincourse/edit?id='.$course->getId()) ?>"><?php echo $course->getId() ?></a></td>
     </tr>
     <?php endforeach; ?>
+    
+    <?php include_partial('global/paging', array('pagelist' => $course_list, 'location' => 'admincourse')) ?>
   </tbody>
 </table>

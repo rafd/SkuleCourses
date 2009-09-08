@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($course_instructor_association_list as $course_instructor_association): ?>
+    <?php foreach ($course_instructor_association_list->getResults() as $course_instructor_association): ?>
     <tr>
       <td><a href="<?php echo url_for('adminCIA/edit?id='.$course_instructor_association->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
       <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'adminCIA/delete?id='.$course_instructor_association->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
@@ -42,5 +42,7 @@
       
     </tr>
     <?php endforeach; ?>
+    
+    <?php include_partial('global/paging', array('pagelist' => $course_instructor_association_list, 'location' => 'adminCIA')) ?>
   </tbody>
 </table>
