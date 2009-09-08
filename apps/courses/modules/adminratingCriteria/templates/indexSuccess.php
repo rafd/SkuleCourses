@@ -1,3 +1,4 @@
+<?php include_partial('global/siteadminmenu') ?>
 <h1>AdminratingCriteria List</h1>
 <table>
 <tr>

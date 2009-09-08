@@ -148,11 +148,19 @@ class admincourseActions extends sfActions
   }
 
   protected function getCourselist(Criteria $c = null){
-    if($c===null){
-  	 return CoursePeer::doSelect(new Criteria());
-  	}else{
-     return CoursePeer::doSelect($c);
+  	 $pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
+    
+    $pager = new sfPropelPager('Course', skuleadminConst::COURSE_RECORDNUMBER);
+    if(!isset($c)){
+  	 $c = new Criteria();
   	}
+  	$pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
   
   protected function submitForm(sfWebRequest $request, sfForm $courseform, sfForm $courseDetailform, sfForm $courseDisAssocform)

@@ -13,7 +13,7 @@ class admininstructorActions extends sfActions
 	
   public function executeIndex(sfWebRequest $request)
   {
-    $this->instructor_list = InstructorPeer::doSelect(new Criteria());
+    $this->instructor_list = $this->getInstructorList();
     
     $this->form = new InstructorForm();
     $this->form2 = new InstructorDetailForm();
@@ -32,7 +32,7 @@ class admininstructorActions extends sfActions
    
     	$this->omiterror = true;		
     
-    $this->instructor_list = InstructorPeer::doSelect(new Criteria());
+    $this->instructor_list = $this->getInstructorList();
     $this->setTemplate('index');
   }
 
@@ -45,7 +45,7 @@ class admininstructorActions extends sfActions
   	$instructDetail = InstructorDetailPeer::doSelectOne($c);
   	
   	$this->form2 = new InstructorDetailForm($instructDetail);
-  	$this->instructor_list = InstructorPeer::doSelect(new Criteria());
+  	$this->instructor_list = $this->getInstructorList();
     $this->setTemplate('index');
   }
 
@@ -68,7 +68,7 @@ class admininstructorActions extends sfActions
     }
     //$this->processForm($request, $this->form);
     $this->submitForm($request, $this->form, $this->form2);
-    $this->instructor_list = InstructorPeer::doSelect(new Criteria());
+    $this->instructor_list = $this->getInstructorList();
     $this->setTemplate('index');
   }
 
@@ -128,5 +128,20 @@ class admininstructorActions extends sfActions
       	$this->redirect('admininstructor/edit?id='.$instructresult->getId());
       }
     
+  }
+  
+  protected function getInstructorList(Criteria $c = null){
+  	$pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
+  	$pager = new sfPropelPager('Instructor', skuleadminConst::INSTRUCTOR_RECORDNUMBER);
+  	if(!isset($c)){
+  	 $c = new Criteria();
+  	}
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
 }

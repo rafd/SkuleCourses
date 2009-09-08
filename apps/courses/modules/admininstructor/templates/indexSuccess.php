@@ -1,3 +1,4 @@
+<?php include_partial('global/siteadminmenu') ?>
 <h1>Instructors</h1>
 <table><tr><td>
 <?php include_partial('list', array('instructor_list' => $instructor_list)) ?>

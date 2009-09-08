@@ -1,3 +1,4 @@
+<?php include_partial('global/siteadminmenu') ?>
 <h1>Department</h1>
 <table>
   <tr>

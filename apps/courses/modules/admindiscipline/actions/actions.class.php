@@ -12,6 +12,10 @@ class admindisciplineActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
+    $page = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$page = $this->getRequestParameter('page');
+    }
   	$c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
     $this->enum_item_list = $this->getDisciplineList($c);
@@ -81,10 +85,20 @@ class admindisciplineActions extends sfActions
   }
   
   protected function getDisciplineList(Criteria $c = null){
-  	if($c===null){
-     return EnumItemPeer::doSelect(new Criteria());
-  	}else{
-     return EnumItemPeer::doSelect($c);
+  	
+    $pagenumber = 1;
+    if($this->getRequestParameter('page')!==null){
+    	$pagenumber = $this->getRequestParameter('page');
+    }
+  	$pager = new sfPropelPager('EnumItem', skuleadminConst::DISCIPLINE_RECORDNUMBER);
+  	if(!isset($c)){
+  	 $c = new Criteria();
   	}
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
+  
+    
 }

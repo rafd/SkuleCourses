@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($instructor_list as $instructor): ?>
+    <?php foreach ($instructor_list->getResults() as $instructor): ?>
     <tr>
     
     <td>
@@ -16,5 +16,6 @@
     
     </tr>
     <?php endforeach; ?>
+    <?php include_partial('global/paging', array('pagelist' => $instructor_list, 'location' => 'admininstructor')) ?>
   </tbody>
 </table>
