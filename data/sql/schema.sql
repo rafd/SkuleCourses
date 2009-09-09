@@ -1,4 +1,4 @@
-# This script creates the default database structure and establishes test data
+﻿# This script creates the default database structure and establishes test data
 
 # This is a fix for InnoDB in MySQL >= 4.1.x
 # It "suspends judgement" for fkey relationships until are tables are set.
@@ -560,7 +560,7 @@ INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
 INSERT INTO `rating_field` VALUES (3, 'How useful is this course to your professional development?', 36, 0);
 INSERT INTO `rating_field` VALUES (4, 'How enthusiastic is the instructor during the lectures?', 36, 0);
-INSERT INTO `rating_field` VALUES (5, 'Percent ratake', 23, 1);
+INSERT INTO `rating_field` VALUES (5, 'Percent retake', 23, 1);
 
 
 #-----------------------------------------------------------------------------
