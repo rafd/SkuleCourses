@@ -12,8 +12,8 @@ class adminratingCriteriaActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->rating_field_list = $this->getRatingCriteriaList();
-    $this->form = new RatingFieldForm();
+    //$this->rating_field_list = $this->getRatingCriteriaList();
+    //$this->form = new RatingFieldForm();
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -24,7 +24,7 @@ class adminratingCriteriaActions extends sfActions
 
     $this->processForm($request, $this->form);
     $this->rating_field_list = $this->getRatingCriteriaList();
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
 
   public function executeEdit(sfWebRequest $request)
@@ -32,7 +32,7 @@ class adminratingCriteriaActions extends sfActions
     $this->forward404Unless($rating_field = RatingFieldPeer::retrieveByPk($request->getParameter('id')), sprintf('Object rating_field does not exist (%s).', $request->getParameter('id')));
     $this->form = new RatingFieldForm($rating_field);
     $this->rating_field_list = $this->getRatingCriteriaList();
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
 
   public function executeUpdate(sfWebRequest $request)
@@ -43,7 +43,7 @@ class adminratingCriteriaActions extends sfActions
 
     $this->processForm($request, $this->form);
     $this->rating_field_list = $this->getRatingCriteriaList();
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
 
   public function executeDelete(sfWebRequest $request)
@@ -53,7 +53,7 @@ class adminratingCriteriaActions extends sfActions
     $this->forward404Unless($rating_field = RatingFieldPeer::retrieveByPk($request->getParameter('id')), sprintf('Object rating_field does not exist (%s).', $request->getParameter('id')));
     $rating_field->delete();
 
-    $this->redirect('adminratingCriteria/index');
+    $this->redirect('adminratingCriteria/list');
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -80,5 +80,11 @@ class adminratingCriteriaActions extends sfActions
     $pager->setPage($pagenumber);
     $pager->init();
     return $pager;
+  }
+ 
+  public function executeList(sfWebRequest $request)
+  {
+    $this->rating_field_list = $this->getRatingCriteriaList();
+    $this->form = new RatingFieldForm();
   }
 }

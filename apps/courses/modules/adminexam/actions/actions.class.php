@@ -12,8 +12,8 @@ class adminexamActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->exam_list = $this->getExamList();
-    $this->form = new ExamForm(new Exam());
+    //$this->exam_list = $this->getExamList();
+    //$this->form = new ExamForm(new Exam());
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -24,7 +24,7 @@ class adminexamActions extends sfActions
     $this->processForm($request, $this->form);
     
     $this->exam_list = $this->getExamList();
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
 
   public function executeEdit(sfWebRequest $request)
@@ -48,7 +48,7 @@ class adminexamActions extends sfActions
     
     
     $this->uploadpath = skuleadminConst::INDIVIDUALEXAMFOLDER.$year.'/'; 
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
 
   public function executeUpdate(sfWebRequest $request)
@@ -74,7 +74,7 @@ class adminexamActions extends sfActions
     
     $this->exam_list = $this->getExamList();
     $this->uploadpath = skuleadminConst::INDIVIDUALEXAMFOLDER.$year.'/'; 
-    $this->setTemplate('index');
+    $this->setTemplate('list');
   }
   
   public function executeDelete(sfWebRequest $request)
@@ -86,7 +86,7 @@ class adminexamActions extends sfActions
     $this->delExam($myfile);
     $exam->delete();
 
-    $this->redirect('adminexam/index');
+    $this->redirect('adminexam/list');
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -155,4 +155,9 @@ class adminexamActions extends sfActions
   	}
   }
  
+  public function executeList(sfWebRequest $request)
+  {
+    $this->exam_list = $this->getExamList();
+    $this->form = new ExamForm(new Exam());
+  }
 }
