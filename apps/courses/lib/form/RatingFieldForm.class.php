@@ -15,15 +15,16 @@ class RatingFieldForm extends BaseRatingFieldForm
   public function configure()
   {
   	$c = new Criteria();
+  	/*
     $cton1 = $c->getNewCriterion(EnumItemPeer::PARENT_ID, skuleadminConst::RATING_FIELD_PID);
     $cton2 = $c->getNewCriterion(EnumItemPeer::PARENT_ID, skuleadminConst::RATING_TYPES_PID);
- 
     // combine them
     $cton1->addOr($cton2);
- 
     // add to Criteria
     $c->add($cton1);
-
+    */
+  	$c->add(EnumItemPeer::PARENT_ID, skuleadminConst::RATING_FIELD_PID);
+  	//need to add a extra field for SCALE TYPES
     $this->setWidgets(array(
       'id'          => new sfWidgetFormInputHidden(),
       'descr'       => new sfWidgetFormInput(),
