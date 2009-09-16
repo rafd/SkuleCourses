@@ -56,17 +56,17 @@ table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1p
 dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
-a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../images/reload.gif);}
-a.reload:hover {background: url(../images/reload.on.gif);}
+a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../skule_images/reload.gif);}
+a.reload:hover {background: url(../skule_images/reload.on.gif);}
 
-a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../images/find.gif);}
-a.find:hover {background: url(../images/find.on.gif);}
+a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../skule_images/find.gif);}
+a.find:hover {background: url(../skule_images/find.on.gif);}
 
-a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../images/select.gif);}
-a.select:hover {background: url(../images/select.on.gif);}
+a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
+a.select:hover {background: url(../skule_images/select.on.gif);}
 
-a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../images/help.gif) no-repeat;}
-a.help:hover {background: url(../images/help.on.gif);}
+a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../skule_images/help.gif) no-repeat;}
+a.help:hover {background: url(../skule_images/help.on.gif);}
 a.help span {display:none;}
 a.help:hover span{
 	display:block;
@@ -127,11 +127,11 @@ div.buttonfield
 	width:100%;
 	text-align: right;
 }
-div.buttonfield a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../images/save.gif);}
-div.buttonfield a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 13px; height:16px; background: url(../images/delete.gif);}
-div.buttonfield a.deletebtn:hover {background: url(../images/delete.on.gif);}
-div.buttonfield a.addbtn {cursor: pointer; float: right; margin-left: 5px; display:block; width: 16px; height:16px; background: url(../images/add.gif);}
-div.buttonfield a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../images/refresh.gif);}
+div.buttonfield a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
+div.buttonfield a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 13px; height:16px; background: url(../skule_images/delete.gif);}
+div.buttonfield a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
+div.buttonfield a.addbtn {cursor: pointer; float: right; margin-left: 5px; display:block; width: 16px; height:16px; background: url(../skule_images/add.gif);}
+div.buttonfield a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
 
 img.btn {cursor: pointer; margin-left: 5px; }
 

@@ -98,7 +98,7 @@
 													</tr>
 													<tr>
 														<td>
-															<?php echo input_date_tag('txtFirstOffered', '', array("rich"=>true, "calendar_button_img"=>"/images/calendar.gif", "class"=>"date"))?>
+															<?php echo input_date_tag('txtFirstOffered', '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
 														</td>
 														<td>
 															<?php echo input_date_tag('txtLastOffered', '', array("rich"=>true, "calendar_button_img"=>"/images/calendar.gif", "class"=>"date"))?>

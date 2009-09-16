@@ -98,4 +98,4 @@
 		<?php endforeach;?>
 	</table>
 </div></div>
-<img class='hidden' src='/images/help.on.gif' />
+<img class='hidden' src='/skule_images/help.on.gif' />
