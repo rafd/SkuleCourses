@@ -1,5 +1,5 @@
 <?php include_partial('global/siteadminmenu') ?>
-<h1>Exam List</h1>
+<h1>Custom Exams Manager</h1>
 <table><tr><td>
 <?php include_partial('list', array('exam_list' => $exam_list)) ?>
 </td><td>

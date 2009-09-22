@@ -17,5 +17,6 @@
     </tr>
     <?php endforeach; ?>
     <?php include_partial('global/paging', array('pagelist' => $instructor_list, 'location' => 'admininstructor')) ?>
+    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admininstructor/index') ?>">New Instructor</a> </td></tr>
   </tbody>
 </table>

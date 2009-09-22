@@ -1,8 +1,10 @@
 <?php echo use_helper('Javascript') ?>
-<?php echo stylesheet_tag('/sf/calendar/calendar-win2k.css') ?>
-<?php echo javascript_include_tag('/sf/calendar/calendar.js') ?>
-<?php echo javascript_include_tag('/sf/calendar/lang/calendar-en.js') ?>
-<?php echo javascript_include_tag('/sf/calendar/calendar-setup.js') ?>
+<?php echo javascript_tag("
+    var uri = 'http://".$sf_request->getHost()."/';
+    ") //this varibale is needed in the datetimepicker_css.js change line 259 inside and the places that uses it (262 to 275)?>
+<script type="text/javascript" src="http://<?php echo $sf_request->getHost() ?>/js/datetimepicker_css.js"></script>
+
+
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>
 <?php include_stylesheets_for_form($form2) ?>
@@ -84,15 +86,20 @@
         </div>
         <br />
         <?php echo $form2['first_offered']->renderLabel() ?><br />
+        <?php //echo $form2['first_offered']->renderRow(array('class' => 'date-pick')) ?>
+        Format (date:dd-MM-yyyy):
         <?php echo $form2['first_offered'] ?>
+        <a href="javascript:NewCssCal('<?php echo $form2['first_offered']->renderId() ?>','ddmmyyyy')"><img src="http://<?php echo $sf_request->getHost() ?>/images/cal.gif" width="16" height="16" alt="Pick a date"></a>
         
+        <?php //echo $sf_request->getHost() ?><?php //echo url_for('@homepage', true) ?>
       
         <?php echo $form2['first_offered']->renderError() ?>
-      
+     
         <br />
         <?php echo $form2['last_offered']->renderLabel() ?><br />
+        Format (date:dd-MM-yyyy):
         <?php echo $form2['last_offered'] ?>
-        
+        <a href="javascript:NewCssCal('<?php echo $form2['last_offered']->renderId() ?>','ddmmyyyy')"><img src="http://<?php echo $sf_request->getHost() ?>/images/cal.gif" width="16" height="16" alt="Pick a date"></a>
       
         <?php echo $form2['last_offered']->renderError() ?>
       

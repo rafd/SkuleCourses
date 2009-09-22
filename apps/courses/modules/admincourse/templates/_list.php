@@ -18,5 +18,6 @@
     <?php endforeach; ?>
     
     <?php include_partial('global/paging', array('pagelist' => $course_list, 'location' => 'admincourse')) ?>
+    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admincourse/index') ?>">New Course</a> </td></tr>
   </tbody>
 </table>
