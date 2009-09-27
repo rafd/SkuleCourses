@@ -1,0 +1,10 @@
+@CHARSET "ISO-8859-1";
+.fbuttons{
+ width: auto;
+  background-color: white;
+  cursor: pointer;
+  border: solid 1px black;
+  color: black;
+  text-decorations: none;
+
+}   

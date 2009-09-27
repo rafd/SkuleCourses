@@ -143,12 +143,12 @@
           <?php echo $form2->renderHiddenFields() ?>
           <?php echo $form3->renderHiddenFields() ?>
           &nbsp;
+          <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-         
-          <a href="<?php echo url_for('admincourse/index') ?>">Cancel</a>
+          <input type="button" href="<?php echo url_for('admincourse/index') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
          
           <?php endif; ?>
-          <input type="submit" value="Save" />
+          
         </div>
 
 </form>

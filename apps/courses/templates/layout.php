@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <?php //TODO: below is temporary ?>
     <link rel="stylesheet" type="text/css" href="http://skuleclubs.heroku.com/stylesheets/compiled/screen.css" />
-    
+     <link rel="stylesheet" type="text/css" href="/css/form.css" />
     <script type='text/javascript' src='/js/popupMenu.js'></script>
     <script type='text/javascript' src='/js/toolkit.js'></script>
     <script src="http://skuleclubs.heroku.com/javascripts/prototype.js?1251690643" type="text/javascript"></script>

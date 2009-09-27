@@ -16,12 +16,12 @@
           <?php echo $form->renderHiddenFields() ?>
           <?php echo $formDetail->renderHiddenFields() ?>
           
+          <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-          
-            &nbsp;<a href="<?php echo url_for('admininstructor/index') ?>">Cancel</a>
-          
+
+          <input type="button" href="<?php echo url_for('admininstructor/index') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
           <?php endif; ?>
-          <input type="submit" value="Save" />
+          
         </td>
       </tr>
     </tfoot>
