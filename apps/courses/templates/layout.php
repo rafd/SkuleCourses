@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/css/screen.css" />
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
-
     <script type='text/javascript' src='/js/popupMenu.js'></script>
     <script type='text/javascript' src='/js/toolkit.js'></script>
   </head>

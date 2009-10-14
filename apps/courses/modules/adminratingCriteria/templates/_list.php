@@ -22,5 +22,6 @@
     </tr>
     <?php endforeach; ?>
     <?php include_partial('global/paging', array('pagelist' => $rating_field_list, 'location' => 'adminratingCriteria')) ?>
+    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('adminratingCriteria/list') ?>">New Rating Criteria</a> </td></tr>
   </tbody>
 </table>

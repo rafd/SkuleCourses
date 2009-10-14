@@ -7,8 +7,8 @@ class skuleadminConst
   const SEM_SUMMER = 5;
   const EXAMTYPE_PARENT_ID = 60;
   const USERTYPE_PARENT_ID = 10;
-  const RATING_FIELD_PID = 20;
-  const RATING_TYPES_PID = 22;
+  const RATING_META_TYPES_PID = 20;
+  const RATING_SCALE_TYPES_PID = 22;
   const INDIVIDUALEXAMFOLDER = '/exams/custom/';
   const EXAM_FILE_DATEFORMAT = 'Y-m-d-H-i-s';
   

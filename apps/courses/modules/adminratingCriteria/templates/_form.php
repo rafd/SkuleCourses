@@ -10,10 +10,12 @@
       <tr>
         <td colspan="2">
           <?php echo $form->renderHiddenFields() ?>
+          
+          <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-          &nbsp;<a href="<?php echo url_for('adminratingCriteria/index') ?>">Cancel</a>
-         <?php endif; ?>
-          <input type="submit" value="Save" />
+
+          <input type="button" href="<?php echo url_for('adminratingCriteria/list') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
+          <?php endif; ?>
         </td>
       </tr>
     </tfoot>
@@ -33,13 +35,15 @@
           <?php echo $form['type_id'] ?>
         </td>
       </tr>
+     
       <tr>
-        <th><?php echo $form['is_reserved']->renderLabel() ?></th>
+        <th><?php echo $form['scale']->renderLabel() ?></th>
         <td>
-          <?php echo $form['is_reserved']->renderError() ?>
-          <?php echo $form['is_reserved'] ?>
+          <?php echo $form['scale']->renderError() ?>
+          <?php echo $form['scale'] ?>
         </td>
       </tr>
+      
     </tbody>
   </table>
 </form>

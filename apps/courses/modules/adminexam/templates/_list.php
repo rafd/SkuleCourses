@@ -32,5 +32,6 @@
     </tr>
     <?php endforeach; ?>
     <?php include_partial('global/paging', array('pagelist' => $exam_list, 'location' => 'adminexam')) ?>
+    <tr><td colspan="5" style="text-align: center"> <a href="<?php echo url_for('adminexam/list') ?>">New Exam</a> </td></tr>
   </tbody>
 </table>

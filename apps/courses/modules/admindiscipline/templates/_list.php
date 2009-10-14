@@ -30,6 +30,6 @@
     
    
     <?php include_partial('global/paging', array('pagelist' => $enum_item_list, 'location' => 'admindiscipline')) ?>
-
+    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admindiscipline/index') ?>">New Discipline</a> </td></tr>
   </tbody>
 </table>

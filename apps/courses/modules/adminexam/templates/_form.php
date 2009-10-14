@@ -10,10 +10,13 @@
       <tr>
         <td colspan="2">
           <?php echo $form->renderHiddenFields() ?>
-             <?php if (!$form->getObject()->isNew()): ?>
-          &nbsp;<a href="<?php echo url_for('adminexam/index') ?>">Cancel</a>
+            
+          
+          <input type="submit" value="Save" class="fbuttons"/>
+          <?php if (!$form->getObject()->isNew()): ?>
+
+          <input type="button" href="<?php echo url_for('adminexam/list') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
           <?php endif; ?>
-          <input type="submit" value="Save" />
         </td>
       </tr>
     </tfoot>

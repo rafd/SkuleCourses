@@ -1,5 +1,5 @@
 <?php include_partial('global/siteadminmenu') ?>
-<h1>AdminratingCriteria List</h1>
+<h1>Base Ratings Manager</h1>
 <table>
 <tr>
 <td><?php include_partial('list', array('rating_field_list' => $rating_field_list)) ?></td>

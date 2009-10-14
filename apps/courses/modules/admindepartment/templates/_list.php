@@ -31,6 +31,6 @@
     <?php endforeach; ?>
     
     <?php include_partial('global/paging', array('pagelist' => $department_list, 'location' => 'admindepartment')) ?>
-   
+    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admindepartment/index') ?>">New Department</a> </td></tr>
     </tbody>
 </table>
