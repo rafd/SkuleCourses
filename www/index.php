@@ -18,7 +18,7 @@ function skuleShutdown()
   if ($error = error_get_last()){
     if ($error['type'] == E_ERROR)
       helperFunctions::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
-  }
+    }
 }
 
 // set to the user defined error handler

@@ -1,14 +1,13 @@
 <script language='javascript' src='/js/FusionCharts.js'></script>
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
-	<h3>Course Critique for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)
-	<br/>
-	<?php echo helperFunctions::translateTerm($year)?> Edition</h3>
+	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
+	<h3>Course Critique <?php echo helperFunctions::translateTerm($year)?> Edition</h3>
 
 	<table class="layout">
 		<tr>
 			<td>
-				<b>Instructors: 
+				<b>Instructors:
 				<?php $len = count($instructorArr)?>
 				<?php for ($i=0; $i<$len; $i++):?>
 				<?php if ($currInstructor->getId() != $instructorArr[$i]->getId()):?>
@@ -90,7 +89,7 @@
 		<tr>
 			<td>
 			<?php
-			$arr["chart"]->setChartParam("caption", "Fig.".$counter." ".$arr["field"]); 
+			$arr["chart"]->setChartParam("caption", "Fig.".$counter." ".$arr["field"]);
 			$arr["chart"]->renderChart()
 			?>
 			</td>

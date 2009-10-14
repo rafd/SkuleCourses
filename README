@@ -15,6 +15,9 @@ Initial Configuration
 4. Run lib.model.schema.sql under /data/sql to establish database structure
 5. Run system.data.sql under /data/sql to populate necessary system data
 6. Delete all files and subdirectories under /cache
-7. Change php.ini max_upload_size and max_form_size to 5M
+7. Change php.ini max_upload_size and max_form_size to 10M, max_post_time and 
+max_input_time to 300
+8. Require third party (from skule.ca) screen.css in www/css, and images in
+www
 
 Start at: domain/index.php

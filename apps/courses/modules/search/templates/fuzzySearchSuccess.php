@@ -1,6 +1,11 @@
+<?php use_helper('Url')?>
+<?php use_helper('Tag')?>
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
 	<h2>Search Results for "<?php echo $query?>"</h2>
+	
+	<table><tr><td><a class="back" href='<?php echo url_for("search/index")?>' style="float:left; padding-left: 20px;width:auto;">Continue onto Detailed Search...</a></td></tr></table><br/>
+
 	<?php if (isset($error)):?>
 	<table>
 		<tr>
@@ -21,9 +26,6 @@
 	  				<?php endforeach;?>
   				</ul>
 			</td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
 		</tr>
 		<?php endif;?>
 		<?php if (count($instructorList)>0):?>
@@ -58,3 +60,5 @@
 	</table>
 	<?php endif;?>
 </div></div>
+
+<img class='hidden' src='/skule_images/back.on.gif' />

@@ -4,24 +4,11 @@
 #main input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #main ul {margin: 2px; padding-left: 10px}
 #main ul li, #main ol li {margin-left: 10px;}
+#main h3 {padding-bottom: 5px;}
 
 #left input[type=text], #left input[type=file], #left select { font: 10pt verdana; width: 200px;}
 #left input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #left form label{font: inherit;width:auto;display:inline;}
-
-#searchbar
-{
-	border: 1px solid #000;
-	position: fixed;
-	top:80%;
-	right:10%;
-	width: 250px;
-	height: 50px;
-	padding: 2px;
-	background-color: #fff;
-	z-index: 30;
-	text-align: left;
-}
 
 #critique_content{margin: 1em;}
 
@@ -35,8 +22,8 @@
 #submenu li { padding:2px;}
 
 
-table.description{}
-table.description td { vertical-align:top;}
+table.description { padding-right: 10px;}
+table.description td { vertical-align:top; text-align:justify;}
 table.description td.title { width:150px; }
 
 table.layout { width:100%; border:none;}
@@ -65,6 +52,9 @@ a.find:hover {background: url(../skule_images/find.on.gif);}
 a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
 a.select:hover {background: url(../skule_images/select.on.gif);}
 
+a.back {position:relative; cursor: pointer; display:block; width: 16px; height: 16px; background: url(../skule_images/back.gif) no-repeat;}
+a.back:hover {background: url(../skule_images/back.on.gif) no-repeat;}
+
 a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../skule_images/help.gif) no-repeat;}
 a.help:hover {background: url(../skule_images/help.on.gif);}
 a.help span {display:none;}
@@ -84,14 +74,13 @@ a.help:hover span{
 
 .hidden {display:none}
 
-div.popupmenu
+#left dl div.popupmenu
 {
 	position: absolute;
 	background-color: #fff;
 	visibility: hidden;
-	margin: 0;
+	margin-left: 140px;
 	padding: 0;
-	left: 280px;
 	z-index: 100;
 	border: solid 1px #000;
 	width: 80px;

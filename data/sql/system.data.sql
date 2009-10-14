@@ -1,4 +1,4 @@
-# enum_item
+﻿# enum_item
 
 INSERT INTO `enum_item` VALUES (1, 1, '');
 INSERT INTO `enum_item` VALUES (10, 1, 'USER_TYPES');
@@ -64,26 +64,32 @@ INSERT INTO `enum_item` VALUES (230, 220, 'Department Name');
 
 # department
 
+INSERT INTO `department` VALUES ('APM', 'Applied Mathematics');
 INSERT INTO `department` VALUES ('AER', 'Aerospace Science and Engineering');
 INSERT INTO `department` VALUES ('APS', 'Applied Science and Engineering');
 INSERT INTO `department` VALUES ('BME', 'Biomedical Engineering');
 INSERT INTO `department` VALUES ('CHE', 'Chemical Engineering and Applied Chemistry');
+INSERT INTO `department` VALUES ('CME', 'Civil and Mineral Engineering');
 INSERT INTO `department` VALUES ('CHM', 'Department of Chemistry');
 INSERT INTO `department` VALUES ('CIV', 'Department of Civil Engineering');
 INSERT INTO `department` VALUES ('CSC', 'Department of Computer Science');
 INSERT INTO `department` VALUES ('ECE', 'Department of Electrical and Comp Engineering');
 INSERT INTO `department` VALUES ('EDV', 'Division of Environmental Engineering and Energy Systems');
+INSERT INTO `department` VALUES ('EDC', 'EDC');
+INSERT INTO `department` VALUES ('EDM', 'EDM');
 INSERT INTO `department` VALUES ('ESC', 'Division of Engineering Science');
 INSERT INTO `department` VALUES ('GLG', 'Department of Geology');
 INSERT INTO `department` VALUES ('HPS', 'Institute for the History and Philosophy of Science & Technology');
+INSERT INTO `department` VALUES ('JGP', 'Joint');
+INSERT INTO `department` VALUES ('JVM', 'JVM');
 INSERT INTO `department` VALUES ('MAT', 'Department of Mathematics');
 INSERT INTO `department` VALUES ('MIE', 'Department of Mechanical and Industrial Engineering');
 INSERT INTO `department` VALUES ('MIN', 'Mineral Engineering');
+INSERT INTO `department` VALUES ('MMS', 'MMS');
 INSERT INTO `department` VALUES ('MSE', 'Department of Materials Science and Engineering');
 INSERT INTO `department` VALUES ('PHL', 'Department of Philosophy');
 INSERT INTO `department` VALUES ('PHY', 'Department of Physics');
 INSERT INTO `department` VALUES ('STA', 'Department of Statistics');
-INSERT INTO `department` VALUES ('APM', 'Applied Mathematics');
 
 
 # rating_field

@@ -141,6 +141,18 @@ class helperFunctions
         break;
     }
   }
+  
+  public static function getExamTypeAbbr($type)
+  {
+    switch ($type) {
+      case EnumItemPeer::TEST:
+        return "ts";
+      case EnumItemPeer::EXAM:
+        return "exam";
+      case EnumItemPeer::QUIZ:
+        return "qs";
+    }
+  }
 
   public static function sendEmailNotice($subject, $msg)
   {

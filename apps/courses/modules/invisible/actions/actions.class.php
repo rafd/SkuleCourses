@@ -61,6 +61,7 @@ class invisibleActions extends sfActions
   
   public function executeSubmitExam(sfWebRequest $request)
   {
+    set_time_limit(0);
     if ($request->isMethod(sfRequest::POST) && $request->hasParameter('security') 
       && $request->hasParameter('year') && $request->hasParameter('descr'))
     {
@@ -68,7 +69,7 @@ class invisibleActions extends sfActions
       $files = $request->getFiles();
       $file = $files['file'];
       $descr = $request->getParameter('descr');
-      
+     
       if (isset($file) && strtoupper(substr($file['name'], -3, 3)) == 'PDF' && !helperFunctions::isMaliciousString($descr)) {
         
         if ($request->getParameter("security") != $_SESSION['securityImage']){
@@ -92,19 +93,23 @@ class invisibleActions extends sfActions
             exit();
           }
         }
+
         // unique filename
-        $fileName = $file['name'].time().".pdf";
-        
+        $courseId = $request->getParameter("course");
+        $examType = $request->getParameter("type");
+        $examTypeAbbr = HelperFunctions::getExamTypeAbbr($examType);
+        $fileName = substr($courseId,0,6).'_'.substr($year,0,4).'_'.$examTypeAbbr.'_'.time().".pdf";
+
 	    if (move_uploaded_file($file['tmp_name'], $tgt_path."/".$fileName))
 	    {
 	      // register in db
 	      $conn = Propel::getConnection();
 	      
 	      $exam = new Exam();
-	      $exam->setCourseId($request->getParameter("course"));
+	      $exam->setCourseId($courseId);
 	      $exam->setFilePath($tgt_path."/".$fileName);
 	      $exam->setYear($year);
-	      $exam->setType($request->getParameter("type"));
+	      $exam->setType($examType);
 	      $exam->setDescr($descr);
 	      $exam->save($conn);
 	      

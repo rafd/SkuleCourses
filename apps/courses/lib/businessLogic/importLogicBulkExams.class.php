@@ -15,6 +15,7 @@ class importLogicOfficialExams
 
   public function __construct($dir, $year)
   {
+    if (substr($dir, -1)!='/') $dir .= '/';
     $this->_dir = $dir;
     $this->_year = $year;
   }
@@ -34,6 +35,8 @@ class importLogicOfficialExams
 
     // TODO: does not do recrusive listing, do we need that?
     while (false !== ($file = readdir($handler))) {
+
+      if (isset($count)) unset($count);
 
       if ($file != '.' && $file != '..') {
         $err = false;

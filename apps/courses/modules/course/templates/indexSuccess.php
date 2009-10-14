@@ -1,6 +1,9 @@
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
 	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
+	<?php if ($courseObj->getIsEng()==0):?>
+	<p style="font-style:italic">This is not a course offered by the Faculty of Applied Science and Engineering.</p>
+	<?php endif;?>
 	<?php if (isset($courseDetail)):?>
 	<table class="description">
 		<tr>

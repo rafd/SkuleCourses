@@ -214,7 +214,7 @@ class subMenu
       $str .= "<dl><dt>Search</dt></dl>";
     else
       $str .= "<dl><dt>".link_to("Search","search/index")."</dt></dl>";
-    
+          
     return $str;
   }
 }

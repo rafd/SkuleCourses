@@ -1,8 +1,7 @@
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
-	<h3>Tests/Exams for <?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)
-	<br/>
-	<?php echo helperFunctions::translateTerm($year)?> Edition</h3></h3>
+	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
+	<h3>Exams Repository of <?php echo helperFunctions::translateTerm($year)?></h3>
 
 	<table class="layout">
 		<?php if (isset($examArr)):?>
@@ -22,7 +21,7 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<?php endif;?>
-		
+
 		<?php if (isset($testArr)):?>
 		<tr>
 			<td>
@@ -40,7 +39,7 @@
 		</tr>
 		<tr><td>&nbsp;</td></tr>
 		<?php endif;?>
-		
+
 		<?php if (isset($quizArr)):?>
 		<tr>
 			<td>
