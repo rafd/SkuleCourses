@@ -15,8 +15,20 @@
 			</td>
 		</tr>
 	</table>
+	<form name='categoryForm' method="get" action="<?php echo url_for('search/searchByInstructor')?>">
+		<input type="hidden" name="category"/>
+	</form>
 	<form name="instrForm" method="get" action="<?php echo url_for('search/searchByInstructor')?>">
 		<table>
+			<tr>
+				<td width="150">Last Name Initial: </td>
+				<td>
+					<?php echo select_tag('category', options_for_select($categoryList, $category), array(
+					  "style" => "width:200px",
+					  "onchange" => "document.categoryForm.category.value=this.options[this.options.selectedIndex].value; document.categoryForm.submit();"))?>
+				</td>
+				<td></td>
+			</tr>
 			<tr>
 				<td width="150">Instructor: </td>
 				<td>

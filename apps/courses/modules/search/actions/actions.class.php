@@ -45,24 +45,44 @@ class searchActions extends sfActions
     $today = getdate();
     
     $this->searchType = searchActions::SEARCH_BY_INSTRUCTOR;
-    $rawInstrList = InstructorPeer::getAll($conn);
     $this->instructorList = array();
-    foreach ($rawInstrList as $obj){
-      $this->instructorList[$obj->getId()] = $obj->getLastName().", ".$obj->getFirstName();
+    $this->categoryList = array();
+    for ($i='A';$i!='AA';$i++){
+      $this->categoryList[$i]=$i;
     }
     
     if ($request->hasParameter("instructor")){
+      // we're searching for a specific instructor
+      
       $this->instructorId = $request->getParameter("instructor");
       if (helperFunctions::isMaliciousString($this->instructorId)) $this->forward404();
       
       // get result set
       $instrObj = InstructorPeer::retrieveByPK($this->instructorId, $conn);
-      $this->resultTitle = "Results for ".$instrObj->getLastName().", ".$instrObj->getFirstName();
-      
+      $lastname = $instrObj->getLastName();
+      $this->category = strtoupper(substr($lastname,0,1));
+      $this->resultTitle = "Results for ".$lastname.", ".$instrObj->getFirstName();
       $this->results = CoursePeer::findCoursesByInstructorId($this->instructorId, $conn);
       
+    } elseif ($request->hasParameter("category")){
+      // we're searching for the initial of last name of an instructor
+      
+      $this->category = strtoupper($request->getParameter("category"));
+      if (helperFunctions::isMaliciousString($this->category)) $this->forward404();
+            
     } else {
-      $this->instructorId = $rawInstrList[0]->getId();
+      // no constraint specified, display category='A'
+      
+      $this->category = 'A';
+    }
+    
+    $rawInstrList = InstructorPeer::findInstructorByLastNameInitial($this->category, $conn);
+    foreach ($rawInstrList as $obj){
+      $this->instructorList[$obj->getId()] = $obj->getLastName().", ".$obj->getFirstName();
+    }
+    if (!isset($this->instructorId)){
+      if (isset($rawInstrList[0])) $this->instructorId = $rawInstrList[0]->getId();
+      else $this->instructorId = "";
     }
   }
   

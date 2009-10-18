@@ -9,6 +9,14 @@ class InstructorPeer extends BaseInstructorPeer
     return InstructorPeer::doSelect($c, $propelConnection);
   }
   
+  public static function findInstructorByLastNameInitial($initial, PropelPDO $conn){
+    $c = new Criteria();
+    $crit1 = $c->getNewCriterion(self::LAST_NAME, $initial."%", Criteria::LIKE);
+    $c->addAnd($crit1);
+    
+    return self::doSelect($c, $conn);
+  }
+  
   public static function findInstructorByName($firstName, $lastName, PropelPDO $conn)
   {
     $c = new Criteria();
