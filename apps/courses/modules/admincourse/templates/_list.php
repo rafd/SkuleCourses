@@ -1,23 +1,23 @@
-<table>
+<table style='width:130px'>
   <thead>
     <tr>
-      <th></th>
-      <th>Course Code</th>
+      <th><?php echo link_to(" ", 'admincourse/index', array("class"=>"addbtn", "title"=>"Add a new course"))?></th>
+      <th>Course</th>
       
     </tr>
   </thead>
   <tbody>
     <?php foreach ($course_list->getResults() as $course): ?>
     <tr>
-      <td>
-      <a href="<?php echo url_for('admincourse/edit?id='.$course->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
-      <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'admincourse/delete?id='.$course->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
+      <td style='width:30px'>
+      <?php echo link_to(" ", 'admincourse/delete?id='.$course->getId(), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
+      <?php echo link_to(" ", 'admincourse/edit?id='.$course->getId(), array('class'=>'select'))?>
+      
       </td>
       <td><?php echo $course->getId() ?></td>
     </tr>
     <?php endforeach; ?>
     
     <?php include_partial('global/paging', array('pagelist' => $course_list, 'location' => 'admincourse')) ?>
-    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admincourse/index') ?>">New Course</a> </td></tr>
   </tbody>
 </table>

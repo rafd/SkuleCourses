@@ -4,9 +4,9 @@
 <form action="<?php echo url_for('admindepartment/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
-<fieldset><legend>Edit Department</legend>
+<fieldset style='width:550px'><legend>Edit Department</legend>
 <?php else: ?>
-<fieldset><legend>New Department</legend>
+<fieldset style='width:550px'><legend>New Department</legend>
 <?php endif; ?>
 
   <table> 

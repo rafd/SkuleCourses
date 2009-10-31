@@ -1,36 +1,31 @@
 
-<table>
+<table style='width:130px'>
 <thead>
     <tr>
-      <th></th>
-      <th>Abbreviations</th>
-      
+      <th><?php echo link_to(" ", 'admindepartment/index', array("class"=>"addbtn", "title"=>"Add a new department"))?></th>
+      <th>Department</th>
     </tr>
   </thead>
  <tbody>
- 
-    
     
     <?php foreach ($department_list->getResults() as $department): ?>
     <tr>
-      <td>
+      <td style='width:30px'>
       <?php if($sf_request->getParameter('page') ===null): ?>
-      <a href="<?php echo url_for('admindepartment/edit?id='.$department->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
-      <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'admindepartment/delete?id='.$department->getId(), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>
+      	<?php echo link_to(" ", 'admindepartment/delete?id='.$department->getId(), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
+        <?php echo link_to(" ", 'admindepartment/edit?id='.$department->getId(), array('class'=>'select'))?>
       <?php else: ?>
-      <a href="<?php echo url_for('admindepartment/edit?id='.$department->getId().'&page='.$sf_request->getParameter('page')) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
-      <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'admindepartment/delete?id='.$department->getId().'&page='.$sf_request->getParameter('page'), array('method' => 'delete', 'confirm' => 'Are you sure?')) ?>  
+      	<?php echo link_to(" ", 'admindepartment/delete?id='.$department->getId().'&page='.$sf_request->getParameter('page'), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
+        <?php echo link_to(" ", 'admindepartment/edit?id='.$department->getId().'&page='.$sf_request->getParameter('page'), array('class'=>'select'))?>
       <?php endif; ?>
       </td>
       <td>
       
       <?php echo $department->getId() ?></td>
 
-      
     </tr>
     <?php endforeach; ?>
     
     <?php include_partial('global/paging', array('pagelist' => $department_list, 'location' => 'admindepartment')) ?>
-    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admindepartment/index') ?>">New Department</a> </td></tr>
     </tbody>
 </table>

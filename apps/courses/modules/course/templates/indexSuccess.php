@@ -64,7 +64,7 @@
 		</tr>
 		<tr>
 			<td>Course Critiques</td>
-			<td>Exams Repository</td>
+			<td>Exams Repository (<a style="cursor:pointer;" onclick='grayout("submitExam");'>Submit Exams</a>)</td>
 		</tr>
 		<tr>
 			<td style="vertical-align:top">

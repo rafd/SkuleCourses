@@ -26,6 +26,11 @@ class admincourseActions extends sfActions
     $this->form2 = new CourseDetailForm();
     $this->form3 = new CourseDisciplineAssociationForm();
   }
+  
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_COURSE);
+    $this->submenu = $submenu->get();
+  }
 
   public function executeCreate(sfWebRequest $request)
   {
@@ -148,9 +153,9 @@ class admincourseActions extends sfActions
   }
 
   protected function getCourselist(Criteria $c = null){
-  	 $pagenumber = 1;
+  	$pagenumber = 1;
     if($this->getRequestParameter('page')!==null){
-    	$pagenumber = $this->getRequestParameter('page');
+      $pagenumber = $this->getRequestParameter('page');
     }
     
     $pager = new sfPropelPager('Course', skuleadminConst::COURSE_RECORDNUMBER);

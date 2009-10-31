@@ -10,6 +10,11 @@
  */
 class adminexamActions extends sfActions
 {
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_EXAM);
+    $this->submenu = $submenu->get();
+  }
+  
   public function executeIndex(sfWebRequest $request)
   {
     //$this->exam_list = $this->getExamList();

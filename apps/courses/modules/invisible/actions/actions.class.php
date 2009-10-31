@@ -61,6 +61,9 @@ class invisibleActions extends sfActions
   
   public function executeSubmitExam(sfWebRequest $request)
   {
+    //TODO: set up uniform display name for each exam/test uploaded so things don't get messy.
+    //i.e. instead of letting the user choose the display name, we'll appropriate it
+    //requested by David
     set_time_limit(0);
     if ($request->isMethod(sfRequest::POST) && $request->hasParameter('security') 
       && $request->hasParameter('year') && $request->hasParameter('descr'))
@@ -115,7 +118,7 @@ class invisibleActions extends sfActions
 	      
 	      // send notification email
 	      $ip = $_SERVER['REMOTE_ADDR'];
-          $msg = "Submitted by ".$ip." [id=".$exam->getId()."]";
+          $msg = "Submitted by ".$ip." [title=".$exam->getDescr()."; course=".$exam->getCourseId()."; year=".$exam->getYear()."; id=".$exam->getId()."]";
 	      helperFunctions::sendEmailNotice("Exam Submission", $msg);
 	      
 	      echo "<input type='text' id='status' value='Success'/>";

@@ -10,6 +10,11 @@
  */
 class admindepartmentActions extends sfActions
 {
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_DEPARTMENT);
+    $this->submenu = $submenu->get();
+  }
+  
   public function executeIndex(sfWebRequest $request)
   {
     $this->department_list = $this->getDepartmentList();

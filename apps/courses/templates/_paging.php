@@ -3,7 +3,7 @@
     Displaying results <?php echo $pagelist->getFirstIndice() ?> to  <?php echo $pagelist->getLastIndice() ?>.
     </td></tr>
    
-    <tr><td colspan="2"style="text-align: center">
+    <tr><td colspan="2"style="text-align: center;font-size:9pt;">
     <?php if ($pagelist->haveToPaginate()): ?>
   <?php echo link_to('&laquo;', $location.'/index?page='.$pagelist->getFirstPage()) ?>
   <?php echo link_to('&lt;', $location.'/index?page='.$pagelist->getPreviousPage()) ?>

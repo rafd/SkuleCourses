@@ -92,14 +92,22 @@ class subMenu
 	          $returnStr .= "</div><dd class='pointer' onmouseover='mopen(\"subExam\")' onmouseout='mclosetime()'><a>Exams Repository</a></dd></dl>";
 	    }
     } 
-    elseif ($this->_menuOption == subMenuOptions::MAINTENANCE)
+    elseif ($this->_menuOption >= subMenuOptions::MAINTENANCE && $this->_menuOption < subMenuOptions::ERROR)
     {
-        //TODO: make maintenance menu
-        $returnStr .= "<dl><dt>".link_to("Maintenance","siteadmin")."</dt>";
         
+        if ($this->_menuOption == subMenuOptions::MAINTENANCE)
+          $returnStr .= "<dl><dt>Maintenance</dt>";
+        else
+          $returnStr .= "<dl><dt>".link_to("Maintenance","siteadmin/index")."</dt>";
+          
         foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
         {
-          $returnStr .= "<dd>".link_to($key, $value)."</dd>";
+          $names = subMenuOptions::getMaintenanceSectionNames();
+          if ($this->_menuOption == $key){
+            $returnStr .= "<dd>".$names[$key]."</dd>";
+          } else {
+            $returnStr .= "<dd>".link_to($names[$key], $value)."</dd>";
+          }
         }
     } 
     elseif ($this->_menuOption == subMenuOptions::ERROR)
@@ -226,15 +234,39 @@ class subMenuOptions
   const COURSE_CRITIQUE = 3;
   const COURSE_EXAM = 4;
   const MAINTENANCE = 5;
-  const ERROR = 6;
+  const MAINTENANCE_COURSE = 6;
+  const MAINTENANCE_INSTRUCTOR = 7;
+  const MAINTENANCE_DEPARTMENT = 8;
+  const MAINTENANCE_DISCIPLINE = 9;
+  const MAINTENANCE_EXAM = 10;
+  const MAINTENANCE_RATING = 11;
+  const ERROR = 12;
+  
+  public static function getMaintenanceSectionNames(){
+    return array(subMenuOptions::MAINTENANCE_COURSE=>"Courses", 
+    subMenuOptions::MAINTENANCE_INSTRUCTOR=>"Instructors",
+    subMenuOptions::MAINTENANCE_DEPARTMENT=>"Departments",
+    subMenuOptions::MAINTENANCE_DISCIPLINE=>"Disciplines",
+    subMenuOptions::MAINTENANCE_EXAM=>"Exams",
+    subMenuOptions::MAINTENANCE_RATING=>"Ratings");
+  }
   
   public static function getMaintenanceSections()
   {
-    return array("Courses"=>"admincourse", 
-    "Instructors"=>"admininstructor",
-    "Departments"=>"admindepartment",
-    "Disciplines"=>"admindiscipline",
-    "Ratings"=>"",
-    "Exams"=>"");
+    return array(subMenuOptions::MAINTENANCE_COURSE=>"admincourse/index", 
+    subMenuOptions::MAINTENANCE_INSTRUCTOR=>"admininstructor/index",
+    subMenuOptions::MAINTENANCE_DEPARTMENT=>"admindepartment/index",
+    subMenuOptions::MAINTENANCE_DISCIPLINE=>"admindiscipline/index",
+    subMenuOptions::MAINTENANCE_EXAM=>"adminexam/index",
+    subMenuOptions::MAINTENANCE_RATING=>"adminratingCriteria/index");
+  }
+  
+  public static function getMaintenanceSectionDetails(){
+    return array(subMenuOptions::MAINTENANCE_COURSE=>"Add, modify or remove courses.", 
+    subMenuOptions::MAINTENANCE_INSTRUCTOR=>"Add, modify or remove instructors.",
+    subMenuOptions::MAINTENANCE_DEPARTMENT=>"Add, modify or remove departments.",
+    subMenuOptions::MAINTENANCE_DISCIPLINE=>"Add, modify or remove disciplines (academic programs).",
+    subMenuOptions::MAINTENANCE_EXAM=>"Add, modify or remove exams.",
+    subMenuOptions::MAINTENANCE_RATING=>"Manage course ratings.");
   }
 }

@@ -1,14 +1,25 @@
-<div id="adminmenu">
-<?php echo link_to('Courses', 'admincourse/index') ?>
-<br />
-<?php echo link_to('Departments', 'admindepartment/index') ?>
-<br />
-<?php echo link_to('Exams', 'adminexam/index') ?>
-<br />
-<?php echo link_to('Disciplines', 'admindiscipline/index') ?>
-<br />
-<?php echo link_to('Instructors', 'admininstructor/index') ?>
-<br />
-<?php echo link_to('Rating Criterias', 'adminratingCriteria/index') ?>
-</div>
-<?php //need to change /course/templates/_siteadminmenu.php as well if this is changed! ?>
+<?php use_helper('Object')?>
+<?php echo $submenu ?>
+<div id="main"><div id="critique_content">
+<h2>Skule Courses Maintenance</h2>
+<p>This section provides means to manage SkuleCourses. Please note that modifications to the system are irreversible once saved. 
+Please pay due diligence when accessing this section.</p>
+<p>Editable Sections:</p>
+<table style='width:100%'>
+<?php $counter = 0;?>
+<?php foreach (subMenuOptions::getMaintenanceSections() as $key=>$value):?>
+	<?php if ($counter%2==0):?>
+		</tr>
+		<tr>
+	<?php endif;?>
+	<td width="50%">
+		<h3><?php echo link_to($sectionNames[$key], $value)?></h3>
+		<p>
+		<?php echo $sectionDetails[$key]?>
+		</p>
+	</td>
+	<?php $counter++;?>
+	
+<?php endforeach;?>
+</tr></table>
+</div></div>

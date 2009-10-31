@@ -10,6 +10,11 @@
  */
 class admindisciplineActions extends sfActions
 {
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_DISCIPLINE);
+    $this->submenu = $submenu->get();
+  }
+  
   public function executeIndex(sfWebRequest $request)
   {
     $page = 1;

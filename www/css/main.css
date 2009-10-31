@@ -1,4 +1,4 @@
-#main {min-height:450px}
+#main {min-height:900px}
 #main table{width: auto;margin:0;vertical-align:baseline;}
 #main input[type=text], #left input[type=file], #main select { font: 10pt verdana; width: 200px;}
 #main input[type=button], #left input[type=submit]{ font: 10pt verdana;}
@@ -10,7 +10,8 @@
 #left input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #left form label{font: inherit;width:auto;display:inline;}
 
-#critique_content{margin: 1em;}
+#critique_content{margin: 1em;font-size:10pt}
+#critique_content fieldset {margin-top:-10px}
 
 #submenu
 {
@@ -20,7 +21,6 @@
 	float: left;
 }
 #submenu li { padding:2px;}
-
 
 table.description { padding-right: 10px;}
 table.description td { vertical-align:top; text-align:justify;}
@@ -33,6 +33,7 @@ table.layout td.separator { width:7px;}
 
 table.inputlayout { width: 100%; border: none;}
 table.inputlayout tr {vertical-align: middle;}
+table.inputlayout td.topup {vertical-align:top}
 table.innerlayout { width: 100%; border: none; margin: none;}
 table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
 
@@ -49,8 +50,13 @@ a.reload:hover {background: url(../skule_images/reload.on.gif);}
 a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../skule_images/find.gif);}
 a.find:hover {background: url(../skule_images/find.on.gif);}
 
-a.select {position:relative; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
+a.select {position:relative; margin-right: 5px; float: right; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
 a.select:hover {background: url(../skule_images/select.on.gif);}
+
+a.deletebtn {cursor: pointer; float: right; display:block; width: 11px; height:13px; background: url(../skule_images/delete.gif);}
+a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
+
+a.addbtn {cursor: pointer; float: right; display:block; width: 13px; height:13px; background: url(../skule_images/add.gif);}
 
 a.back {position:relative; cursor: pointer; display:block; width: 16px; height: 16px; background: url(../skule_images/back.gif) no-repeat;}
 a.back:hover {background: url(../skule_images/back.on.gif) no-repeat;}
@@ -110,17 +116,8 @@ div.selector
 div.selector li {margin: 3px; display: block; min-width: 50px;}
 div.selector li.selected {border: solid 1px purple;}
 
-/* button field for editors */
-div.buttonfield
-{
-	width:100%;
-	text-align: right;
-}
-div.buttonfield a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
-div.buttonfield a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 13px; height:16px; background: url(../skule_images/delete.gif);}
-div.buttonfield a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
-div.buttonfield a.addbtn {cursor: pointer; float: right; margin-left: 5px; display:block; width: 16px; height:16px; background: url(../skule_images/add.gif);}
-div.buttonfield a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
+a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
+a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
 
 img.btn {cursor: pointer; margin-left: 5px; }
 

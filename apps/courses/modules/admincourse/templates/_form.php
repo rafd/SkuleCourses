@@ -12,18 +12,20 @@
 <?php include_stylesheets_for_form($form3) ?>
 <?php include_javascripts_for_form($form3) ?>
 
-<?php if ($form->getObject()->isNew()): ?>
-<h2>New Course</h2>
-<?php else: ?>
-<h2>Edit Course <?php echo $sf_request->getParameter('id')?></h2>
-<?php endif; ?>
 <form action="<?php echo url_for('admincourse/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
+
+<?php if ($form->getObject()->isNew()): ?>
+<fieldset style='width:550px'><legend>New Course</legend>
+<?php else: ?>
+<fieldset style='width:550px'><legend>Edit <?php echo $sf_request->getParameter('id')?></legend>
+<?php endif; ?>
+
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
 <?php endif; ?>
  
 <div><?php echo $form->renderGlobalErrors() ?></div>
-<h3>Course Info:</h3>
+<b>Course Info:</b>
 <div>
        <?php if ($form->getObject()->isNew()): ?>
        <table style="width: 1px">
@@ -69,7 +71,7 @@
        <?php echo $form['is_eng']->renderError() ?>
      </div>
 
-<h3>Course Detail:</h3>
+<b>Course Detail:</b>
 <div>
 <div id="_expand1" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(1)') ?></div>
     <div id="_collapse1" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(1)') ?></div>
@@ -151,6 +153,7 @@
           
         </div>
 
+</fieldset>
 </form>
 
 <?php if (!$form->getObject()->isNew()): ?>
@@ -184,11 +187,4 @@
     
   }
 ") ?>
-<fieldset><legend>Course Instructor Association:</legend>
-     <div id="_courseinstructassoc_">
-     <?php echo link_to_remote('List', array(
-          'update' => '_courseinstructassoc_',
-          'url'    => $sf_request->getRelativeUrlRoot().'/adminCIA/index?course='.$sf_request->getParameter('id'),
-          )) ?>
-</fieldset>
 <?php endif; ?>

@@ -17,6 +17,10 @@ class siteadminActions extends sfActions
   */
   public function executeIndex(sfWebRequest $request)
   {
-    //$this->forward('default', 'module');
+    $this->sectionNames = subMenuOptions::getMaintenanceSectionNames();
+    $this->sectionDetails = subMenuOptions::getMaintenanceSectionDetails();
+    
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE);
+    $this->submenu = $submenu->get();
   }
 }

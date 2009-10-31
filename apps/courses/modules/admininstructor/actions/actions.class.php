@@ -10,6 +10,11 @@
  */
 class admininstructorActions extends sfActions
 {
+  
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_INSTRUCTOR);
+    $this->submenu = $submenu->get();
+  }
 	
   public function executeIndex(sfWebRequest $request)
   {
