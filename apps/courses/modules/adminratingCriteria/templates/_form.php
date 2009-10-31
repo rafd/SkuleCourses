@@ -1,3 +1,5 @@
+<?php echo use_helper('Javascript') ?>
+
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>
 
@@ -28,22 +30,37 @@
           <?php echo $form['descr'] ?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $form['type_id']->renderLabel() ?></th>
+      
+     <tr>
+        <th>Type:</th>
         <td>
-          <?php echo $form['type_id']->renderError() ?>
-          <?php echo $form['type_id'] ?>
+          <?php echo $form['type_scale']->renderError() ?>
+          <?php echo $form['type_scale'] ?>
         </td>
       </tr>
-     
-      <tr>
+      
+      <?php if($form->getObject()->getTypeId()>30 && $form->getObject()->getTypeId()<40): ?>
+      <tr id="scale_data" style="visibility: visible;">
+      <?php else: ?>
+      <tr id="scale_data" style="visibility: hidden;">
+      <?php endif; ?>
         <th><?php echo $form['scale']->renderLabel() ?></th>
         <td>
           <?php echo $form['scale']->renderError() ?>
           <?php echo $form['scale'] ?>
         </td>
       </tr>
-      
     </tbody>
   </table>
 </form>
+<?php echo javascript_tag("
+  function changeType(self)
+  {
+    var scale_data = document.getElementById('scale_data');
+    if(self.options[self.selectedIndex].value == '".$scale_PID."'){
+       scale_data.style.visibility = 'visible';
+    }else{
+       scale_data.style.visibility = 'hidden';
+    }
+  }
+") ?>
