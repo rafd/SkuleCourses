@@ -28,14 +28,17 @@
 </script>
 
 <form action="<?php echo url_for('admininstructor/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
+
+<fieldset style='width:450px'>
+
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
-<fieldset style='width:450px'><legend>New Instructor</legend>
+<legend>New Instructor</legend>
 <?php else: ?>
-<fieldset style='width:450px'><legend>Edit Instructor</legend>
+<legend>Edit Instructor</legend>
 <?php endif;?>
 
-<table style='width:90%'>
+<table style='width:95%'>
 	<tfoot>
 		<tr>
 			<td colspan="2">
@@ -56,33 +59,27 @@
 		<tr><td colspan="2">
 			<table class="inputlayout">
 				<tr>
-					<td>Last Name</td>
-					<td>
-						<div style="float: left"> <?php echo $form['last_name'] ?>  </div>
-						<div style="float: left"><?php echo $form['last_name']->renderError() ?></div>
-					</td>
+					<th>Last Name</th>
+					<td><?php echo $form['last_name'] ?></td>
 				</tr>
+				<tr><td></td><td><?php echo $form['last_name']->renderError() ?></td></tr>
 				<tr>
-					<td>First Name</td>
-					<td>
-				       <div style="float: left">   <?php echo $form['first_name'] ?></div>
-				       <div style="float: left">   <?php echo $form['first_name']->renderError() ?></div>
-					</td>
+					<th>First Name</th>
+					<td><?php echo $form['first_name'] ?></td>
 				</tr>
+				<tr><td></td><td><?php echo $form['first_name']->renderError() ?></td></tr>
 				<tr>
-					<td>Department</td>
-					<td>
-						<div style="float: left"><?php echo $form['dept_id'] ?></div>
-						<div style="float: left"><?php echo $form['dept_id']->renderError() ?></div>
-					</td>
+					<th>Department</th>
+					<td><?php echo $form['dept_id'] ?></td>
 				</tr>
+				<tr><td></td><td><?php echo $form['dept_id']->renderError() ?></td></tr>
 			</table>
       		</td>
 		</tr>
 		<tr>
 			<td style='width:100%'>
 				<fieldset style='width:100%' id="blockHid">
-					<legend style='font-size:10pt'>Instructor Detail 
+					<legend style='font-size:10pt'>Instructor Details 
       				<img onclick="toggleDetails()" style="cursor:pointer" title="Add detailed description" src='/skule_images/expand.gif' />
       				</legend>
 				</fieldset>
@@ -107,8 +104,10 @@
 		</tr>
 		<tr>
 			<td>
-				<fieldset style='width:100%' id="blockShow">
+				<fieldset style='width:100%'>
       				<legend style='font-size:10pt'>Associated Courses</legend>
+      				
+      				<?php //FIXME course instructor association table?>
       			</fieldset>
 			</td>
 		</tr>

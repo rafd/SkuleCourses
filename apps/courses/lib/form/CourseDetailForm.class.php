@@ -15,7 +15,7 @@ class CourseDetailForm extends BaseCourseDetailForm
   	unset($this['course_id']);
     $this->setWidgets(array(
       'id'            => new sfWidgetFormInputHidden(),
-      'detail_descr'  => new sfWidgetFormTextarea(),
+      'detail_descr'  => new sfWidgetFormTextarea(array(),array("cols"=>"40")),
       'first_offered' => new sfWidgetFormInput(),
       'last_offered'  => new sfWidgetFormInput(),
       

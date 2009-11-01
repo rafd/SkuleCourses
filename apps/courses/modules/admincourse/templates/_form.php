@@ -8,12 +8,35 @@
 <?php include_stylesheets_for_form($form3) ?>
 <?php include_javascripts_for_form($form3) ?>
 
+<script type="text/javascript">
+	var detailsShown = true;
+
+	function toggleDetails(){
+		if (detailsShown) {
+			detailsShown = false;
+			document.getElementById("blockShow").style.display = "none";
+			document.getElementById("blockHid").style.display = "block";
+		} else {
+		  	detailsShown = true;
+			document.getElementById("blockShow").style.display = "block";
+			document.getElementById("blockHid").style.display = "none";
+		}
+	}
+
+	function confirmDetailsRemoval(){
+		 var res = confirm("Remove detailed description of this instructor?");
+		 if (res){toggleDetails();}
+	}
+</script>
+
 <form action="<?php echo url_for('admincourse/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
 
+<fieldset style='width:550px'>
+
 <?php if ($form->getObject()->isNew()): ?>
-<fieldset style='width:550px'><legend>New Course</legend>
+<legend>New Course</legend>
 <?php else: ?>
-<fieldset style='width:550px'><legend>Edit Course</legend>
+<legend>Edit Course</legend>
 <?php endif; ?>
 
 <?php if (!$form->getObject()->isNew()): ?>
@@ -21,86 +44,139 @@
 <?php endif; ?>
  
 <div><?php echo $form->renderGlobalErrors() ?></div>
-<b>Course Info:</b>
-<div>
 
-      <?php if ($form->getObject()->isNew()): ?>
-      
-    <table style="width: 1px"> 
-    <tr>
-    	<th><?php echo $form['dept_id']->renderLabel() ?></th>
-    	<th><div style="float: left"><?php echo $form['code']->renderLabel() ?></div> <i style="valign: middle;float: left">&nbsp;&nbsp;e.g. 101</i> </th>
-    	<th> <?php echo $form['credit']->renderLabel() ?></th>
-    </tr>
-    <tr>
-       <td valign="top">
-       <?php echo $form['dept_id'] ?>
-       <?php echo $form['dept_id']->renderError() ?>
-       </td>
-       <td valign="top">
-       <?php echo $form['code'] ?>
-       <?php echo $form['code']->renderError() ?>
-       </td>
-       <td valign="top">
-       <?php echo $form['credit'] ?>
-       <?php echo $form['credit']->renderError() ?>
-       </td>
-    </tr>
-    </table>
-      
-       <?php else: ?>
-       
-       <div>Course Code: <?php echo $form->getObject()->getId() ?></div>
-       <div>Department: <?php echo $form->getObject()->getDepartment() ?></div>
-       <br />
-     
-       <?php endif; ?>
-       
-       <?php echo $form['descr']->renderLabel() ?><br />
-       <?php echo $form['descr'] ?>
-       <?php echo $form['descr']->renderError() ?><br/>
-    
-       <?php echo $form['is_eng']->renderLabel() ?><br />
-       <?php echo $form['is_eng'] ?>
-       <?php echo $form['is_eng']->renderError() ?>
-     </div>
+<table style='width:95%'>
+	<tfoot>
+		<tr>
+			<td colspan="2">
+            <?php echo $form->renderHiddenFields() ?>
+         	<?php echo $form2->renderHiddenFields() ?>
+            <?php echo $form3->renderHiddenFields() ?>
+          
+			<input type="submit" value="Save" class="fbuttons"/>
+            <?php if (!$form->getObject()->isNew()): ?>
+          	<input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
+            <?php endif; ?>
+			</td>
+		</tr>
+	</tfoot>
+	<tbody>
+		<tr><td colspan="2">
+	      <?php echo $form->renderGlobalErrors() ?>
+		</td></tr>
+		<tr>
+			<td>
+				<?php if ($form->getObject()->isNew()): ?>
+				<table class="inputlayout"> 
+			    <tr>
+			    	<th>Department</th>
+			    	<th>Code <i>(e.g. 101)</i></th>
+			    	<th>Credit</th>
+			    </tr>
+			    <tr>
+			       <td><?php echo $form['dept_id'] ?></td>
+			       <td><?php echo $form['code'] ?></td>
+			       <td><?php echo $form['credit'] ?></td>
+			    </tr>
+			    <tr>
+			    	<td><?php echo $form['dept_id']->renderError() ?></td>
+			    	<td><?php echo $form['code']->renderError() ?></td>
+			    	<td><?php echo $form['credit']->renderError() ?></td>
+			    </tr>
+			    </table>
+			    
+			    <?php else:?>
+			    
+			    <table class="inputlayout">
+			    	<tr>
+			    		<th>Course Code</th>
+			    		<td><?php echo $form->getObject()->getId() ?></td>
+			    	</tr>
+			    </table>
+			    
+			    <?php endif;?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table class="inputlayout">
+					<tr>
+						<th>Title</th>
+						<td><?php echo $form['descr'] ?></td>
+					</tr>
+					<tr><td></td><td><?php echo $form['descr']->renderError() ?></td></tr>
+					<tr>
+						<th colspan="10">Is An Engineering Course? <?php echo $form['is_eng'] ?></th>
+						<td></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%">
+				<fieldset style='width:100%' id="blockHid">
+					<legend style='font-size:10pt'>Course Details 
+      				<img onclick="toggleDetails()" style="cursor:pointer" title="Add detailed description" src='/skule_images/expand.gif' />
+      				</legend>
+				</fieldset>
+				<fieldset style='width:100%' id="blockShow">
+					<legend style='font-size:10pt'>Course Details 
+      				<img onclick="confirmDetailsRemoval()" style="cursor:pointer" title="Remove detailed description" src='/skule_images/collapse.gif' />
+      				</legend>
+      				
+      				<table class="inputlayout">
+      					<tr>
+      						<th>Description</th>
+      						<td><?php echo $form2['detail_descr'] ?></td>
+      					</tr>
+      					<tr>
+      						<td></td>
+      						<td>
+      							<?php if(isset($omitdetail)): ?>
+						        <span style="display: none">
+						        <?php else: ?>
+						        <span>
+						        <?php endif; ?>
+						        <?php echo $form2['detail_descr']->renderError() ?>
+						        </span>
+      						</td>
+      					</tr>
+      					<tr>
+      						<th>Date First Offered</th>
+      						<td>
+      							<?php echo input_date_tag($form2->getName()."[".$form2['first_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
+      						</td>
+      					</tr>
+      					<tr>
+      						<td></td><td><?php echo $form2['first_offered']->renderError() ?></td>
+      					</tr>
+      					<tr>
+      						<th>Date Last Offered</th>
+      						<td>
+      							<?php echo input_date_tag($form2->getName()."[".$form2['last_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
+      						</td>
+      					</tr>
+      					<tr>
+      						<td></td><td><?php echo $form2['last_offered']->renderError() ?></td>
+      					</tr>
+      				</table>
+				</fieldset>
+				
+				<script type="text/javascript">toggleDetails();</script>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:100%">
+				<fieldset style='width:100%'>
+					<legend style='font-size:10pt'>Associated Disciplines</legend>
+				</fieldset>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-<b>Course Detail:</b>
-<div>
-<div id="_expand1" style="display: none"><?php echo link_to_function(image_tag('/skule_images/expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(1)') ?></div>
-    <div id="_collapse1" style="display: none"><?php echo link_to_function(image_tag('/skule_images/collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(1)') ?></div>
-     </div>
-     <div><div id="_expand1_" style="display: block">
-        <?php echo $form2['detail_descr']->renderLabel() ?><br />
-        <?php echo $form2['detail_descr'] ?>
-        <?php if(isset($omitdetail)): ?>
-        <div style="display: none">
-        <?php else: ?>
-        <div style="">
-        <?php endif; ?>
-        <?php echo $form2['detail_descr']->renderError() ?>
-        </div>
-        <br />
-        <?php echo $form2['first_offered']->renderLabel() ?><br />
-        <?php //echo $form2['first_offered']->renderRow(array('class' => 'date-pick')) ?>
-        Format (date:dd-MM-yyyy):
-        <?php echo input_date_tag($form2->getName()."[".$form2['first_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
-
-        <?php //echo $sf_request->getHost() ?><?php //echo url_for('@homepage', true) ?>
-      
-        <?php echo $form2['first_offered']->renderError() ?>
-     
-        <br />
-        <?php echo $form2['last_offered']->renderLabel() ?><br />
-        Format (date:dd-MM-yyyy):
-        <?php echo input_date_tag($form2->getName()."[".$form2['last_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
-      
-        <?php echo $form2['last_offered']->renderError() ?>
-      
-        </div></div>
- 
-  
-<h3>Course Discipline Association:</h3>     
+<?php //FIXME 
+/*<h3>Course Discipline Association:</h3>     
  	<div>
 		<div id="_expand2" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(2)') ?></div>
     	<div id="_collapse2" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(2)') ?></div>
@@ -130,53 +206,8 @@
        <?php echo $form3['year_of_study']->renderError() ?>
        </div>
      </div>
- 
-     
-      <div>
-          <?php echo $form->renderHiddenFields() ?>
-          <?php echo $form2->renderHiddenFields() ?>
-          <?php echo $form3->renderHiddenFields() ?>
-          &nbsp;
-          <input type="submit" value="Save" class="fbuttons"/>
-          <?php if (!$form->getObject()->isNew()): ?>
-          <input type="button" href="<?php echo url_for('admincourse/index') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
-         
-          <?php endif; ?>
-          
-        </div>
+*/
+?>
 
 </fieldset>
 </form>
-
-<?php if (!$form->getObject()->isNew()): ?>
-<?php echo javascript_tag("
-    document.getElementById('_expand1').style.display = 'block';
-    document.getElementById('_expand1_').style.display = 'none';
-    ") ?>
-<?php echo javascript_tag("
-    document.getElementById('_expand2').style.display = 'block';
-    document.getElementById('_expand2_').style.display = 'none';
-    ") ?> 
-<?php echo javascript_tag("
-  function more(num)
-  {
-    var n1='_expand'+num;
-    document.getElementById(n1).style.display = 'none';
-    var n2='_expand'+num+'_';
-    document.getElementById(n2).style.display = 'block';
-    var n3='_collapse'+num;
-    document.getElementById(n3).style.display = 'block';
-    
-  }
-  function less(num)
-  {
-    var n1='_expand'+num;
-    document.getElementById(n1).style.display = 'block';
-    var n2='_expand'+num+'_';
-    document.getElementById(n2).style.display = 'none';
-    var n3='_collapse'+num;
-    document.getElementById(n3).style.display = 'none';
-    
-  }
-") ?>
-<?php endif; ?>
