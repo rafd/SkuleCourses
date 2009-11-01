@@ -59,6 +59,7 @@ class searchActions extends sfActions
       
       // get result set
       $instrObj = InstructorPeer::retrieveByPK($this->instructorId, $conn);
+      if (!is_object($instrObj)) $this->forward404();
       $lastname = $instrObj->getLastName();
       $this->category = strtoupper(substr($lastname,0,1));
       $this->resultTitle = "Results for ".$lastname.", ".$instrObj->getFirstName();
@@ -105,6 +106,7 @@ class searchActions extends sfActions
       $this->deptId = $deptId;
       
       $deptObj = DepartmentPeer::retrieveByPK($deptId, $conn);
+      if (!is_object($deptObj)) $this->forward404();
       $this->resultTitle = "Results for ".$deptObj->getId()." (".$deptObj->getDescr().")";
       
       $this->results = $deptObj->getCourses(null, $conn);
@@ -134,6 +136,7 @@ class searchActions extends sfActions
       
       // get result set
       $enum = EnumItemPeer::retrieveByPK($this->programId, $conn);
+      if (!is_object($enum)) $this->forward404();
       $this->resultTitle = "Results for ".$enum->getDescr();
       
       $this->results = CoursePeer::findCoursesByDisciplineIdAndYear($this->programId, $this->year, $conn);

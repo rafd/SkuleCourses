@@ -18,6 +18,8 @@ class courseActions extends sfActions
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
+    
+    if (!is_object($this->courseObj)) $this->forward404();
 
     // courseDetail
     $detList = $this->courseObj->getCourseDetails(null, $conn);
@@ -48,6 +50,8 @@ class courseActions extends sfActions
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
     
+    if (!is_object($this->courseObj)) $this->forward404();
+    
     if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $year = $request->getParameter("year");
@@ -65,6 +69,8 @@ class courseActions extends sfActions
       
       $this->year = $year;
       $this->instructorArr = CourseInstructorAssociationPeer::getInstructorsForCourseAndYear($id, $year, $conn);
+      
+      // FIXME if instructorArr returns no result, we're in deep shit
       
       if ($request->hasParameter("instructor"))
         $insId = $request->getParameter("instructor");
@@ -152,11 +158,15 @@ class courseActions extends sfActions
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
     
+    if (!is_object($this->courseObj)) $this->forward404();
+    
     if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $this->year = $request->getParameter("year");
       
       $results = ExamPeer::getExamsForYearAndCourseId($id, $this->year, $conn);
+      
+      if (count($results)==0) $this->forward404();
       
       $examArr = array();
       $testArr = array();
@@ -221,6 +231,7 @@ class courseActions extends sfActions
       $arr["mean"] = helperFunctions::findMean(1, $item->getDescr(), $arr);
       $arr["median"] = helperFunctions::findMedian(1, $item->getDescr(), $arr);
     } else {
+      // FIXME type not supported
       throw new Exception ("type not supported");
     }
 
@@ -244,6 +255,7 @@ class courseActions extends sfActions
     } elseif ($item->getParentId() == EnumItemPeer::RATING_SCALE){
       for ($i=0; $i<$item->getDescr(); $i++) $FC->addChartData($arr[$i], "name=$i");
     } else {
+      // FIXME
       throw new Exception ("type not supported");
     }
 
