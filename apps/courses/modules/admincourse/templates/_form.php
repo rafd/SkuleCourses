@@ -1,9 +1,5 @@
-<?php echo use_helper('Javascript') ?>
-<?php echo javascript_tag("
-    var uri = 'http://".$sf_request->getHost()."/';
-    ") //this varibale is needed in the datetimepicker_css.js change line 259 inside and the places that uses it (262 to 275)?>
-<script type="text/javascript" src="http://<?php echo $sf_request->getHost() ?>/js/datetimepicker_css.js"></script>
-
+<?php use_helper('Javascript') ?>
+<?php use_helper("DateForm")?>
 
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>
@@ -17,7 +13,7 @@
 <?php if ($form->getObject()->isNew()): ?>
 <fieldset style='width:550px'><legend>New Course</legend>
 <?php else: ?>
-<fieldset style='width:550px'><legend>Edit <?php echo $sf_request->getParameter('id')?></legend>
+<fieldset style='width:550px'><legend>Edit Course</legend>
 <?php endif; ?>
 
 <?php if (!$form->getObject()->isNew()): ?>
@@ -27,32 +23,30 @@
 <div><?php echo $form->renderGlobalErrors() ?></div>
 <b>Course Info:</b>
 <div>
-       <?php if ($form->getObject()->isNew()): ?>
-       <table style="width: 1px">
-     
+
+      <?php if ($form->getObject()->isNew()): ?>
+      
+    <table style="width: 1px"> 
     <tr>
-      <th><?php echo $form['dept_id']->renderLabel() ?></th>
-           <th><div style="float: left"><?php echo $form['code']->renderLabel() ?></div> <i style="valign: middle;float: left">&nbsp;&nbsp;Example: 101</i> </th>
-           <th> <?php echo $form['credit']->renderLabel() ?></th>
+    	<th><?php echo $form['dept_id']->renderLabel() ?></th>
+    	<th><div style="float: left"><?php echo $form['code']->renderLabel() ?></div> <i style="valign: middle;float: left">&nbsp;&nbsp;e.g. 101</i> </th>
+    	<th> <?php echo $form['credit']->renderLabel() ?></th>
     </tr>
-       <tr>
+    <tr>
        <td valign="top">
        <?php echo $form['dept_id'] ?>
        <?php echo $form['dept_id']->renderError() ?>
-       
        </td>
        <td valign="top">
-       
        <?php echo $form['code'] ?>
        <?php echo $form['code']->renderError() ?>
-       
        </td>
        <td valign="top">
        <?php echo $form['credit'] ?>
-        <?php echo $form['credit']->renderError() ?>
+       <?php echo $form['credit']->renderError() ?>
        </td>
-       </tr>
-       </table>
+    </tr>
+    </table>
       
        <?php else: ?>
        
@@ -64,7 +58,7 @@
        
        <?php echo $form['descr']->renderLabel() ?><br />
        <?php echo $form['descr'] ?>
-       <?php echo $form['descr']->renderError() ?>
+       <?php echo $form['descr']->renderError() ?><br/>
     
        <?php echo $form['is_eng']->renderLabel() ?><br />
        <?php echo $form['is_eng'] ?>
@@ -73,8 +67,8 @@
 
 <b>Course Detail:</b>
 <div>
-<div id="_expand1" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(1)') ?></div>
-    <div id="_collapse1" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(1)') ?></div>
+<div id="_expand1" style="display: none"><?php echo link_to_function(image_tag('/skule_images/expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(1)') ?></div>
+    <div id="_collapse1" style="display: none"><?php echo link_to_function(image_tag('/skule_images/collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(1)') ?></div>
      </div>
      <div><div id="_expand1_" style="display: block">
         <?php echo $form2['detail_descr']->renderLabel() ?><br />
@@ -90,9 +84,8 @@
         <?php echo $form2['first_offered']->renderLabel() ?><br />
         <?php //echo $form2['first_offered']->renderRow(array('class' => 'date-pick')) ?>
         Format (date:dd-MM-yyyy):
-        <?php echo $form2['first_offered'] ?>
-        <a href="javascript:NewCssCal('<?php echo $form2['first_offered']->renderId() ?>','ddmmyyyy')"><img src="http://<?php echo $sf_request->getHost() ?>/images/cal.gif" width="16" height="16" alt="Pick a date"></a>
-        
+        <?php echo input_date_tag($form2->getName()."[".$form2['first_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
+
         <?php //echo $sf_request->getHost() ?><?php //echo url_for('@homepage', true) ?>
       
         <?php echo $form2['first_offered']->renderError() ?>
@@ -100,18 +93,17 @@
         <br />
         <?php echo $form2['last_offered']->renderLabel() ?><br />
         Format (date:dd-MM-yyyy):
-        <?php echo $form2['last_offered'] ?>
-        <a href="javascript:NewCssCal('<?php echo $form2['last_offered']->renderId() ?>','ddmmyyyy')"><img src="http://<?php echo $sf_request->getHost() ?>/images/cal.gif" width="16" height="16" alt="Pick a date"></a>
+        <?php echo input_date_tag($form2->getName()."[".$form2['last_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
       
         <?php echo $form2['last_offered']->renderError() ?>
       
         </div></div>
  
   
- <h3>Course Discipline Association:</h3>     
-     <div>
-<div id="_expand2" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(2)') ?></div>
-    <div id="_collapse2" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(2)') ?></div>
+<h3>Course Discipline Association:</h3>     
+ 	<div>
+		<div id="_expand2" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(2)') ?></div>
+    	<div id="_collapse2" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(2)') ?></div>
     </div>
     
     <div id="_expand2_" style="display: block">

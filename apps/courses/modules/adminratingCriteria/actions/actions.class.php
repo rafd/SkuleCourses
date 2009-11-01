@@ -10,6 +10,11 @@
  */
 class adminratingCriteriaActions extends sfActions
 { 
+  public function preExecute(){
+    $submenu = new subMenu(subMenuOptions::MAINTENANCE_RATING);
+    $this->submenu = $submenu->get();
+  }
+  
   //creating a new rating field has been deprecated to executeList
   public function executeIndex(sfWebRequest $request)
   {

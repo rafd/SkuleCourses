@@ -13,15 +13,12 @@
      <tfoot>
      <tr><td colspan="2"><?php echo $form->renderHiddenFields() ?></td></tr>
      <tr class="t_foot">
-        <td>
+        <td></td>
         
-         
-          
-        </td><td> 
-         <input type="submit" value="Save" class="fbuttons"/>
+        <td> 
+          <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-        
-          <input type="button" href="<?php echo url_for('admindepartment/index') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
+          <input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
           <?php endif; ?>
         </td>
       </tr>

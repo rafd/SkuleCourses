@@ -1,4 +1,3 @@
-<?php include_partial('global/siteadminmenu') ?>
 <h1>Base Ratings Manager</h1>
 <table>
 <tr>

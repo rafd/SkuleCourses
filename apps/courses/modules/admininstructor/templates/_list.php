@@ -1,22 +1,23 @@
-<table>
+<table style='width:230px'>
   <thead>
     <tr>
-      <th></th>
-      <th>Full Name</th>
+      <th><?php echo link_to(" ", 'admininstructor/index', array("class"=>"addbtn", "title"=>"Add a new instructor"))?></th>
+      <th>Instructor</th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($instructor_list->getResults() as $instructor): ?>
     <tr>
-    
-    <td>
-    <a href="<?php echo url_for('admininstructor/edit?id='.$instructor->getId()) ?>"><?php echo image_tag('edit.gif', array('size' => '15x15')) ?></a>
-    <?php echo link_to(image_tag('delete.gif', array('size' => '15x15')), 'admininstructor/delete?id='.$instructor->getId(), array('method' => 'delete', 'confirm' => 'Delete '.$instructor->getFirstName().' '.$instructor->getLastName().'?')) ?></td>
-    <td><a href="<?php echo url_for('admininstructor/edit?id='.$instructor->getId()) ?>"><?php echo $instructor->getFirstName() ?> <?php echo $instructor->getLastName() ?></a></td>
-    
+	    <td width="30">
+	    <?php //FIXME selecting an instructor will cause paging to reorder?>
+	    	<?php echo link_to(" ", 'admininstructor/delete?id='.$instructor->getId(), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
+            <?php echo link_to(" ", 'admininstructor/edit?id='.$instructor->getId(), array('class'=>'select'))?>
+	    </td>
+	    <td>
+	    	<?php echo $instructor->getLastName() ?>, <?php echo $instructor->getFirstName() ?>
+	    </td>
     </tr>
     <?php endforeach; ?>
     <?php include_partial('global/paging', array('pagelist' => $instructor_list, 'location' => 'admininstructor')) ?>
-    <tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('admininstructor/index') ?>">New Instructor</a> </td></tr>
   </tbody>
 </table>

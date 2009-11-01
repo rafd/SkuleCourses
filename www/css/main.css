@@ -9,6 +9,7 @@
 #left input[type=text], #left input[type=file], #left select { font: 10pt verdana; width: 200px;}
 #left input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #left form label{font: inherit;width:auto;display:inline;}
+#left {font-size:9pt}
 
 #critique_content{margin: 1em;font-size:10pt}
 #critique_content fieldset {margin-top:-10px}
@@ -50,10 +51,10 @@ a.reload:hover {background: url(../skule_images/reload.on.gif);}
 a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../skule_images/find.gif);}
 a.find:hover {background: url(../skule_images/find.on.gif);}
 
-a.select {position:relative; margin-right: 5px; float: right; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
+a.select {position:relative; float: right; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
 a.select:hover {background: url(../skule_images/select.on.gif);}
 
-a.deletebtn {cursor: pointer; float: right; display:block; width: 11px; height:13px; background: url(../skule_images/delete.gif);}
+a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 11px; height:13px; background: url(../skule_images/delete.gif);}
 a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
 
 a.addbtn {cursor: pointer; float: right; display:block; width: 13px; height:13px; background: url(../skule_images/add.gif);}

@@ -4,25 +4,22 @@
 <form action="<?php echo url_for('admindiscipline/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
-<fieldset><legend>Edit Discipline</legend>
+<fieldset style='width:450px'><legend>Edit Discipline</legend>
 <?php else: ?>
-<fieldset><legend>New Discipline</legend>
+<fieldset style='width:450px'><legend>New Discipline</legend>
 <?php endif; ?>
   <table>
     <tfoot>
       <tr><td colspan="2"><?php echo $form->renderHiddenFields() ?></td></tr>
       <tr>
-          <td>
+          <td></td>
           
-          </td>
           <td>
           <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-
-          <input type="button" href="<?php echo url_for('admindiscipline/index') ?>" onclick="window.location.href(this.href);" class="fbuttons" value="Cancel" />
+          <input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
           <?php endif; ?>
-          
-        </td>
+          </td>
       </tr>
     </tfoot>
     <tbody>

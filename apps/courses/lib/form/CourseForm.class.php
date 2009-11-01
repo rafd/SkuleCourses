@@ -31,9 +31,9 @@ class CourseForm extends BaseCourseForm
   	}else{
   	$this->setWidgets(array(
       //'id'      => new sfWidgetFormInput(),
-      'dept_id' => new sfWidgetFormPropelChoice(array('model' => 'Department', 'add_empty' => false)),
-  	  'code'    => new sfWidgetFormInput(),
-  	  'credit'  => new sfWidgetFormChoice(array('choices' =>  self::$credits)),
+      'dept_id' => new sfWidgetFormPropelChoice(array('model' => 'Department', 'add_empty' => false), array("style"=>"width:100px")),
+  	  'code'    => new sfWidgetFormInput(array(), array("style"=>"width:100px")),
+  	  'credit'  => new sfWidgetFormChoice(array('choices' =>  self::$credits), array("style"=>"width:100px")),
       'descr'   => new sfWidgetFormInput(),
       'is_eng'  => new sfWidgetFormInputCheckbox(),
       
