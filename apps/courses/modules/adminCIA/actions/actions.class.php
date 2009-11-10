@@ -10,6 +10,10 @@
  */
 class adminCIAActions extends sfActions
 {
+  public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+  }
+  
   public function executeIndex(sfWebRequest $request)
   {
   	$this->course_instructor_association_list = $this->getCIAlist();

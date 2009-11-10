@@ -1,6 +1,6 @@
 #main {min-height:900px}
 #main table{width: auto;margin:0;vertical-align:baseline;}
-#main input[type=text], #left input[type=file], #main select { font: 10pt verdana; width: 200px;}
+#main input[type=text], #main input[type=password], #left input[type=file], #main select { font: 10pt verdana; width: 200px;}
 #main input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #main ul {margin: 2px; padding-left: 10px}
 #main ul li, #main ol li {margin-left: 10px;}

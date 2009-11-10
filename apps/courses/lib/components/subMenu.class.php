@@ -95,19 +95,22 @@ class subMenu
     elseif ($this->_menuOption >= subMenuOptions::MAINTENANCE && $this->_menuOption < subMenuOptions::ERROR)
     {
         
-        if ($this->_menuOption == subMenuOptions::MAINTENANCE)
+        if ($this->_menuOption == subMenuOptions::MAINTENANCE || $this->_menuOption == subMenuOptions::MAINTENANCE_LOGIN)
           $returnStr .= "<dl><dt>Maintenance</dt>";
         else
           $returnStr .= "<dl><dt>".link_to("Maintenance","siteadmin/index")."</dt>";
-          
-        foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
-        {
-          $names = subMenuOptions::getMaintenanceSectionNames();
-          if ($this->_menuOption == $key){
-            $returnStr .= "<dd>".$names[$key]."</dd>";
-          } else {
-            $returnStr .= "<dd>".link_to($names[$key], $value)."</dd>";
-          }
+        
+        if ($this->_menuOption != subMenuOptions::MAINTENANCE_LOGIN) {
+	        foreach (subMenuOptions::getMaintenanceSections() as $key => $value)
+	        {
+	          $names = subMenuOptions::getMaintenanceSectionNames();
+	          if ($this->_menuOption == $key){
+	            $returnStr .= "<dd>".$names[$key]."</dd>";
+	          } else {
+	            $returnStr .= "<dd>".link_to($names[$key], $value)."</dd>";
+	          }
+	        }
+	        $returnStr .= "<dd>".link_to("Sign Out", "siteadmin/logout")."</dd>";
         }
     } 
     elseif ($this->_menuOption == subMenuOptions::ERROR)
@@ -240,7 +243,8 @@ class subMenuOptions
   const MAINTENANCE_DISCIPLINE = 9;
   const MAINTENANCE_EXAM = 10;
   const MAINTENANCE_RATING = 11;
-  const ERROR = 12;
+  const MAINTENANCE_LOGIN = 12;
+  const ERROR = 13;
   
   public static function getMaintenanceSectionNames(){
     return array(subMenuOptions::MAINTENANCE_COURSE=>"Courses", 

@@ -33,9 +33,9 @@
 
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
-<legend>New Instructor</legend>
-<?php else: ?>
 <legend>Edit Instructor</legend>
+<?php else: ?>
+<legend>New Instructor</legend>
 <?php endif;?>
 
 <table style='width:95%'>

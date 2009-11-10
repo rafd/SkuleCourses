@@ -28,6 +28,8 @@ class admincourseActions extends sfActions
   }
   
   public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+    
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_COURSE);
     $this->submenu = $submenu->get();
   }
@@ -137,8 +139,12 @@ class admincourseActions extends sfActions
       endforeach;
     }
     $course->delete();
+    
+    if ($request->hasParameter("page")){
+      $par = "?page=".$request->getParameter("page");
+    }
 
-    $this->redirect('admincourse/index');
+    $this->redirect('admincourse/index'.$par);
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -161,6 +167,7 @@ class admincourseActions extends sfActions
     $pager = new sfPropelPager('Course', skuleadminConst::COURSE_RECORDNUMBER);
     if(!isset($c)){
   	 $c = new Criteria();
+  	 $c->addAscendingOrderByColumn(CoursePeer::ID);
   	}
   	$pager->setCriteria($c);
     $pager->setPage($pagenumber);

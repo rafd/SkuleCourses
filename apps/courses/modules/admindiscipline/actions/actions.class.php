@@ -11,6 +11,8 @@
 class admindisciplineActions extends sfActions
 {
   public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+    
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_DISCIPLINE);
     $this->submenu = $submenu->get();
   }
@@ -74,7 +76,11 @@ class admindisciplineActions extends sfActions
     $this->forward404Unless($enum_item = EnumItemPeer::retrieveByPk($request->getParameter('id')), sprintf('Object enum_item does not exist (%s).', $request->getParameter('id')));
     $enum_item->delete();
 
-    $this->redirect('admindiscipline/index');
+    if ($request->hasParameter("page")){
+      $par = "?page=".$request->getParameter("page");
+    }
+    
+    $this->redirect('admindiscipline/index'.$par);
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -99,6 +105,7 @@ class admindisciplineActions extends sfActions
   	if(!isset($c)){
   	 $c = new Criteria();
   	}
+  	$c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
     $pager->setCriteria($c);
     $pager->setPage($pagenumber);
     $pager->init();

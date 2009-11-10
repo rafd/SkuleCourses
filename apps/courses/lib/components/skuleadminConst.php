@@ -20,5 +20,32 @@ class skuleadminConst
   const INSTRUCTOR_RECORDNUMBER = 10;
   const RATINGCRITERIA_RECORDNUMBER = 10; //ratingfield
 
+  public static function decomposeURL(sfContext $context, sfRequest $request){
+    $module = $context->getModuleName();
+    $action = $context->getActionName();
+    $parameters = $request->getParameterHolder()->getAll();
+    
+    return array("module"=>$module, "action"=>$action, "parameters"=>$parameters);
+  }
+  
+  public static function setPageFromDecomposedURL($urlArray, $page){
+    $url = $urlArray['module'].'/'.$urlArray['action'].'?';
+    $found = false;
+    foreach ($urlArray['parameters'] as $key => $value){
+      if ($key=="page"){
+        $found = true;
+        $url .= $key.'='.$page.'&';
+      } else {
+        $url .= $key.'='.$value.'&';
+      }
+    }
+    
+    if (!$found){
+      $url .= "page=$page/";
+    }
+
+    return $url;
+  }
+  
 }
 ?>

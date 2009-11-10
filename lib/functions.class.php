@@ -43,7 +43,7 @@ class helperFunctions
 
   public static function isLoggedIn(sfWebRequest $request)
   {
-    return ($request->getCookie("username") && $request->getCookie("sid"));
+    return $request->getCookie("username");
   }
 
   /**

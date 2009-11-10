@@ -3,15 +3,16 @@
 /**
  * admininstructor actions.
  *
- * @package    sf_sandbox
+ * @package    SkuleCourses
  * @subpackage admininstructor
- * @author     Your name here
- * @version    SVN: $Id: actions.class.php 12474 2008-10-31 10:41:27Z fabien $
+ * @author     Jason Ko, Jimmy Lu
  */
 class admininstructorActions extends sfActions
 {
    
   public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+    
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_INSTRUCTOR);
     $this->submenu = $submenu->get();
   }
@@ -83,8 +84,12 @@ class admininstructorActions extends sfActions
 
     $this->forward404Unless($instructor = InstructorPeer::retrieveByPk($request->getParameter('id')), sprintf('Object instructor does not exist (%s).', $request->getParameter('id')));
     $instructor->delete();
+    
+    if ($request->hasParameter("page")){
+      $par = "?page=".$request->getParameter("page");
+    }
 
-    $this->redirect('admininstructor/index');
+    $this->redirect('admininstructor/index'.$par);
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -101,19 +106,19 @@ class admininstructorActions extends sfActions
   protected function submitForm(sfWebRequest $request, sfForm $form, sfForm $form2){
   //processform logic
       $submit = true;
-     
       $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-      $form2->bind($request->getParameter($form2->getName()), $request->getFiles($form2->getName()));
+      //FIXME form2
+      //$form2->bind($request->getParameter($form2->getName()), $request->getFiles($form2->getName()));
       
       if ($form->isValid()){
       	$instructresult = $form->save();
-        $form2->getObject()->setInstructorId($instructresult->getId());
+        /*$form2->getObject()->setInstructorId($instructresult->getId());
         
         if($form2->getValue('descr') !== null && $form2->getValue('descr')!='' ){
         	if($form2->isValid()){
         	  $instructdetailresult = $form2->save();
         	}else{
-        		$submit = false;
+        	  $submit = false;
         	}
         }else{
         	//its form DESCR null or empty, if previous exists then delete it
@@ -124,25 +129,27 @@ class admininstructorActions extends sfActions
         	  $detail->delete();
         	}
         	
-        }
+        }*/
       }else{
       	$submit = false;
       }
       
       if($submit){
-      	$this->redirect('admininstructor/edit?id='.$instructresult->getId());
+        $page = ($request->hasParameter("page")? "&page=".$request->getParameter("page"):"");
+      	$this->redirect('admininstructor/edit?id='.$instructresult->getId().$page);
       }
     
   }
   
   protected function getInstructorList(Criteria $c = null){
   	$pagenumber = 1;
-    if($this->getRequestParameter('page')!==null){
-    	$pagenumber = $this->getRequestParameter('page');
+    if($this->hasRequestParameter('page')){
+      $pagenumber = $this->getRequestParameter('page');
     }
   	$pager = new sfPropelPager('Instructor', skuleadminConst::INSTRUCTOR_RECORDNUMBER);
   	if(!isset($c)){
-  	 $c = new Criteria();
+  	  $c = new Criteria();
+  	  $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
   	}
     $pager->setCriteria($c);
     $pager->setPage($pagenumber);

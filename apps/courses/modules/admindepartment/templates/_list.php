@@ -19,11 +19,13 @@
         <?php echo link_to(" ", 'admindepartment/edit?id='.$department->getId().'&page='.$sf_request->getParameter('page'), array('class'=>'select'))?>
       <?php endif; ?>
       </td>
-      <td width="70"><?php echo $department->getId() ?></td>
+      <td width="70"<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$department->getId()):?> style='background:#FFE87C'<?php endif;?>>
+        <?php echo $department->getId() ?>
+      </td>
     </tr>
     <?php endforeach; ?>
     
-    <?php include_partial('global/paging', array('pagelist' => $department_list, 'location' => 'admindepartment')) ?>
+    <?php include_partial('global/paging', array('pagelist' => $department_list, 'location' => skuleadminConst::decomposeURL($sf_context, $sf_request))) ?>
     
     </tbody>
 </table>

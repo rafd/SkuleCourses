@@ -11,6 +11,8 @@
 class admindepartmentActions extends sfActions
 {
   public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+    
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_DEPARTMENT);
     $this->submenu = $submenu->get();
   }
@@ -60,7 +62,11 @@ class admindepartmentActions extends sfActions
     $this->forward404Unless($department = DepartmentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object department does not exist (%s).', $request->getParameter('id')));
     $department->delete();
 
-    $this->redirect('admindepartment/index');
+    if ($request->hasParameter("page")){
+      $par = "?page=".$request->getParameter("page");
+    }
+    
+    $this->redirect('admindepartment/index'.$par);
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -83,6 +89,7 @@ class admindepartmentActions extends sfActions
   	$pager = new sfPropelPager('Department', skuleadminConst::DEPARTMENT_RECORDNUMBER);
   	if(!isset($c)){
   	 $c = new Criteria();
+  	 $c->addAscendingOrderByColumn(DepartmentPeer::ID);
   	}
     $pager->setCriteria($c);
     $pager->setPage($pagenumber);

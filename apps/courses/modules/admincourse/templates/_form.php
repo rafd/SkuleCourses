@@ -16,6 +16,9 @@
 			detailsShown = false;
 			document.getElementById("blockShow").style.display = "none";
 			document.getElementById("blockHid").style.display = "block";
+			document.getElementsByName("<?php echo $form2->getName()."[".$form2['first_offered']->getName()."]"?>")[0].value="";
+			document.getElementsByName("<?php echo $form2->getName()."[".$form2['last_offered']->getName()."]"?>")[0].value="";
+			document.getElementsByName("<?php echo $form2->getName()."[".$form2['detail_descr']->getName()."]"?>")[0].value="";
 		} else {
 		  	detailsShown = true;
 			document.getElementById("blockShow").style.display = "block";

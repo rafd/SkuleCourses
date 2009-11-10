@@ -11,6 +11,8 @@
 class adminratingCriteriaActions extends sfActions
 { 
   public function preExecute(){
+    if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
+    
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_RATING);
     $this->submenu = $submenu->get();
   }
