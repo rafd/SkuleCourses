@@ -41,7 +41,7 @@ class skuleadminConst
     }
     
     if (!$found){
-      $url .= "page=$page/";
+      $url .= "page=$page";
     }
 
     return $url;

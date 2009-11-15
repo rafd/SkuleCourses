@@ -269,7 +269,6 @@ class courseActions extends sfActions
     // set cookie to remember
     $id = $request->getParameter("id");
     $this->getResponse()->setCookie('courseId', $id);
-    //setcookie ('courseId', $id, 0);
     
     $conn = Propel::getConnection();
     
