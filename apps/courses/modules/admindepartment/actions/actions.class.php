@@ -50,6 +50,8 @@ class admindepartmentActions extends sfActions
     $this->forward404Unless($department = DepartmentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object department does not exist (%s).', $request->getParameter('id')));
     $this->form = new DepartmentForm($department);
 
+    $this->redirectAddress = "admindepartment/edit?id=".$request->getParameter('id');
+    
     $this->processForm($request, $this->form);
     $this->department_list = $this->getDepartmentList();
     $this->setTemplate('index');
@@ -58,15 +60,22 @@ class admindepartmentActions extends sfActions
   public function executeDelete(sfWebRequest $request)
   {
     $request->checkCSRFProtection();
-
     $this->forward404Unless($department = DepartmentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object department does not exist (%s).', $request->getParameter('id')));
-    $department->delete();
-
-    if ($request->hasParameter("page")){
-      $par = "?page=".$request->getParameter("page");
-    }
     
-    $this->redirect('admindepartment/index'.$par);
+    try {
+      $department->delete();
+      
+      if ($request->hasParameter("page")){
+        $par = "?page=".$request->getParameter("page");
+      }
+    
+      $this->redirect('admindepartment/index'.$par);
+    } catch (Exception $e) {
+      $this->globalErrors = $e->getMessage();
+      $this->department_list = $this->getDepartmentList();
+      $this->form = new DepartmentForm($department);
+      $this->setTemplate('index');
+    }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -74,9 +83,12 @@ class admindepartmentActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
-      $department = $form->save();
-
-      $this->redirect('admindepartment/edit?id='.$department->getId());
+      try {
+        $department = $form->save();
+        $this->redirect('admindepartment/edit?id='.$department->getId());
+      } catch (Exception $e) {
+        $this->globalErrors = $e->getMessage();
+      }      
     }
   }
 

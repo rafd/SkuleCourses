@@ -2,6 +2,8 @@
 
 class importLogicRatings
 {
+  //FIXME untested
+  
   // _ratingArr[rowNumber][ratingField][rating] = number of people
   private $_ratingArr;
   // _infoArr[rowNumber]["courseCode", etc] = datum

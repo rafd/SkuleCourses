@@ -47,35 +47,39 @@
           
 			<input type="submit" value="Save" class="fbuttons"/>
             <?php if (!$form->getObject()->isNew()): ?>
-          	<input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
+          	<input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
             <?php endif; ?>
 			</td>
 		</tr>
 	</tfoot>
 	<tbody>
-		<tr><td colspan="2">
-	      <?php echo $form->renderGlobalErrors() ?>
+		<?php if (isset($globalErrors)):?>
+		<tr><td class="error">
+	    <?php echo $globalErrors ?>
 		</td></tr>
+		<?php endif;?>
 		<tr><td colspan="2">
 			<table class="inputlayout">
 				<tr>
 					<th>Last Name</th>
 					<td><?php echo $form['last_name'] ?></td>
 				</tr>
-				<tr><td></td><td><?php echo $form['last_name']->renderError() ?></td></tr>
+				<tr><td></td><td class="error"><?php echo $form['last_name']->renderError() ?></td></tr>
 				<tr>
 					<th>First Name</th>
 					<td><?php echo $form['first_name'] ?></td>
 				</tr>
-				<tr><td></td><td><?php echo $form['first_name']->renderError() ?></td></tr>
+				<tr><td></td><td class="error"><?php echo $form['first_name']->renderError() ?></td></tr>
 				<tr>
 					<th>Department</th>
 					<td><?php echo $form['dept_id'] ?></td>
 				</tr>
-				<tr><td></td><td><?php echo $form['dept_id']->renderError() ?></td></tr>
+				<tr><td></td><td class="error"><?php echo $form['dept_id']->renderError() ?></td></tr>
 			</table>
       		</td>
 		</tr>
+		<?php //TODO instructor detail
+		/*
 		<tr>
 			<td style='width:100%'>
 				<fieldset style='width:100%' id="blockHid">
@@ -102,6 +106,7 @@
       			<script type="text/javascript">toggleDetails();</script>
           	</td>
 		</tr>
+		*/?>
 		<tr>
 			<td>
 				<fieldset style='width:100%'>

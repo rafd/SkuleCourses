@@ -61,7 +61,7 @@ class admininstructorActions extends sfActions
     $this->forward404Unless($instructor = InstructorPeer::retrieveByPk($request->getParameter('id')), sprintf('Object instructor does not exist (%s).', $request->getParameter('id')));
     $this->form = new InstructorForm($instructor);
 
-    $this->form = new InstructorForm($instructor);
+    $this->redirectAddress = "admininstructor/edit?id=".$request->getParameter('id');
     
     $c = new Criteria();
   	$c->add(InstructorDetailPeer::INSTRUCTOR_ID,$request->getParameter('id'));
@@ -83,13 +83,21 @@ class admininstructorActions extends sfActions
     $request->checkCSRFProtection();
 
     $this->forward404Unless($instructor = InstructorPeer::retrieveByPk($request->getParameter('id')), sprintf('Object instructor does not exist (%s).', $request->getParameter('id')));
-    $instructor->delete();
     
-    if ($request->hasParameter("page")){
-      $par = "?page=".$request->getParameter("page");
-    }
+    try{
+      $instructor->delete();
+    
+      if ($request->hasParameter("page")){
+        $par = "?page=".$request->getParameter("page");
+      }
 
-    $this->redirect('admininstructor/index'.$par);
+      $this->redirect('admininstructor/index'.$par);
+    } catch (Exception $e){
+      $this->globalErrors = $e->getMessage();
+      $this->form = new InstructorForm($instructor);
+  	  $this->instructor_list = $this->getInstructorList();
+      $this->setTemplate('index');
+    }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -97,9 +105,12 @@ class admininstructorActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
-      $instructor = $form->save();
-
-      $this->redirect('admininstructor/edit?id='.$instructor->getId());
+      try{
+        $instructor = $form->save();
+        $this->redirect('admininstructor/edit?id='.$instructor->getId());
+      } catch (Exception $e){
+        $this->globalErrors = $e->getMessage();
+      }
     }
   }
   
@@ -107,7 +118,6 @@ class admininstructorActions extends sfActions
   //processform logic
       $submit = true;
       $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-      //FIXME form2
       //$form2->bind($request->getParameter($form2->getName()), $request->getFiles($form2->getName()));
       
       if ($form->isValid()){

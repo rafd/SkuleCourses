@@ -6,13 +6,11 @@
 <tr><td class='topup'>
 <?php include_partial('list', array('course_list' => $course_list)) ?>
 </td><td class='topup'>
-<?php if(!isset($omitdetail)): ?>
-<?php $omitdetail=false ?>
+<?php if(!isset($omitdetailerr)): ?>
+<?php $omitdetailerr=false ?>
 <?php endif; ?>
-<?php if(!isset($omitdisassoc)): ?>
-<?php $omitdisassoc=false ?>
-<?php endif; ?>
-<?php include_partial('form', array('form' => $form, 'form2' => $form2, 'form3' => $form3, 'omitdetail' => $omitdetail, 'omitdisassoc' => $omitdisassoc)) ?>
+<?php include_partial('form', array('form' => $form, 'form2' => $form2, 'omitdetailerr' => $omitdetailerr, 'globalErrors' => (isset($globalErrors)?$globalErrors:null),
+	'redirectAddress' => (isset($redirectAddress)?$redirectAddress:null), 'courseDetail' => (isset($courseDetail)?$courseDetail:null))) ?>
 </td>
 </table>
 </div></div>

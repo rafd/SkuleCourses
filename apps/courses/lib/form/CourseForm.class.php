@@ -10,11 +10,11 @@
  */
 class CourseForm extends BaseCourseForm
 {
-  protected static $credits = array(H1 => 'H1', Y1 => 'Y1');
+  protected static $credits = array('H1' => 'H1', 'Y1' => 'Y1');
   
   public function configure()
   {
-    $this->unset['id'];
+    //$this->unset['id'];
   	if($this->getOption('edit')!==null){
   	//edit form
   	$this->setWidgets(array(
@@ -31,7 +31,7 @@ class CourseForm extends BaseCourseForm
   	}else{
   	$this->setWidgets(array(
       //'id'      => new sfWidgetFormInput(),
-      'dept_id' => new sfWidgetFormPropelChoice(array('model' => 'Department', 'add_empty' => false), array("style"=>"width:100px")),
+      'dept_id' => new sfWidgetFormPropelChoice(array('model' => 'Department', 'add_empty' => true, 'order_by'=>array('Id', 'asc')), array("style"=>"width:100px")),
   	  'code'    => new sfWidgetFormInput(array(), array("style"=>"width:100px")),
   	  'credit'  => new sfWidgetFormChoice(array('choices' =>  self::$credits), array("style"=>"width:100px")),
       'descr'   => new sfWidgetFormInput(array(), array("style"=>"width:300px")),

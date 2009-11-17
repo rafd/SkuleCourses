@@ -5,15 +5,19 @@
 <?php include_javascripts_for_form($form) ?>
 <?php include_stylesheets_for_form($form2) ?>
 <?php include_javascripts_for_form($form2) ?>
-<?php include_stylesheets_for_form($form3) ?>
-<?php include_javascripts_for_form($form3) ?>
 
 <script type="text/javascript">
+	<?php if ((isset($courseDetail) && $form2['hasDetail']->getValue()=="") || $form2['hasDetail']->getValue()==1):?>
+	var detailsShown = false;
+	<?php else: ?>
 	var detailsShown = true;
+	<?php endif;?>
+	
 
 	function toggleDetails(){
 		if (detailsShown) {
 			detailsShown = false;
+			document.getElementsByName("<?php echo $form2->getName()."[".$form2['hasDetail']->getName()."]"?>")[0].value=0;
 			document.getElementById("blockShow").style.display = "none";
 			document.getElementById("blockHid").style.display = "block";
 			document.getElementsByName("<?php echo $form2->getName()."[".$form2['first_offered']->getName()."]"?>")[0].value="";
@@ -21,6 +25,7 @@
 			document.getElementsByName("<?php echo $form2->getName()."[".$form2['detail_descr']->getName()."]"?>")[0].value="";
 		} else {
 		  	detailsShown = true;
+		  	document.getElementsByName("<?php echo $form2->getName()."[".$form2['hasDetail']->getName()."]"?>")[0].value=1;
 			document.getElementById("blockShow").style.display = "block";
 			document.getElementById("blockHid").style.display = "none";
 		}
@@ -45,8 +50,6 @@
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
 <?php endif; ?>
- 
-<div><?php echo $form->renderGlobalErrors() ?></div>
 
 <table style='width:95%'>
 	<tfoot>
@@ -54,19 +57,20 @@
 			<td colspan="2">
             <?php echo $form->renderHiddenFields() ?>
          	<?php echo $form2->renderHiddenFields() ?>
-            <?php echo $form3->renderHiddenFields() ?>
           
 			<input type="submit" value="Save" class="fbuttons"/>
             <?php if (!$form->getObject()->isNew()): ?>
-          	<input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
+          	<input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
             <?php endif; ?>
 			</td>
 		</tr>
 	</tfoot>
 	<tbody>
-		<tr><td colspan="2">
-	      <?php echo $form->renderGlobalErrors() ?>
+		<?php if (isset($globalErrors)):?>
+		<tr><td class="error">
+	    <?php echo $globalErrors?>
 		</td></tr>
+		<?php endif;?>
 		<tr>
 			<td>
 				<?php if ($form->getObject()->isNew()): ?>
@@ -82,9 +86,9 @@
 			       <td><?php echo $form['credit'] ?></td>
 			    </tr>
 			    <tr>
-			    	<td><?php echo $form['dept_id']->renderError() ?></td>
-			    	<td><?php echo $form['code']->renderError() ?></td>
-			    	<td><?php echo $form['credit']->renderError() ?></td>
+			    	<td class="error"><?php echo $form['dept_id']->renderError() ?></td>
+			    	<td class="error"><?php echo $form['code']->renderError() ?></td>
+			    	<td class="error"><?php echo $form['credit']->renderError() ?></td>
 			    </tr>
 			    </table>
 			    
@@ -107,7 +111,7 @@
 						<th>Title</th>
 						<td><?php echo $form['descr'] ?></td>
 					</tr>
-					<tr><td></td><td><?php echo $form['descr']->renderError() ?></td></tr>
+					<tr><td></td><td class="error"><?php echo $form['descr']->renderError() ?></td></tr>
 					<tr>
 						<th colspan="10">Is An Engineering Course? <?php echo $form['is_eng'] ?></th>
 						<td></td>
@@ -130,15 +134,15 @@
       				<table class="inputlayout">
       					<tr>
       						<th>Description</th>
-      						<td><?php echo $form2['detail_descr'] ?></td>
+      						<td><textarea cols="42" rows="4" name="<?php echo $form2->getName()."[".$form2['first_offered']->getName()."]"?>"><?php echo base64_decode($form2['detail_descr']->getValue()) ?></textarea></td>
       					</tr>
       					<tr>
       						<td></td>
       						<td>
-      							<?php if(isset($omitdetail)): ?>
+      							<?php if(isset($omitdetailerr)): ?>
 						        <span style="display: none">
 						        <?php else: ?>
-						        <span>
+						        <span class="error">
 						        <?php endif; ?>
 						        <?php echo $form2['detail_descr']->renderError() ?>
 						        </span>
@@ -147,32 +151,25 @@
       					<tr>
       						<th>Date First Offered</th>
       						<td>
-      							<?php echo input_date_tag($form2->getName()."[".$form2['first_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
+      							<?php echo input_date_tag($form2->getName()."[".$form2['first_offered']->getName()."]", $form2['first_offered']->getValue(), array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
       						</td>
       					</tr>
       					<tr>
-      						<td></td><td><?php echo $form2['first_offered']->renderError() ?></td>
+      						<td></td><td class="error"><?php echo $form2['first_offered']->renderError() ?></td>
       					</tr>
       					<tr>
       						<th>Date Last Offered</th>
       						<td>
-      							<?php echo input_date_tag($form2->getName()."[".$form2['last_offered']->getName()."]", '', array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
+      							<?php echo input_date_tag($form2->getName()."[".$form2['last_offered']->getName()."]", $form2['last_offered']->getValue(), array("rich"=>true, "calendar_button_img"=>"/skule_images/calendar.gif", "class"=>"date"))?>
       						</td>
       					</tr>
       					<tr>
-      						<td></td><td><?php echo $form2['last_offered']->renderError() ?></td>
+      						<td></td><td class="error"><?php echo $form2['last_offered']->renderError() ?></td>
       					</tr>
       				</table>
 				</fieldset>
 				
 				<script type="text/javascript">toggleDetails();</script>
-			</td>
-		</tr>
-		<tr>
-			<td style="width:100%">
-				<fieldset style='width:100%'>
-					<legend style='font-size:10pt'>Associated Disciplines</legend>
-				</fieldset>
 			</td>
 		</tr>
 	</tbody>

@@ -2,3 +2,6 @@
 input.fbuttons{
 	font-size: 10pt;
 }
+
+td.error {color: #FF0000}
+span.error {color: #FF0000}

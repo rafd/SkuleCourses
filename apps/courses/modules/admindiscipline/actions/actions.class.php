@@ -52,7 +52,7 @@ class admindisciplineActions extends sfActions
     $this->enum_item_list = $this->getDisciplineList($c);
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm($enum_item,$values);
-     $this->setTemplate('index');
+    $this->setTemplate('index');
   }
 
   public function executeUpdate(sfWebRequest $request)
@@ -62,6 +62,8 @@ class admindisciplineActions extends sfActions
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm($enum_item,$values);
 
+    $this->redirectAddress = "admindiscipline/edit?id=".$request->getParameter('id');
+    
     $this->processForm($request, $this->form);
     $c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
@@ -74,13 +76,24 @@ class admindisciplineActions extends sfActions
     $request->checkCSRFProtection();
 
     $this->forward404Unless($enum_item = EnumItemPeer::retrieveByPk($request->getParameter('id')), sprintf('Object enum_item does not exist (%s).', $request->getParameter('id')));
-    $enum_item->delete();
-
-    if ($request->hasParameter("page")){
-      $par = "?page=".$request->getParameter("page");
-    }
     
-    $this->redirect('admindiscipline/index'.$par);
+    try {
+      $enum_item->delete();
+
+      if ($request->hasParameter("page")){
+        $par = "?page=".$request->getParameter("page");
+      }
+    
+      $this->redirect('admindiscipline/index'.$par);
+    } catch (Exception $e){
+      $this->globalErrors = $e->getMessage();
+      $c = new Criteria();
+  	  $c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
+      $this->enum_item_list = $this->getDisciplineList($c);
+      $values=array('discipline'=>1);
+      $this->form = new EnumItemForm($enum_item,$values);
+      $this->setTemplate('index');
+    }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -89,9 +102,12 @@ class admindisciplineActions extends sfActions
     $form->getObject()->setParentId(skuleadminConst::DISCIPLINE_PARENT_ID);
     if ($form->isValid())
     {
-      $enum_item = $form->save();
-
-      $this->redirect('admindiscipline/edit?id='.$enum_item->getId());
+      try{
+        $enum_item = $form->save();
+        $this->redirect('admindiscipline/edit?id='.$enum_item->getId());
+      } catch (Exception $e){
+        $this->globalErrors = $e->getMessage();
+      }
     }
   }
   
@@ -112,5 +128,25 @@ class admindisciplineActions extends sfActions
     return $pager;
   }
   
-    
+  protected function parseDisAssoc(sfForm $courseDisAssocform, Course $course){
+        if(!$courseDisAssocform->isValid()){
+          if($courseDisAssocform->getValue('year_of_study')==0 || $courseDisAssocform->getValue('year_of_study')=== null 
+            || $courseDisAssocform->getValue('year_of_study')==''){
+            //check for deletion
+            $courseDisobj = $course->getCourseDisciplineAssociations();
+            if ($courseDisobj !== null)
+            {
+               //deleting discipline dependency
+               foreach ($courseDisobj as $dis)
+                  $dis->delete();
+               return true;
+            }
+          }
+          
+        }else{
+          $courseDisAssocres = $courseDisAssocform->save();
+          return true;	
+        }
+        return false;
+  }
 }

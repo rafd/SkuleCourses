@@ -10,29 +10,49 @@
 <?php else: ?>
 <legend>New Discipline</legend>
 <?php endif; ?>
-  <table>
+  <table style="width:95%">
     <tfoot>
-      <tr><td colspan="2"><?php echo $form->renderHiddenFields() ?></td></tr>
+      <tr><td><?php echo $form->renderHiddenFields() ?></td></tr>
       <tr>
-          <td></td>
-          
           <td>
           <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-          <input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
+          <input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
           <?php endif; ?>
           </td>
       </tr>
     </tfoot>
     <tbody>
-      <?php echo $form->renderGlobalErrors() ?>
+      <?php if (isset($globalErrors)):?>
+      <span class="error"><p><?php echo $globalErrors?></p></span>
+      <?php endif;?>
       <tr>
-        <th>Discipline <br />Description</th>
-        <td>
-          <?php echo $form['descr'] ?>
-        </td>
+      	<td>
+      		<table class="inputlayout">
+      			<tr>
+			        <th>Title</th>
+			        <td>
+			          <?php echo $form['descr'] ?>
+			        </td>
+			    </tr>
+			    <tr><td></td><td class="error"><?php echo $form['descr']->renderError() ?></td></tr>
+      		</table>
+      	</td>
       </tr>
-      <tr><td></td><td><?php echo $form['descr']->renderError() ?></td></tr>
+      <tr>
+      	<td>
+      		<fieldset style="width:100%">
+      			<legend style='font-size:10pt'>Associated Courses</legend>
+      		</fieldset>
+      		<table class="inputlayout" style="width:100%">
+      			<tr>
+					<td>
+						
+					</td>
+				  </tr>
+      		</table>
+      	</td>
+      </tr>
     </tbody>
   </table>
   </fieldset>

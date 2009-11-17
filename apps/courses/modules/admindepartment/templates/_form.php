@@ -21,14 +21,16 @@
         <td> 
           <input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
-          <input type="button" onclick="window.location.href=window.location.href;" class="fbuttons" value="Cancel" />
+          <input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
           <?php endif; ?>
         </td>
       </tr>
      
      </tfoot>
      <tbody>
-      <?php echo $form->renderGlobalErrors() ?>
+       <?php if (isset($globalErrors)): ?>
+       <span class="error"><p><?php echo $globalErrors ?></p></span>
+       <?php endif;?>
       <?php if ($form->getObject()->isNew()): ?>
       <tr>
 		<th>Abbreviations</th>
@@ -36,7 +38,7 @@
       </tr>
       <tr>
       	<td></td>
-      	<td><?php echo $form['id']->renderError() ?></td>
+      	<td class="error"><?php echo $form['id']->renderError() ?></td>
       </tr>
       <?php else: ?>
       <tr>
@@ -51,7 +53,7 @@
         </td>
       </tr>
       <tr>
-      	<td></td><td><?php echo $form['descr']->renderError() ?></td>
+      	<td></td><td class="error"><?php echo $form['descr']->renderError() ?></td>
       </tr>
       </tbody>
       

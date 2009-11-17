@@ -5,7 +5,8 @@
 <table class='inputlayout'>
   <tr>
     <td class='topup'><?php include_partial('list', array('department_list' => $department_list)) ?></td>
-    <td class='topup'><?php include_partial('form', array('form' => $form)) ?></td>
+    <td class='topup'><?php include_partial('form', array('form' => $form, 'globalErrors' => (isset($globalErrors)?$globalErrors:null),
+		'redirectAddress' => (isset($redirectAddress)?$redirectAddress:null))) ?></td>
   </tr>
 </table>
 </div></div>
