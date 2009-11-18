@@ -217,7 +217,6 @@ class admincourseActions extends sfActions
       //$courseDisAssocObj = $courseDisAssocform->getObject()->setCourseId($courseid);
       
       if ($courseform->isValid()){
-      	//FIXME need to check that the id doesn't exist in database or redirect to the object
       	try {
       	  $courseresult = $courseform->save();
       	  $noerror = $this->parseDetails($courseDetailform, $courseform->getObject());
@@ -241,28 +240,44 @@ class admincourseActions extends sfActions
   }
   
   protected function parseDetails(sfForm $courseDetailform, Course $course){
-        if($courseDetailform->isValid()){
-          // custom saving of course_detail object
-          $detailDescr = base64_encode($courseDetailform->getValue("detail_descr"));
-          
-          //FIXME
-          //$courseDetailformres = $courseDetailform->save();
-          return true;
+    if ($courseDetailform['hasDetail']->getValue() == '1'){
+      if ($courseDetailform->isValid()){
+        // save the course_detail object
+        $detailDescr = $courseDetailform['detail_descr']->getValue();
+        $firstOffered = $courseDetailform["first_offered"]->getValue();
+        $lastOffered = $courseDetailform["last_offered"]->getValue();
+        
+        $arr = $course->getCourseDetails();
+        if ($arr != null && count($arr)==1){
+          // replace the existing object with the new one
+          $detailObj = $arr[0];
+        } elseif ($arr !== null && count($arr)>1){
+          //TODO: multiple courseDetail objects.
+          throw new Exception("Multiple course detail objects found.");
         } else {
-          //FIXME
-          //not a valid form why?
-          if($courseDetailform->getValue('detail_descr')==''||$courseDetailform->getValue('detail_descr')===null){
-          //check to delete
-	          $coursedetailobj = $course->getCourseDetails();
-	          if($coursedetailobj !== null){
-	            foreach ($coursedetailobj as $detail)
-                  $detail->delete();
-                return true;
-	          
-	          }
-	      }
-          //return false;
+          // insert a new object
+          $detailObj = new CourseDetail();
+          $detailObj->setCourseId($course->getId());
         }
+        
+        $detailObj->setDetailDescr($detailDescr);
+        $detailObj->setFirstOffered($firstOffered);
+        $detailObj->setLastOffered($lastOffered);
+        $detailObj->save();
+        
+        return true;
+        
+      } else {
         return false;
+      }
+    } else {
+      $this->omitdetailerr = true;
+      // delete the course_detail object if it exists
+      $arr = $course->getCourseDetails();
+	  if($arr !== null){
+	    foreach ($arr as $detailObj) $detailObj->delete();
+	  }
+      return true;
+    }
   }
 }

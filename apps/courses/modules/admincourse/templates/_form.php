@@ -6,6 +6,7 @@
 <?php include_stylesheets_for_form($form2) ?>
 <?php include_javascripts_for_form($form2) ?>
 
+<script type="text/javascript" src="/js/base64.js"></script>
 <script type="text/javascript">
 	<?php if ((isset($courseDetail) && $form2['hasDetail']->getValue()=="") || $form2['hasDetail']->getValue()==1):?>
 	var detailsShown = false;
@@ -13,7 +14,6 @@
 	var detailsShown = true;
 	<?php endif;?>
 	
-
 	function toggleDetails(){
 		if (detailsShown) {
 			detailsShown = false;
@@ -22,7 +22,7 @@
 			document.getElementById("blockHid").style.display = "block";
 			document.getElementsByName("<?php echo $form2->getName()."[".$form2['first_offered']->getName()."]"?>")[0].value="";
 			document.getElementsByName("<?php echo $form2->getName()."[".$form2['last_offered']->getName()."]"?>")[0].value="";
-			document.getElementsByName("<?php echo $form2->getName()."[".$form2['detail_descr']->getName()."]"?>")[0].value="";
+			document.getElementById('pseudo_descr').value="";
 		} else {
 		  	detailsShown = true;
 		  	document.getElementsByName("<?php echo $form2->getName()."[".$form2['hasDetail']->getName()."]"?>")[0].value=1;
@@ -32,8 +32,15 @@
 	}
 
 	function confirmDetailsRemoval(){
-		 var res = confirm("Remove detailed description of this instructor?");
-		 if (res){toggleDetails();}
+		var res = confirm("Remove detailed description of this instructor?");
+		if (res){toggleDetails();}
+	}
+
+	function preSave(){
+		var encoded = nl2br(document.getElementById('pseudo_descr').value);
+		encoded = Base64.encode(encoded);
+		document.getElementsByName('<?php echo $form2->getName()."[".$form2['detail_descr']->getName()."]"?>')[0].value=encoded;
+		return true;
 	}
 </script>
 
@@ -58,7 +65,7 @@
             <?php echo $form->renderHiddenFields() ?>
          	<?php echo $form2->renderHiddenFields() ?>
           
-			<input type="submit" value="Save" class="fbuttons"/>
+			<input type="submit" value="Save" onclick="return preSave();" class="fbuttons"/>
             <?php if (!$form->getObject()->isNew()): ?>
           	<input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
             <?php endif; ?>
@@ -134,18 +141,16 @@
       				<table class="inputlayout">
       					<tr>
       						<th>Description</th>
-      						<td><textarea cols="42" rows="4" name="<?php echo $form2->getName()."[".$form2['first_offered']->getName()."]"?>"><?php echo base64_decode($form2['detail_descr']->getValue()) ?></textarea></td>
+      						<td><textarea cols="42" rows="4" name="pseudo_descr" id="pseudo_descr"></textarea></td>
       					</tr>
       					<tr>
       						<td></td>
       						<td>
-      							<?php if(isset($omitdetailerr)): ?>
-						        <span style="display: none">
-						        <?php else: ?>
+      							<?php if(!$omitdetailerr): ?>
 						        <span class="error">
-						        <?php endif; ?>
 						        <?php echo $form2['detail_descr']->renderError() ?>
 						        </span>
+						        <?php endif; ?>
       						</td>
       					</tr>
       					<tr>
@@ -169,7 +174,12 @@
       				</table>
 				</fieldset>
 				
-				<script type="text/javascript">toggleDetails();</script>
+				<script type="text/javascript">
+					toggleDetails();
+					var descr = Base64.decode(document.getElementsByName('<?php echo $form2->getName()."[".$form2['detail_descr']->getName()."]"?>')[0].value);
+					descr = br2nl(descr);
+					document.getElementById('pseudo_descr').value=descr;
+				</script>
 			</td>
 		</tr>
 	</tbody>

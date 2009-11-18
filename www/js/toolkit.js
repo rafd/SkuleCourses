@@ -31,3 +31,11 @@ function rtrim(str, chars) {
   chars = chars || "\\s";
   return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
 }
+
+function nl2br(text) {
+  return text.replace(/\r\n|\r|\n/g, "<br/>");
+}
+
+function br2nl(text) {
+  return text.replace(/<br\/>/g, "\n"); 
+}
