@@ -8,6 +8,7 @@ class helperFunctions
    * @param       string $in String to be searched
    * @return      True if keywords found, False otherwise
    */
+  //TODO: create a white list instead of a limited black list. this logic can easily be broken
   public static function isMaliciousString($in){
     $string = strtoupper($in);
     $token = strtok($string, " ");

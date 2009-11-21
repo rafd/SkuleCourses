@@ -1,4 +1,4 @@
-﻿# enum_item
+# enum_item
 
 INSERT INTO `enum_item` VALUES (1, 1, '');
 INSERT INTO `enum_item` VALUES (10, 1, 'USER_TYPES');
@@ -96,3 +96,8 @@ INSERT INTO `department` VALUES ('STA', 'Department of Statistics');
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
+
+
+# user
+
+INSERT INTO `user` VALUES (1, 'admin', 'test', 11, 'courses@webdev.skule.ca', '2009-09-09 00:00:00');

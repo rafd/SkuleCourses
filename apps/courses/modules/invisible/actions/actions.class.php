@@ -125,8 +125,10 @@ class invisibleActions extends sfActions
 	    }
 	    else echo "<input type='text' id='status' value='Moving'/>";
       } else echo "<input type='text' id='status' value='PDF'/>";
+      
+      exit();
+    } else {
+      $this->forward404();
     }
-    
-    exit();
   }
 }
