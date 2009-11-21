@@ -23,3 +23,5 @@ Please pay due diligence when accessing this section.</p>
 <?php endforeach;?>
 </tr></table>
 </div></div>
+<img class='hidden' src='/skule_images/delete.on.gif' />
+<img class='hidden' src='/skule_images/select.on.gif' />

@@ -41,16 +41,46 @@
       </tr>
       <tr>
       	<td>
-      		<fieldset style="width:100%">
+      		<div id='assocChooser' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>
+      			<table class="inputlayout">
+      				<tr>
+      					<td>Search Courses: <input type="text"/></td>
+      				</tr>
+      				<tr>
+      					<td><i>Click on the results to add them.</i></td>
+      				</tr>
+      			</table>
+      		</div>
+      		<fieldset style="width:100%" onmouseover='mopen("assocChooser", 1)' onmouseout='mclosetime()'>
       			<legend style='font-size:10pt'>Associated Courses</legend>
+      			<table class="inputlayout" style="width:100%">
+      				<tr>
+      					<td>Year of Study: 
+      						<select style="width:50px">
+      							<option value="1">1</option>
+      							<option value="2">2</option>
+      							<option value="3">3</option>
+      							<option value="4">4</option>
+      						</select>
+      					</td>
+      				</tr>
+      				<tr>
+      					<td style="width:100%">
+      						<table class="disptable" style="margin-top:5px;width:100%">
+      							<tr><th>Selected Courses</th></tr>
+      							<?php for ($i=0;$i<=4; $i++):?>
+      							<tr>
+	      							<td style="padding-left:5px;padding:right:40px">AER202H1 (Mechanical System Design)
+	      							<a class="deletebtn" style="margin-top:3px;margin-right:5px"></a>
+	      							</td>
+      							</tr>
+      							<?php endfor;?>
+      							
+      						</table>
+      					</td>
+      				</tr>
+      			</table>
       		</fieldset>
-      		<table class="inputlayout" style="width:100%">
-      			<tr>
-					<td>
-						
-					</td>
-				  </tr>
-      		</table>
       	</td>
       </tr>
     </tbody>

@@ -11,6 +11,8 @@
 #left form label{font: inherit;width:auto;display:inline;}
 #left {font-size:9pt}
 
+.hidden {display:none}
+
 #critique_content{margin: 1em;font-size:10pt}
 #critique_content fieldset {margin-top:-10px}
 
@@ -22,6 +24,8 @@
 	float: left;
 }
 #submenu li { padding:2px;}
+
+/* tables */
 
 table.description { padding-right: 10px;}
 table.description td { vertical-align:top; text-align:justify;}
@@ -38,10 +42,6 @@ table.inputlayout td.topup {vertical-align:top}
 table.innerlayout { width: 100%; border: none; margin: none;}
 table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
 
-table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
-table.disptable td{ padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
-table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
-
 dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
@@ -50,14 +50,6 @@ a.reload:hover {background: url(../skule_images/reload.on.gif);}
 
 a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../skule_images/find.gif);}
 a.find:hover {background: url(../skule_images/find.on.gif);}
-
-a.select {position:relative; float: right; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
-a.select:hover {background: url(../skule_images/select.on.gif);}
-
-a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 11px; height:13px; background: url(../skule_images/delete.gif);}
-a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
-
-a.addbtn {cursor: pointer; float: right; display:block; width: 13px; height:13px; background: url(../skule_images/add.gif);}
 
 a.back {position:relative; cursor: pointer; display:block; width: 16px; height: 16px; background: url(../skule_images/back.gif) no-repeat;}
 a.back:hover {background: url(../skule_images/back.on.gif) no-repeat;}
@@ -79,7 +71,7 @@ a.help:hover span{
 	padding: 5px;
 }
 
-.hidden {display:none}
+/* popupmenu */
 
 #left dl div.popupmenu
 {
@@ -105,7 +97,6 @@ div.popupmenu a {
 }
 div.popupmenu a:hover{background: #49A3FF !important;}
 
-
 div.selector
 {
 	width:100%;
@@ -116,9 +107,6 @@ div.selector
 }
 div.selector li {margin: 3px; display: block; min-width: 50px;}
 div.selector li.selected {border: solid 1px purple;}
-
-a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
-a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
 
 img.btn {cursor: pointer; margin-left: 5px; }
 

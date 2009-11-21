@@ -2,11 +2,11 @@
 //visit http://javascript-array.com for more js code
 
 var timeout         = 500;
-var closetimer		= 0;
+var closetimer		  = 0;
 var ddmenuitem      = 0;
 
 // open hidden layer
-function mopen(id)
+function mopen(id, noclickout)
 {	
 	// cancel close timer
 	mcancelclosetime();
@@ -18,6 +18,9 @@ function mopen(id)
 	if (id){
 		ddmenuitem = document.getElementById(id);
 		ddmenuitem.style.visibility = 'visible';
+		// click-out
+		if (noclickout) {document.onclick = "";} 
+		else {document.onclick = mclose; }
 	}
 
 }
@@ -42,6 +45,3 @@ function mcancelclosetime()
 		closetimer = null;
 	}
 }
-
-// close layer when click-out
-document.onclick = mclose;

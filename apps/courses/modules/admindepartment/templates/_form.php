@@ -16,14 +16,11 @@
      <tfoot>
      <tr><td colspan="2"><?php echo $form->renderHiddenFields() ?></td></tr>
      <tr class="t_foot">
-        <td></td>
-        
-        <td> 
-          <input type="submit" value="Save" class="fbuttons"/>
+        <td colspan="2"><input type="submit" value="Save" class="fbuttons"/>
           <?php if (!$form->getObject()->isNew()): ?>
           <input type="button" onclick="window.location.href=<?php if (isset($redirectAddress)):?>'<?php echo url_for($redirectAddress)?>'<?php else:?>window.location.href<?php endif;?>;" class="fbuttons" value="Cancel" />
-          <?php endif; ?>
-        </td>
+          <?php endif; ?></td>
+        <td></td>
       </tr>
      
      </tfoot>
@@ -33,7 +30,7 @@
        <?php endif;?>
       <?php if ($form->getObject()->isNew()): ?>
       <tr>
-		<th>Abbreviations</th>
+		<th>Code</th>
         <td><?php echo $form['id'] ?></td>
       </tr>
       <tr>
@@ -42,7 +39,7 @@
       </tr>
       <?php else: ?>
       <tr>
-        <th>Abbreviations</th>
+        <th>Code</th>
         <td><?php echo $form->getObject()->getId() ?></td>
       </tr>
       <?php endif; ?>

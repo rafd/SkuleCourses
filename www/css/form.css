@@ -1,7 +1,51 @@
-@CHARSET "ISO-8859-1";
-input.fbuttons{
-	font-size: 10pt;
+#assocChooser {
+	position: absolute;
+	background-color: #C3D9FF;
+	visibility: hidden;
+	top: 120px;
+ 	z-index: 100;
+	border: solid 1px #000;
+	width: 423px;
+	height: 150px;
+	margin-left: 5px;
+	overflow: auto;
 }
+
+#instrChooser {
+	position: absolute;
+	background-color: #C3D9FF;
+	visibility: hidden;
+	top: 120px;
+ 	z-index: 100;
+	border: solid 1px #000;
+	width: 423px;
+	height: 150px;
+	margin-left: 5px;
+	overflow: auto;
+}
+
+/* tables */
 
 td.error {color: #FF0000}
 span.error {color: #FF0000}
+
+table.disptable { border-collapse: collapse; border: 1px solid #afaeb2;}
+table.disptable td{ padding:2px; border: 1px solid #afaeb2; vertical-align: middle;}
+table.disptable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+
+/* buttons */
+
+a.select {position:relative; float: right; cursor: pointer; display:block; width: 14px; height: 13px; background: url(../skule_images/select.gif);}
+a.select:hover {background: url(../skule_images/select.on.gif);}
+
+a.deletebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 11px; height:13px; background: url(../skule_images/delete.gif);}
+a.deletebtn:hover {background: url(../skule_images/delete.on.gif);}
+
+a.addbtn {cursor: pointer; float: right; display:block; width: 13px; height:13px; background: url(../skule_images/add.gif);}
+
+a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
+a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
+
+input.fbuttons{
+	font-size: 10pt;
+}
