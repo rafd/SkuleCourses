@@ -205,8 +205,8 @@ class subMenu
 		    <tr><td>Year:</td><td align='left'><input type='text' name='year' style='width:100px'/></td></tr>
 		    <tr><td>Term:</td><td>
 		    	<input type='radio' name='term' id='radioFall' value='9' CHECKED><label for='radioFall'>Fall</label>
-		    	<input type='radio' name='term' id='radioSummer' value='5'><label for='radioSummer'>Summer</label>
 		    	<input type='radio' name='term' id='radioWinter' value='1'><label for='radioWinter'>Winter</label>
+		    	<input type='radio' name='term' id='radioSummer' value='5'><label for='radioSummer'>Summer</label>
 		    </td></tr>
 		    <tr><td>Display Title:</td><td align='left'><input type='text' name='descr' /></td></tr>
 		    <tr><td>File:</td><td align='left'><input type='file' name='file' /></td></tr>

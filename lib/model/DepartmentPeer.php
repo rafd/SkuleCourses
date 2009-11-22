@@ -2,7 +2,7 @@
 
 class DepartmentPeer extends BaseDepartmentPeer
 {
-  public static function getAll($propelConnection){
+  public static function getAll(PropelPDO $propelConnection){
     $c = new Criteria();
     $c->addAscendingOrderByColumn(DepartmentPeer::ID);
     return DepartmentPeer::doSelect($c, $propelConnection);

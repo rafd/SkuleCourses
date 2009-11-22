@@ -1,4 +1,4 @@
-#assocChooser {
+#disciplAssocChooser {
 	position: absolute;
 	background-color: #C3D9FF;
 	visibility: hidden;
@@ -11,11 +11,11 @@
 	overflow: auto;
 }
 
-#instrChooser {
+#instrAssocChooser {
 	position: absolute;
 	background-color: #C3D9FF;
 	visibility: hidden;
-	top: 120px;
+	top: 200px;
  	z-index: 100;
 	border: solid 1px #000;
 	width: 423px;

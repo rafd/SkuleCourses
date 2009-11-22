@@ -41,7 +41,7 @@ class fuzzySearch
    *
    * @param       string $query the query being searched for
    */
-  public function query($query, $propelConnection)
+  public function query($query, PropelPDO $propelConnection=null)
   {
     $refQuery = trim($query);
 

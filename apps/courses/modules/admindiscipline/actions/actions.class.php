@@ -3,10 +3,9 @@
 /**
  * discipline actions.
  *
- * @package    sf_sandbox
+ * @package    SkuleCourses
  * @subpackage discipline
- * @author     Your name here
- * @version    SVN: $Id: actions.class.php 12474 2008-10-31 10:41:27Z fabien $
+ * @author     Jason Ko, Jimmy Lu
  */
 class admindisciplineActions extends sfActions
 {
@@ -15,6 +14,9 @@ class admindisciplineActions extends sfActions
     
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_DISCIPLINE);
     $this->submenu = $submenu->get();
+    
+    // separator used for course_discipl assoc data
+    $this->separator = "&&**&&";
   }
   
   public function executeIndex(sfWebRequest $request)
@@ -28,6 +30,8 @@ class admindisciplineActions extends sfActions
     $this->enum_item_list = $this->getDisciplineList($c);
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm(new EnumItem(),$values);
+    
+    $this->getDisAssocListFromDB();
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -41,6 +45,7 @@ class admindisciplineActions extends sfActions
     $c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
     $this->enum_item_list = $this->getDisciplineList($c);
+    $this->getDisAssocListFromPost($request);
     $this->setTemplate('index');
   }
 
@@ -52,6 +57,7 @@ class admindisciplineActions extends sfActions
     $this->enum_item_list = $this->getDisciplineList($c);
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm($enum_item,$values);
+    $this->getDisAssocListFromDB($enum_item);
     $this->setTemplate('index');
   }
 
@@ -68,6 +74,7 @@ class admindisciplineActions extends sfActions
     $c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
     $this->enum_item_list = $this->getDisciplineList($c);
+    $this->getDisAssocListFromPost($request);
     $this->setTemplate('index');
   }
 
@@ -92,10 +99,12 @@ class admindisciplineActions extends sfActions
       $this->enum_item_list = $this->getDisciplineList($c);
       $values=array('discipline'=>1);
       $this->form = new EnumItemForm($enum_item,$values);
+      $this->getDisAssocListFromDB($enum_item);
       $this->setTemplate('index');
     }
   }
 
+  /* process the forms being submitted, do validation and saving */
   protected function processForm(sfWebRequest $request, sfForm $form)
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
@@ -126,6 +135,28 @@ class admindisciplineActions extends sfActions
     $pager->setPage($pagenumber);
     $pager->init();
     return $pager;
+  }
+  
+  protected function getDisAssocListFromDB(EnumItem $discipline=null){
+    // declare empty array
+    $this->assocData = array("1"=>"", "2"=>"", "3"=>"", "4"=>"");
+    
+    // get data from db
+    if (isset($discipline)){
+      $crit = new Criteria();
+      $crit->addAscendingOrderByColumn(CourseDisciplineAssociationPeer::YEAR_OF_STUDY);
+      $crit->addAscendingOrderByColumn(CourseDisciplineAssociationPeer::COURSE_ID);
+      $rawList = $discipline->getCourseDisciplineAssociationsJoinCourse($crit);
+      
+      foreach ($rawList as $obj){
+        $year = $obj->getYearOfStudy();
+        $this->assocData[$year] .= $obj->getCourseId()." (".$obj->getCourse()->getDescr().")".$this->separator;
+      }
+    }
+  }
+  
+  protected function getDisAssocListFromPost(sfWebRequest $request){
+    
   }
   
   protected function parseDisAssoc(sfForm $courseDisAssocform, Course $course){

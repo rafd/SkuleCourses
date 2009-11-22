@@ -1,9 +1,18 @@
 <?php echo use_helper('Javascript') ?>
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>
-
 <?php include_stylesheets_for_form($formDetail) ?>
 <?php include_javascripts_for_form($formDetail) ?>
+
+<script type="text/javascript">
+	function course_search(event){
+		if (event.keyCode == 13){
+			document.getElementById('ajax_search').click();
+			return false;
+		}
+		return true;
+	}
+</script>
 
 <script type="text/javascript">
 	var detailsShown = true;
@@ -109,11 +118,58 @@
 		*/?>
 		<tr>
 			<td>
-				<fieldset style='width:100%'>
-      				<legend style='font-size:10pt'>Associated Courses</legend>
-      				
-      				<?php //FIXME course instructor association table?>
-      			</fieldset>
+				<div id='instrAssocChooser' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>
+	      			<table class="inputlayout">
+	      				<tr>
+	      					<td>Search Courses: <input type="text" onkeydown="return course_search(event)" name="ajax_query" />
+	      					<?php echo submit_to_remote('ajax_search', 'Search', array(
+	      					  'update'=>'ajax_search_results',
+	      					  'url'=>'admincourse/ajaxSearch'), array(
+	      					  'id'=>'ajax_search'))?>
+	      					</td>
+	      				</tr>
+	      				<tr>
+	      					<td><i>Click on the results to add them.</i></td>
+	      				</tr>
+	      				<tr><td><ul id="ajax_search_results"></ul></td>
+	      				</tr>
+	      			</table>
+	      		</div>
+	      		<fieldset style="width:100%" onmouseover='mopen("instrAssocChooser", 1)' onmouseout='mclosetime()'>
+	      			<legend style='font-size:10pt'>Associated Courses</legend>
+	      			<table class="inputlayout" style="width:100%">
+	      				<tr>
+	      					<td>Year: 
+	      						<select style="width:70px" id="year">
+	      						<?php $date = getdate();?>
+	      						<?php for ($i=$date["year"]+1; $i>=1998; $i--):?>
+	      							<option value="<?php echo $i?>"<?php if ($i==$date["year"]):?> selected<?php endif;?>><?php echo $i?></option>
+	      						<?php endfor;?>
+	      						</select>
+	      						&nbsp;&nbsp;Term: 
+	      						<select style="width:90px" id="term">
+	      							<option value="9">Fall</option>
+	      							<option value="1">Winter</option>
+	      							<option value="5">Summer</option>
+	      						</select>
+	      					</td>
+	      				</tr>
+	      				<tr>
+	      					<td style="width:100%">
+	      						<table class="disptable" style="margin-top:5px;width:100%">
+	      							<tr><th>Selected Courses</th></tr>
+	      							<?php for ($i=0;$i<=4; $i++):?>
+	      							<tr>
+		      							<td style="padding-left:5px;padding:right:40px">AER202H1 (Mechanical System Design)
+		      							<a class="deletebtn" style="margin-top:3px;margin-right:5px"></a>
+		      							</td>
+	      							</tr>
+	      							<?php endfor;?>
+	      						</table>
+	      					</td>
+	      				</tr>
+	      			</table>
+	      		</fieldset>
 			</td>
 		</tr>
     </tbody>

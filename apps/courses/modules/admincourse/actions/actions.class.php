@@ -167,6 +167,37 @@ class admincourseActions extends sfActions
       }
     }
   }
+  
+  /**
+   * Return a list of courses in <li></li> format
+   * Must be called in an Ajax request
+   */
+  public function executeAjaxSearch(sfWebRequest $request)
+  {
+    if (!$request->isXmlHttpRequest()) $this->forward404();
+    if (!$request->hasParameter("ajax_query")) throw new Exception("ajax_query does not exist");
+    
+    // use fuzzySearch class to get a list of courses matching the query
+    $query = $request->getParameter("ajax_query");
+    $fuzzySearch = new fuzzySearch();
+    try {
+      $fuzzySearch->query($query);
+      $courseList = $fuzzySearch->getCourseList();
+    } catch (Exception $e){
+      echo "<li>No match found</li>";
+      exit();
+    }
+    
+    if (!isset($courseList) || count($courseList) == 0) {
+      echo "<li>No match found</li>";
+    } else {
+      foreach ($courseList as $course){
+        echo "<li>".$course->getId()." (".$course->getDescr().")</li>";
+      }
+    }
+    
+    exit();
+  }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
   {
