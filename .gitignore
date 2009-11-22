@@ -1,0 +1,14 @@
+log/**/*
+log/*
+data/backup/**/*
+data/backup/*
+cache/**/*
+cache/*
+appletExamsUploader/build/**/*
+appletExamsUploader/build/*
+appletExamsUploader/dist/**/*
+appletExamsUploader/dist/*
+www/exams/bulk/**/*
+www/exams/custom/**/*
+www/images/**/*
+www/images/*
