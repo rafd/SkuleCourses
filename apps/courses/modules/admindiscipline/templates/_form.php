@@ -14,28 +14,60 @@
 		return true;
 	}
 
-	function yodOnChange(yod){
-		var year = yod.options[yod.selectedIndex].value;
+	function yosOnChange(yos){
+		var year = yos.options[yos.selectedIndex].value;
 		var el = document.getElementById("hidAssoc"+year);
-		readAssocData(el.value);
+		parseAssocData(el.value);
 		return true;
 	}
 
-	function readAssocData(dataString){
+	// read raw data from string and parse to table
+	function parseAssocData(dataString){
 		var arr = splice(dataString, separator);
 		var disptable = document.getElementById("disptable");
 		disptable.innerHTML = "<tr><th>Selected Courses</th></tr>";
 		for (var i=0; i<arr.length; i++){
-			disptable.innerHTML += "<tr><td style='padding-left:5px;padding:right:40px'>" + arr[i] + "<a class='deletebtn' style='margin-top:3px;margin-left:15px'></a></td></tr>";
+			if (trim(arr[i]) != ""){
+				disptable.innerHTML += "<tr><td style='padding-left:5px;padding:right:40px'>" + arr[i] 
+				+ "<a class='deletebtn' onclick='removeFromSelected(\"" + arr[i] + "\")' style='margin-top:3px;margin-left:15px'></a></td></tr>";
+			}
 		}
 	}
 
 	function addToSelected(item){
+		var yos = document.getElementById("yos");
+	  	var year = yos.options[yos.selectedIndex].value;
+		var el = document.getElementById("hidAssoc"+year);
+		var arr = splice(el.value, separator);
 
+		var DNE = true;
+		for (var i=0; i<arr.length; i++){
+			if (arr[i] == item){
+				DNE = false;
+				break;
+			}
+		}
+
+		if (DNE){
+			el.value += item + separator;
+			yosOnChange(yos);
+		}
 	}
 
 	function removeFromSelected(item){
+	  	var yos = document.getElementById("yos");
+	  	var year = yos.options[yos.selectedIndex].value;
+		var el = document.getElementById("hidAssoc"+year);
+		var arr = splice(el.value, separator);
 
+		el.value = "";
+		for (var i=0; i<arr.length; i++){
+			if (arr[i] != item && trim(arr[i]) != ""){
+				el.value += arr[i] + separator;
+			}
+		}
+
+		yosOnChange(yos);
 	}
 </script>
 
@@ -107,7 +139,7 @@
       			<table class="inputlayout" style="width:100%">
       				<tr>
       					<td>Year of Study: 
-      						<select style="width:50px" id="yod" onchange="return yodOnChange(this)">
+      						<select style="width:50px" id="yos" onchange="return yosOnChange(this)">
       							<option value="1">1</option>
       							<option value="2">2</option>
       							<option value="3">3</option>
@@ -125,9 +157,9 @@
       		
       		<script type="text/javascript">
       			// initialize the assoc table
-      			var yod = document.getElementById("yod");
-      			var year = yod.options[yod.selectedIndex].value;
-      			readAssocData(document.getElementById("hidAssoc"+year).value);
+      			var yos = document.getElementById("yos");
+      			var year = yos.options[yos.selectedIndex].value;
+      			parseAssocData(document.getElementById("hidAssoc"+year).value);
       		</script>
       	</td>
       </tr>

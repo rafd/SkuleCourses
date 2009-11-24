@@ -113,6 +113,7 @@ class admindisciplineActions extends sfActions
     {
       try{
         $enum_item = $form->save();
+        $this->parseDisAssoc($enum_item, $request);
         $this->redirect('admindiscipline/edit?id='.$enum_item->getId());
       } catch (Exception $e){
         $this->globalErrors = $e->getMessage();
@@ -148,6 +149,7 @@ class admindisciplineActions extends sfActions
       $crit->addAscendingOrderByColumn(CourseDisciplineAssociationPeer::COURSE_ID);
       $rawList = $discipline->getCourseDisciplineAssociationsJoinCourse($crit);
       
+      // parse out raw data string to client
       foreach ($rawList as $obj){
         $year = $obj->getYearOfStudy();
         $this->assocData[$year] .= $obj->getCourseId()." (".$obj->getCourse()->getDescr().")".$this->separator;
@@ -156,28 +158,67 @@ class admindisciplineActions extends sfActions
   }
   
   protected function getDisAssocListFromPost(sfWebRequest $request){
-    
+    $this->assocData = array(
+      "1" => $request->getParameter("assoc[1]"),
+      "2" => $request->getParameter("assoc[2]"),
+      "3" => $request->getParameter("assoc[3]"),
+      "4" => $request->getParameter("assoc[4]"));
   }
   
-  protected function parseDisAssoc(sfForm $courseDisAssocform, Course $course){
-        if(!$courseDisAssocform->isValid()){
-          if($courseDisAssocform->getValue('year_of_study')==0 || $courseDisAssocform->getValue('year_of_study')=== null 
-            || $courseDisAssocform->getValue('year_of_study')==''){
-            //check for deletion
-            $courseDisobj = $course->getCourseDisciplineAssociations();
-            if ($courseDisobj !== null)
-            {
-               //deleting discipline dependency
-               foreach ($courseDisobj as $dis)
-                  $dis->delete();
-               return true;
-            }
-          }
-          
-        }else{
-          $courseDisAssocres = $courseDisAssocform->save();
-          return true;	
-        }
-        return false;
+  /**
+   * Save the course_discipline_assocs
+   * @param $discipline
+   * @param $request
+   * @return true if ready for saving, false otherwise
+   */
+  protected function parseDisAssoc(EnumItem $discipline, sfWebRequest $request){
+    $conn = Propel::getConnection();
+    
+    // retrieve existing assoc objects
+    $criteria = new Criteria();
+    $criteria->addAscendingOrderByColumn(CourseDisciplineAssociationPeer::YEAR_OF_STUDY);
+    $criteria->addAscendingOrderByColumn(CourseDisciplineAssociationPeer::COURSE_ID);
+    $extObjs = $discipline->getCourseDisciplineAssociations($criteria, $conn);
+    $delList = $extObjs;
+    
+    for ($year=1; $year<=4; $year++) {
+      // first get an array of items
+      $itemArr = array();
+      $token = strtok($request->getParameter("assoc[".$year."]"), $this->separator);
+      while ($token !== false){
+        if (trim($token) != "") $itemArr[] = $token;
+	    $token = strtok($this->separator);
+	  }
+	  
+	  // check which ones exist, which ones are new and which ones need deletion
+	  foreach ($itemArr as $item){
+	    $cCode = substr($item, 0, 8);
+	    $existed = false;
+	    foreach ($extObjs as $obj){
+	      if ($obj->getCourseId() == $cCode) {
+	        $existed = true;
+	        $key = array_search($obj, $delList);
+	        if ($key !== false) unset($delList[$key]);
+	        break;
+	      }
+	    }
+	    
+	    if (!$existed) {
+	      // save the new assoc
+	      $assoc = new CourseDisciplineAssociation();
+	      $assoc->setCourseId($cCode);
+	      $assoc->setDisciplineId($discipline->getId());
+	      $assoc->setYearOfStudy($year);
+	      $assoc->save($conn);
+	    }
+	  }
+    }
+    
+    // delete old assocs that no longer exist
+	foreach ($delList as $obj){
+	  $obj->delete($conn);
+	}
+        
+    return true;
   }
 }

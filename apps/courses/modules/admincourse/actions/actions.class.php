@@ -171,6 +171,7 @@ class admincourseActions extends sfActions
   /**
    * Return a list of courses in <li></li> format
    * Must be called in an Ajax request
+   * Requires the existence of addToSelected javascript method on client
    */
   public function executeAjaxSearch(sfWebRequest $request)
   {
@@ -192,7 +193,7 @@ class admincourseActions extends sfActions
       echo "<li>No match found</li>";
     } else {
       foreach ($courseList as $course){
-        echo "<li>".$course->getId()." (".$course->getDescr().")</li>";
+        echo "<li><a style='cursor:pointer' onclick='addToSelected(\"".$course->getId()." (".$course->getDescr().")"."\")'>".$course->getId()." (".$course->getDescr().")</a></li>";
       }
     }
     

@@ -90,7 +90,7 @@ function splice(string, separator) {
   while (remainder.indexOf(separator) != -1){
     var i = remainder.indexOf(separator);
     var a = remainder.substring(0, i);
-    if (a.length == 0) {break;}
+    //if (a.length == 0) {break;}
     ret[count] = a;
     remainder = remainder.substring(i+separatorLen);
     count++;
