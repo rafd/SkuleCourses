@@ -21,10 +21,6 @@ class admindisciplineActions extends sfActions
   
   public function executeIndex(sfWebRequest $request)
   {
-    $page = 1;
-    if($this->getRequestParameter('page')!==null){
-    	$page = $this->getRequestParameter('page');
-    }
   	$c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
     $this->enum_item_list = $this->getDisciplineList($c);
@@ -195,7 +191,7 @@ class admindisciplineActions extends sfActions
 	    $cCode = substr($item, 0, 8);
 	    $existed = false;
 	    foreach ($extObjs as $obj){
-	      if ($obj->getCourseId() == $cCode) {
+	      if ($obj->getCourseId() == $cCode && $obj->getYearOfStudy() == $year) {
 	        $existed = true;
 	        $key = array_search($obj, $delList);
 	        if ($key !== false) unset($delList[$key]);
