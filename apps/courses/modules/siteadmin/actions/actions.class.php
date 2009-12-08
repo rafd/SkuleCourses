@@ -44,6 +44,8 @@ class siteadminActions extends sfActions
         
         if (!is_object($admin) || $admin->getPassword() != $password){
           $this->error = "* Incorrect credentials.";
+        } elseif ($admin->getTypeId() != EnumItemPeer::USER_ADMIN){
+          $this->error = "* You do not have enough clearance to access this section.";
         } else {
           $this->getResponse()->setCookie('username', $username);
           

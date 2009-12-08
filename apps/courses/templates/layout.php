@@ -11,7 +11,7 @@
     <script type='text/javascript' src='/js/toolkit.js'></script>
   </head>
   <body class="skule_courses_body">
-  	<?php echo searchBar::get(); ?>
+  	<?php include_partial('global/skuleBar') ?>
   	<div id='container'>
   		<div id="header">
 			<div id="top">

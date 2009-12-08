@@ -26,11 +26,17 @@ class EnumItemPeer extends BaseEnumItemPeer
   const QUIZ = 61;
   const TEST = 62;
   const EXAM = 63;
+  const PROBLEM_SET = 64;
 
   // meta rating types
   const RATING_BOOLEAN = 21;
   const RATING_SCALE = 22;
   const RATING_NUMBER = 23;
+  
+  // user types
+  const USER_ADMIN = 11;
+  const USER_MODERATOR = 12;
+  const USER_GUEST = 13;
     
   public static function getAllForParentNodeId($parentId, PropelPDO $propelConnection=null)
   {
