@@ -32,13 +32,15 @@
 	function parseAssocData(dataString){
 		var arr = splice(dataString, separator);
 		var disptable = document.getElementById("disptable");
-		disptable.innerHTML = "<tr><th>Selected Courses</th></tr>";
+		var html = "<table class='disptable' style='margin-top:5px;width:100%'><tr><th>Selected Courses</th></tr>";
 		for (var i=0; i<arr.length; i++){
 			if (trim(arr[i]) != ""){
-				disptable.innerHTML += "<tr><td style='padding-left:5px;padding:right:40px'>" + arr[i] 
+				html += "<tr><td style='padding-left:5px;padding:right:40px'>" + arr[i] 
 				+ "<a class='deletebtn' onclick='removeFromSelected(\"" + arr[i] + "\")' style='margin-top:3px;margin-left:15px'></a></td></tr>";
 			}
 		}
+		html += "</table>";
+		disptable.innerHTML = html;
 	}
 	
 	function addToSelected(item){
@@ -199,7 +201,7 @@
 	      				</tr>
 	      				<tr>
 	      					<td style="width:100%">
-	      						<table class="disptable" id="disptable" style="margin-top:5px;width:100%"></table>
+	      						<div id="disptable"></div>
 	      					</td>
 	      				</tr>
 	      			</table>
