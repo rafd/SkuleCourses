@@ -36,10 +36,10 @@
 			<div id="copyright">
 			<p>Disclaimer: Neither Skule&trade; nor the developers of this site guarantee the accuracy of the information provided
 			in Skule Courses.</p>
-			Copyright &copy; 1970-2009
+			Copyright &copy; 1970-<?php $d = getdate(); echo $d["year"]?>
 			<a href="http://engsoc.skule.ca/">University of Toronto Engineering Society</a>.
 			All Rights Reserved
-			| Updated Dec 6, 2009
+			| Updated Dec 23, 2009
 			</div>
 		</div>
 	</div>

@@ -5,6 +5,7 @@
 #main ul {margin: 2px; padding-left: 10px}
 #main ul li, #main ol li {margin-left: 10px;}
 #main h3 {padding-bottom: 5px;}
+#main h4 { color: #5a5b5b; font-size: 11px; font-weight: bold; margin-bottom: 5px; border-bottom: none !important; letter-spacing: 1px;text-transform: uppercase; margin-top: 5px;}
 
 #left input[type=text], #left input[type=file], #left select { font: 10pt verdana; width: 200px;}
 #left input[type=button], #left input[type=submit]{ font: 10pt verdana;}
@@ -15,6 +16,18 @@
 
 #critique_content{margin: 1em;font-size:10pt}
 #critique_content fieldset {margin-top:-10px}
+
+div.search_block {
+	border: 1px solid gray;
+	background-color: #C0C0C0; 
+	padding: 5px; 
+	margin:0 5px 0 5px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+}
+div.search_block p.title {float:left; padding-right: 10px; font-size:16px; font-weight:bold; }
+
+div.critique_block {border-top: 1px solid #EEEEEE; padding:7px 0 0 0; margin: 0 5px 15px 5px}
 
 #submenu
 {
@@ -27,7 +40,7 @@
 
 /* tables */
 
-table.description { padding-right: 10px;}
+table.description {}
 table.description td { vertical-align:top; text-align:justify;}
 table.description td.title { width:150px; }
 
@@ -50,6 +63,8 @@ dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
 
+img.btn {cursor: pointer; margin-left: 5px; }
+
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../skule_images/reload.gif);}
 a.reload:hover {background: url(../skule_images/reload.on.gif);}
 
@@ -59,21 +74,22 @@ a.find:hover {background: url(../skule_images/find.on.gif);}
 a.back {position:relative; cursor: pointer; display:block; width: 16px; height: 16px; background: url(../skule_images/back.gif) no-repeat;}
 a.back:hover {background: url(../skule_images/back.on.gif) no-repeat;}
 
-a.help {position:relative; cursor: help; display:block; width: 16px; height: 16px; background: url(../skule_images/help.gif) no-repeat;}
+a.help {position:relative; cursor: help; text-decoration: none; display:block; width: 16px; height: 16px; background: url(../skule_images/help.gif) no-repeat;}
 a.help:hover {background: url(../skule_images/help.on.gif);}
 a.help span {display:none;}
 a.help:hover span{
 	display:block;
-	width: 200px;
+	width: 240px;
 	position: absolute;
 	top: 25px;
-	border: 1px solid #0cf;
-	background-color: #cff;
+	border: solid 1px #000;
+	background-color: #C3D9FF;
 	color: #000;
 	text-align: left;
-	text-decoration: none;
+	text-decoration: !important;
 	font: 8pt/14pt verdana;
 	padding: 5px;
+	z-index: 100;
 }
 
 /* popupmenu */
@@ -113,9 +129,12 @@ div.selector
 div.selector li {margin: 3px; display: block; min-width: 50px;}
 div.selector li.selected {border: solid 1px purple;}
 
-img.btn {cursor: pointer; margin-left: 5px; }
-
 input[type=text].date {width:90px;}
+
+/* grayout dialog box */
 
 #grayout {position:fixed;top:0px;left:0px;overflow:hidden;display:none;width:100%;height:100%;background-color:#000000;opacity:0.5;MozOpacity:0.5;z-index:500;filter:alpha(opacity=50);text-align:center}
 .grayout_dialog {text-align:center;position:absolute;width:350px;background-color:white;color:black;padding:10px;z-index:1000;top:120px;left:500px;display:none}
+
+/* commenting system */
+

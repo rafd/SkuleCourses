@@ -1,7 +1,7 @@
 <?php use_helper('Object')?>
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
-	<h2>Course Search</h2>
+	<h2>Detailed Search</h2>
 	<table>
 		<tr>
 			<td width="150">Search By: </td>

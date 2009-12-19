@@ -33,9 +33,6 @@ class searchActions extends sfActions
 	      $this->forward404();
 	      break;
 	  }
-      
-    } else {
-      $this->forward("search", "searchByDepartment");
     }
   }
   
