@@ -13,6 +13,7 @@ propel:
     course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade }
     comment:           { type: longvarchar, required: true }
     input_dt:          { type: timestamp, required: true }
+    approved:          { type: boolean, required: true, default: 0 }
     
   course_detail:
     _attributes:       { phpName: CourseDetail }

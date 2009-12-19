@@ -42,6 +42,10 @@ table.inputlayout td.topup {vertical-align:top}
 table.innerlayout { width: 100%; border: none; margin: none;}
 table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
 
+table.critiquetable { border-collapse: collapse; border: 1px solid #afaeb2;}
+table.critiquetable td{ padding:2px; border: 1px solid #afaeb2; vertical-align: middle; text-align:center}
+table.critiquetable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+
 dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */

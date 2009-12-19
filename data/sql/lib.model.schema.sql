@@ -37,6 +37,7 @@ CREATE TABLE `course_comment`
 	`course_id` VARCHAR(9)  NOT NULL,
 	`comment` TEXT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
+	`approved` TINYINT default 0 NOT NULL,
 	PRIMARY KEY (`id`),
 	INDEX `course_comment_FI_1` (`user_id`),
 	CONSTRAINT `course_comment_FK_1`
