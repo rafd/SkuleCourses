@@ -33,20 +33,38 @@ DROP TABLE IF EXISTS `course_comment`;
 CREATE TABLE `course_comment`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`user_id` INTEGER  NOT NULL,
+	`ip` VARCHAR(15)  NOT NULL,
 	`course_id` VARCHAR(9)  NOT NULL,
 	`comment` TEXT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
 	`approved` TINYINT default 0 NOT NULL,
+	`applies_to` INTEGER  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `course_comment_FI_1` (`user_id`),
+	KEY `course_comment_I_1`(`ip`),
+	KEY `course_comment_I_2`(`course_id`),
 	CONSTRAINT `course_comment_FK_1`
-		FOREIGN KEY (`user_id`)
-		REFERENCES `user` (`id`),
-	INDEX `course_comment_FI_2` (`course_id`),
-	CONSTRAINT `course_comment_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
+		ON DELETE CASCADE
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
+#-- course_comment_dig
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `course_comment_dig`;
+
+
+CREATE TABLE `course_comment_dig`
+(
+	`ip` VARCHAR(15)  NOT NULL,
+	`comment_id` INTEGER  NOT NULL,
+	`is_good` TINYINT  NOT NULL,
+	PRIMARY KEY (`ip`),
+	KEY `course_comment_dig_I_1`(`comment_id`),
+	CONSTRAINT `course_comment_dig_FK_1`
+		FOREIGN KEY (`comment_id`)
+		REFERENCES `course_comment` (`id`)
 		ON DELETE CASCADE
 )Type=InnoDB;
 
@@ -252,19 +270,36 @@ CREATE TABLE `exam_comment`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`exam_id` INTEGER  NOT NULL,
-	`user_id` INTEGER  NOT NULL,
+	`ip` VARCHAR(15)  NOT NULL,
 	`comment` TEXT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
 	PRIMARY KEY (`id`),
-	INDEX `exam_comment_FI_1` (`exam_id`),
+	KEY `exam_comment_I_1`(`exam_id`),
+	KEY `exam_comment_I_2`(`ip`),
 	CONSTRAINT `exam_comment_FK_1`
 		FOREIGN KEY (`exam_id`)
 		REFERENCES `exam` (`id`)
-		ON DELETE CASCADE,
-	INDEX `exam_comment_FI_2` (`user_id`),
-	CONSTRAINT `exam_comment_FK_2`
-		FOREIGN KEY (`user_id`)
-		REFERENCES `user` (`id`)
+		ON DELETE CASCADE
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
+#-- exam_comment_dig
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `exam_comment_dig`;
+
+
+CREATE TABLE `exam_comment_dig`
+(
+	`ip` VARCHAR(15)  NOT NULL,
+	`comment_id` INTEGER  NOT NULL,
+	`is_good` TINYINT  NOT NULL,
+	PRIMARY KEY (`ip`),
+	KEY `exam_comment_dig_I_1`(`comment_id`),
+	CONSTRAINT `exam_comment_dig_FK_1`
+		FOREIGN KEY (`comment_id`)
+		REFERENCES `exam_comment` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------

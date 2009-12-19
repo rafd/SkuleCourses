@@ -9,11 +9,17 @@ propel:
   course_comment:
     _attributes:       { phpName: CourseComment }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    user_id:           { type: integer, required: true, foreignTable: user, foreignReference: id }
-    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade }
+    ip:                { type: varchar(15), required: true, index: true }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
     comment:           { type: longvarchar, required: true }
     input_dt:          { type: timestamp, required: true }
     approved:          { type: boolean, required: true, default: 0 }
+    applies_to:        { type: integer, required: true }
+    
+  course_comment_dig:
+    ip:                { type: varchar(15), required: true, primaryKey: true }
+    comment_id:        { type: integer, required: true, foreignTable: course_comment, foreignReference: id, onDelete: cascade, index: true }
+    is_good:           { type: boolean, required: true }
     
   course_detail:
     _attributes:       { phpName: CourseDetail }
@@ -78,10 +84,15 @@ propel:
   exam_comment:
     _attributes:       { phpName: ExamComment }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    exam_id:           { type: integer, required: true, foreignTable: exam, foreignReference: id, onDelete: cascade }
-    user_id:           { type: integer, required: true, foreignTable: user, foreignReference: id }
+    exam_id:           { type: integer, required: true, foreignTable: exam, foreignReference: id, onDelete: cascade, index: true }
+    ip:                { type: varchar(15), required: true, index: true }
     comment:           { type: longvarchar, required: true }
     input_dt:          { type: timestamp, required: true }
+    
+  exam_comment_dig:
+    ip:                { type: varchar(15), required: true, primaryKey: true }
+    comment_id:        { type: integer, required: true, foreignTable: exam_comment, foreignReference: id, onDelete: cascade, index: true }
+    is_good:           { type: boolean, required: true }
 
   instructor:
     _attributes:       { phpName: Instructor }
