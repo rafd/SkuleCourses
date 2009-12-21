@@ -29,5 +29,30 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     return AutoCourseRatingPeer::doSelect($c, $propelConnection);
   }
   
-  
+  public static function getAvailableInstructorsForCourseIdAndYear($courseId, $year, PropelPDO $conn){
+    $query = "SELECT DISTINCT %s as i FROM %s JOIN %s ON %s=%s WHERE %s='%s' AND %s=%s";
+    $query = sprintf($query, CourseInstructorAssociationPeer::ID, AutoCourseRatingPeer::TABLE_NAME, CourseInstructorAssociationPeer::TABLE_NAME,
+      AutoCourseRatingPeer::COURSE_INS_ID, CourseInstructorAssociationPeer::ID, CourseInstructorAssociationPeer::COURSE_ID, $courseId,
+      CourseInstructorAssociationPeer::YEAR, $year);
+    $statement = $conn->prepare($query);
+    $statement->execute();
+    $ids = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+    
+    $results = array();
+    $c = new Criteria();
+    $c->addJoin(CourseInstructorAssociationPeer::INSTRUCTOR_ID, InstructorPeer::ID);
+    foreach ($ids as $id){
+      $crit = $c->getNewCriterion(CourseInstructorAssociationPeer::ID, $id);
+      $c->addOr($crit);
+    }
+    $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
+    $c->addAscendingOrderByColumn(InstructorPeer::FIRST_NAME);
+    $raw = CourseInstructorAssociationPeer::doSelect($c, $conn);
+    
+    foreach ($raw as $obj){
+      $results[] = $obj->getInstructor();
+    }
+    
+    return $results;
+  }
 }

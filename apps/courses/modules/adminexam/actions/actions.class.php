@@ -15,12 +15,18 @@ class adminexamActions extends sfActions
     
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_EXAM);
     $this->submenu = $submenu->get();
+    $this->earliestYear = 1998;
+    $this->date = getdate();
   }
   
   public function executeIndex(sfWebRequest $request)
   {
-    //$this->exam_list = $this->getExamList();
-    //$this->form = new ExamForm(new Exam());
+  }
+  
+  public function executeCustom(sfWebRequest $request)
+  {
+    $this->exam_list = $this->getExamList();
+    $this->form = new ExamForm(new Exam());
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -160,11 +166,5 @@ class adminexamActions extends sfActions
   	if(!unlink($myfile)){
       $this->redirect('adminexam/failederr?msg=unlink');
   	}
-  }
- 
-  public function executeList(sfWebRequest $request)
-  {
-    $this->exam_list = $this->getExamList();
-    $this->form = new ExamForm(new Exam());
   }
 }

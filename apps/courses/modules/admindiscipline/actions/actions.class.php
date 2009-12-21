@@ -64,7 +64,10 @@ class admindisciplineActions extends sfActions
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm($enum_item,$values);
 
-    $this->redirectAddress = "admindiscipline/edit?id=".$request->getParameter('id');
+    if ($request->hasParameter("page")){
+      $par = "page=".$request->getParameter("page");
+    }
+    $this->redirectAddress = "admindiscipline/edit?".$par."&id=".$request->getParameter('id');
     
     $this->processForm($request, $this->form);
     $c = new Criteria();

@@ -19,7 +19,7 @@ class admininstructorActions extends sfActions
     // separator used for course_discipl assoc data
     $this->separator = "&&**&&";
     $this->date = getdate();
-    $this->earliestYear = 1998;
+    $this->earliestYear = skuleadminConst::EARLIEST_YEAR;
   }
 	
   public function executeIndex(sfWebRequest $request)
@@ -65,7 +65,10 @@ class admininstructorActions extends sfActions
     $this->forward404Unless($instructor = InstructorPeer::retrieveByPk($request->getParameter('id')), sprintf('Object instructor does not exist (%s).', $request->getParameter('id')));
     $this->form = new InstructorForm($instructor);
 
-    $this->redirectAddress = "admininstructor/edit?id=".$request->getParameter('id');
+    if ($request->hasParameter("page")){
+      $par = "page=".$request->getParameter("page");
+    }
+    $this->redirectAddress = "admininstructor/edit?".$par."&id=".$request->getParameter('id');
     
     /*$c = new Criteria();
   	$c->add(InstructorDetailPeer::INSTRUCTOR_ID,$request->getParameter('id'));

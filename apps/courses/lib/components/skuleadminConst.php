@@ -19,6 +19,8 @@ class skuleadminConst
   const EXAM_RECORDNUMBER = 10;
   const INSTRUCTOR_RECORDNUMBER = 10;
   const RATINGCRITERIA_RECORDNUMBER = 10; //ratingfield
+  
+  const EARLIEST_YEAR = 1998;
 
   public static function decomposeURL(sfContext $context, sfRequest $request){
     $module = $context->getModuleName();

@@ -21,7 +21,8 @@ class ExamForm extends BaseExamForm
     if($this->getOption('courseid')!==null){
     	$c2->add(CoursePeer::ID, $this->getOption('courseid'));
     }
-    $this->unset['year'];
+    unset($this->year);
+    //$this->unset['year'];
     
     $this->setWidgets(array(
       'id'        => new sfWidgetFormInputHidden(),

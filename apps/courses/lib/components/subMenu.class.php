@@ -1,5 +1,7 @@
 <?php
 
+//TODO: convert this class into a symfony partial and place it in the templates folder
+
 class subMenu
 {
   private $_courseId;
@@ -76,6 +78,12 @@ class subMenu
 	        else
 	          $returnStr .= "</div><dd onmouseover='mopen(\"subCritique\")' onmouseout='mclosetime()' class='pointer'><a>Course Critiques</a></dd>";
 	        
+	        // commenting
+	        if ($this->_menuOption == subMenuOptions::COURSE_COMMENTING)
+	          $returnStr .= "<dd>Course Commenting</dd>";
+	        else
+	          $returnStr .= "<dd>".link_to("Course Commenting", "course/commenting?id=".$this->_courseId)."</dd>";
+	          
 	        // exams
 	        $returnStr .= "<div class='popupmenu' id='subExam' onmouseover='mcancelclosetime()' onmouseout='mclosetime()'>";
 	        if (count($this->_examYearArray)==0){
@@ -190,7 +198,7 @@ class subMenu
     		document.exam_submission.security.value='';
     	}
     </script>
-    <h3>Submit Exam</h3>
+    <div class='title_bar'>Submit Exam</div>
     <form name='exam_submission' method='post' enctype='multipart/form-data' action='".url_for("invisible/submitExam")."' target='hidSecurityFrame'>
 	    <table>
 		    <tr><td width='100'>Course:</td><td align='left'>{$this->_courseId}
@@ -202,7 +210,14 @@ class subMenu
     }
 
     $str .= "</select></td></tr>
-		    <tr><td>Year:</td><td align='left'><input type='text' name='year' style='width:100px'/></td></tr>
+		    <tr><td>Year:</td><td align='left'><select name='year' style='width:100px'>";
+    
+    $date = getdate();
+    for ($i=$date["year"]+1; $i>=skuleadminConst::EARLIEST_YEAR; $i--){
+      $str .= ($i == $date["year"])?"<option value='$i' selected>$i</option>":"<option value='$i'>$i</option>";
+    }
+    
+    $str .= "</select></td></tr>
 		    <tr><td>Term:</td><td>
 		    	<input type='radio' name='term' id='radioFall' value='9' CHECKED><label for='radioFall'>Fall</label>
 		    	<input type='radio' name='term' id='radioWinter' value='1'><label for='radioWinter'>Winter</label>
@@ -213,7 +228,7 @@ class subMenu
 		    <tr><td>&nbsp;</td></tr>
 		    <tr><td></td><td align='left'><img src='".url_for('invisible/securityImage')."'/></td></tr>
 		    <tr><td>Security String:</td><td><input type='text' name='security' /></td></tr>
-	    </table><br/>
+	    </table>
     	<div id='inputButtons'><input type='submit' onclick='return submitExamOnSubmit();' value='Submit'/><input type='button' onclick='cancelAction()' value='Cancel'/></div>
     	<div id='successButtons' style='display:none'><input type='button' onclick='cancelAction()' value='Close'/></div>
     </form>
@@ -236,15 +251,17 @@ class subMenuOptions
   const COURSE = 2;
   const COURSE_CRITIQUE = 3;
   const COURSE_EXAM = 4;
-  const MAINTENANCE = 5;
-  const MAINTENANCE_COURSE = 6;
-  const MAINTENANCE_INSTRUCTOR = 7;
-  const MAINTENANCE_DEPARTMENT = 8;
-  const MAINTENANCE_DISCIPLINE = 9;
-  const MAINTENANCE_EXAM = 10;
-  const MAINTENANCE_RATING = 11;
-  const MAINTENANCE_LOGIN = 12;
-  const ERROR = 13;
+  const COURSE_COMMENTING = 5;
+  const MAINTENANCE = 10;
+  const MAINTENANCE_COURSE = 11;
+  const MAINTENANCE_INSTRUCTOR = 12;
+  const MAINTENANCE_DEPARTMENT = 13;
+  const MAINTENANCE_DISCIPLINE = 14;
+  const MAINTENANCE_EXAM = 15;
+  const MAINTENANCE_RATING = 16;
+  const MAINTENANCE_LOGIN = 17;
+  const MAINTENANCE_COMMENTING = 18;
+  const ERROR = 20;
   
   public static function getMaintenanceSectionNames(){
     return array(subMenuOptions::MAINTENANCE_COURSE=>"Courses", 
@@ -252,7 +269,8 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DEPARTMENT=>"Departments",
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"Disciplines",
     subMenuOptions::MAINTENANCE_EXAM=>"Exams",
-    subMenuOptions::MAINTENANCE_RATING=>"Ratings");
+    subMenuOptions::MAINTENANCE_RATING=>"Ratings",
+    subMenuOptions::MAINTENANCE_COMMENTING=>"Commenting");
   }
   
   public static function getMaintenanceSections()
@@ -262,7 +280,8 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DEPARTMENT=>"admindepartment/index",
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"admindiscipline/index",
     subMenuOptions::MAINTENANCE_EXAM=>"adminexam/index",
-    subMenuOptions::MAINTENANCE_RATING=>"adminratingCriteria/index");
+    subMenuOptions::MAINTENANCE_RATING=>"adminratingCriteria/index",
+    subMenuOptions::MAINTENANCE_COMMENTING=>"admincommenting/index");
   }
   
   public static function getMaintenanceSectionDetails(){
@@ -271,6 +290,7 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DEPARTMENT=>"Add, modify or remove departments.",
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"Add, modify or remove disciplines (academic programs).",
     subMenuOptions::MAINTENANCE_EXAM=>"Add, modify or remove exams.",
-    subMenuOptions::MAINTENANCE_RATING=>"Manage course ratings.");
+    subMenuOptions::MAINTENANCE_RATING=>"Manage course ratings.",
+    subMenuOptions::MAINTENANCE_COMMENTING=>"Manage course commenting.");
   }
 }

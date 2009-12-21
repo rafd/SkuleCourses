@@ -24,6 +24,19 @@
 	overflow: auto;
 }
 
+#examCourseChooser {
+	position: absolute;
+	background-color: #C3D9FF;
+	visibility: hidden;
+	top: 200px;
+ 	z-index: 100;
+	border: solid 1px #000;
+	width: 423px;
+	height: 150px;
+	margin-left: 5px;
+	overflow: auto;
+}
+
 /* tables */
 
 td.error {color: #FF0000}

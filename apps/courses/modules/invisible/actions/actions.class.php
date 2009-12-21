@@ -2,6 +2,11 @@
 
 class invisibleActions extends sfActions
 {
+  /**
+   * Randomly generate a security string and save into session variable "securityImage"
+   * Then outputs a JPEG image of the security string
+   * @param sfWebRequest $request
+   */
   public function executeSecurityImage(sfWebRequest $request)
   {
     $font = 'monofont.ttf';
@@ -23,30 +28,7 @@ class invisibleActions extends sfActions
     $_SESSION['securityImage'] = $code;
     //$this->getUser()->setAttribute("securityImage", $code);
      
-    //Set the image width and height
-    $width = 100;
-    $height = 20; 
-
-    //Create the image resource 
-    $image = ImageCreate($width, $height);  
-
-    //We are making three colors, white, black and gray
-    $white = ImageColorAllocate($image, 255, 255, 255);
-    $black = ImageColorAllocate($image, 0, 0, 0);
-    $grey = ImageColorAllocate($image, 204, 204, 204);
-
-    //Make the background black 
-    ImageFill($image, 0, 0, $black); 
-
-    //Add randomly generated string in white to the image
-    ImageString($image, 5, 20, 2, $code, $white); 
-
-    //Throw in some lines to make it a little bit harder for any bots to break 
-    ImageRectangle($image,0,0,$width-1,$height-1,$grey); 
-    //imageline($image, 0, $height/2, $width, $height/5, $grey); 
-    imageline($image, $width/3, 0, $width/6, $height, $grey);
-    imageline($image, $width/3, $height/2, $width/2, $height, $grey);
-    imageline($image, $width/2, $height/2, $width, $height, $grey);  
+    $image = $this->createImage($code);
  
     //Tell the browser what kind of file is come in 
     header("Content-Type: image/jpeg"); 
@@ -59,6 +41,30 @@ class invisibleActions extends sfActions
 	exit();
   }
   
+  /**
+   * Reuse the code from session variable "securityImage"
+   * Outputs a JPEG image of the security string
+   * @param sfWebRequest $request
+   */
+  public function executeCurrentSecurityImage(sfWebRequest $request)
+  {
+    $image = $this->createImage($_SESSION['securityImage']);
+ 
+    //Tell the browser what kind of file is come in 
+    header("Content-Type: image/jpeg"); 
+
+    //Output the newly created image in jpeg format 
+    ImageJpeg($image);
+   
+    //Free up resources
+    ImageDestroy($image); 
+	exit();
+  }
+  
+  /**
+   * Take the exam submission request and save it into database
+   * @param sfWebRequest $request
+   */
   public function executeSubmitExam(sfWebRequest $request)
   {
     //TODO: set up uniform display name for each exam/test uploaded so things don't get messy.
@@ -105,23 +111,31 @@ class invisibleActions extends sfActions
 
 	    if (move_uploaded_file($file['tmp_name'], $tgt_path."/".$fileName))
 	    {
-	      // register in db
-	      $conn = Propel::getConnection();
+	      try {
+	        // register in db
+	        $conn = Propel::getConnection();
 	      
-	      $exam = new Exam();
-	      $exam->setCourseId($courseId);
-	      $exam->setFilePath($tgt_path."/".$fileName);
-	      $exam->setYear($year);
-	      $exam->setType($examType);
-	      $exam->setDescr($descr);
-	      $exam->save($conn);
+	        $exam = new Exam();
+	        $exam->setCourseId($courseId);
+	        $exam->setFilePath($tgt_path."/".$fileName);
+	        $exam->setYear($year);
+	        $exam->setType($examType);
+	        $exam->setDescr($descr);
+	        $exam->save($conn);
 	      
-	      // send notification email
-	      $ip = $_SERVER['REMOTE_ADDR'];
-          $msg = "Submitted by ".$ip." [title=".$exam->getDescr()."; course=".$exam->getCourseId()."; year=".$exam->getYear()."; id=".$exam->getId()."]";
-	      helperFunctions::sendEmailNotice("Exam Submission", $msg);
+	        // send notification email
+	        $ip = $_SERVER['REMOTE_ADDR'];
+            $msg = "A new exam on [title=".$exam->getDescr()."; course=".$exam->getCourseId()."; year=".$exam->getYear()."; id=".$exam->getId()."] has been submitted by ".$ip.
+              " on ".date('Y-m-d H:i:s').".";
+	        helperFunctions::sendEmailNotice("Exam Submission", $msg);
 	      
-	      echo "<input type='text' id='status' value='Success'/>";
+	        echo "<input type='text' id='status' value='Success'/>";
+	      } catch (Exception $e){
+	        echo "<input type='text' id='status' value='Saving'/>";
+	        
+	        // send error email
+	        helperFunctions::sendEmailNotice("Exam Submission Error", $e->getMessage());
+	      }
 	    }
 	    else echo "<input type='text' id='status' value='Moving'/>";
       } else echo "<input type='text' id='status' value='PDF'/>";
@@ -130,5 +144,34 @@ class invisibleActions extends sfActions
     } else {
       $this->forward404();
     }
+  }
+  
+  private function createImage($code){
+    //Set the image width and height
+    $width = 100;
+    $height = 20; 
+
+    //Create the image resource 
+    $image = ImageCreate($width, $height);  
+
+    //We are making three colors, white, black and gray
+    $white = ImageColorAllocate($image, 255, 255, 255);
+    $black = ImageColorAllocate($image, 0, 0, 0);
+    $grey = ImageColorAllocate($image, 204, 204, 204);
+
+    //Make the background black 
+    ImageFill($image, 0, 0, $black); 
+
+    //Add randomly generated string in white to the image
+    ImageString($image, 5, 20, 2, $code, $white); 
+
+    //Throw in some lines to make it a little bit harder for any bots to break 
+    ImageRectangle($image,0,0,$width-1,$height-1,$grey); 
+    //imageline($image, 0, $height/2, $width, $height/5, $grey); 
+    imageline($image, $width/3, 0, $width/6, $height, $grey);
+    imageline($image, $width/3, $height/2, $width/2, $height, $grey);
+    imageline($image, $width/2, $height/2, $width, $height, $grey);
+    
+    return $image;
   }
 }

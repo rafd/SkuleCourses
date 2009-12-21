@@ -9,13 +9,14 @@
 
 #left input[type=text], #left input[type=file], #left select { font: 10pt verdana; width: 200px;}
 #left input[type=button], #left input[type=submit]{ font: 10pt verdana;}
-#left form label{font: inherit;width:auto;display:inline;}
 #left {font-size:9pt}
 
 .hidden {display:none}
 
 #critique_content{margin: 1em;font-size:10pt}
 #critique_content fieldset {margin-top:-10px}
+
+form label{font: inherit;width:auto;display:inline;}
 
 div.search_block {
 	border: 1px solid gray;
@@ -26,8 +27,32 @@ div.search_block {
 	-webkit-border-radius: 5px 5px 5px 5px;
 }
 div.search_block p.title {float:left; padding-right: 10px; font-size:16px; font-weight:bold; }
+div.search_block div.title_bar { 
+	background-color: #5970B2;
+	color: #fff;
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	margin: -5px -5px 5px -5px;
+	padding-left: 5px;
+}
 
 div.critique_block {border-top: 1px solid #EEEEEE; padding:7px 0 0 0; margin: 0 5px 15px 5px}
+div.critique_block div.box {
+	margin:5px 0 0 0;
+	background-color:#ccc;
+	border: 1px solid gray;
+	padding: 5px; 
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+}
+div.critique_block div.box div.title_bar { 
+	background-color: #5970B2;
+	color: #fff;
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	margin: -5px -5px 5px -5px;
+	padding-left: 5px;
+}
 
 #submenu
 {
@@ -55,15 +80,16 @@ table.inputlayout td.topup {vertical-align:top}
 table.innerlayout { width: 100%; border: none; margin: none;}
 table.innerlayout td { padding: 0px; border-spacing: 0px; border-collapse: collapse; margin:none; }
 
-table.critiquetable { border-collapse: collapse; border: 1px solid #afaeb2;}
-table.critiquetable td{ padding:2px; border: 1px solid #afaeb2; vertical-align: middle; text-align:center}
-table.critiquetable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #afaeb2; vertical-align: middle;}
+table.critiquetable { border-collapse: collapse; border: 1px solid #000;}
+table.critiquetable td{ padding:2px; border: 1px solid #000; vertical-align: middle; text-align:center}
+table.critiquetable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #000; vertical-align: middle;}
 
 dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
 
 img.btn {cursor: pointer; margin-left: 5px; }
+a.btn {cursor: pointer;}
 
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../skule_images/reload.gif);}
 a.reload:hover {background: url(../skule_images/reload.on.gif);}
@@ -134,7 +160,26 @@ input[type=text].date {width:90px;}
 /* grayout dialog box */
 
 #grayout {position:fixed;top:0px;left:0px;overflow:hidden;display:none;width:100%;height:100%;background-color:#000000;opacity:0.5;MozOpacity:0.5;z-index:500;filter:alpha(opacity=50);text-align:center}
-.grayout_dialog {text-align:center;position:absolute;width:350px;background-color:white;color:black;padding:10px;z-index:1000;top:120px;left:500px;display:none}
-
-/* commenting system */
-
+div.grayout_dialog {
+	text-align:center;
+	position:absolute;
+	width:350px;
+	background-color:white;
+	color:black;
+	padding:10px;
+	z-index:1000;
+	top:120px;
+	left:500px;
+	display:none;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+}
+div.grayout_dialog div.title_bar {
+	background-color: #5970B2;
+	color: #fff;
+	-moz-border-radius: 5px 5px 0 0;
+	-webkit-border-radius: 5px 5px 0 0;
+	margin: -10px -10px 5px -10px;
+	padding-left: 5px;
+	font-size: 14px;
+}

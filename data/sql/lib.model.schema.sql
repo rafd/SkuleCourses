@@ -60,8 +60,8 @@ CREATE TABLE `course_comment_dig`
 	`ip` VARCHAR(15)  NOT NULL,
 	`comment_id` INTEGER  NOT NULL,
 	`is_good` TINYINT  NOT NULL,
-	PRIMARY KEY (`ip`),
-	KEY `course_comment_dig_I_1`(`comment_id`),
+	PRIMARY KEY (`ip`,`comment_id`),
+	INDEX `course_comment_dig_FI_1` (`comment_id`),
 	CONSTRAINT `course_comment_dig_FK_1`
 		FOREIGN KEY (`comment_id`)
 		REFERENCES `course_comment` (`id`)
@@ -294,8 +294,8 @@ CREATE TABLE `exam_comment_dig`
 	`ip` VARCHAR(15)  NOT NULL,
 	`comment_id` INTEGER  NOT NULL,
 	`is_good` TINYINT  NOT NULL,
-	PRIMARY KEY (`ip`),
-	KEY `exam_comment_dig_I_1`(`comment_id`),
+	PRIMARY KEY (`ip`,`comment_id`),
+	INDEX `exam_comment_dig_FI_1` (`comment_id`),
 	CONSTRAINT `exam_comment_dig_FK_1`
 		FOREIGN KEY (`comment_id`)
 		REFERENCES `exam_comment` (`id`)

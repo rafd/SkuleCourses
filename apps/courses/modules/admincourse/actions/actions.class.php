@@ -146,6 +146,7 @@ class admincourseActions extends sfActions
       // finally, delete the course obj
       $course->delete();
       
+      $par = "";
       if ($request->hasParameter("page")){
         $par = "?page=".$request->getParameter("page");
       }
@@ -200,17 +201,6 @@ class admincourseActions extends sfActions
     exit();
   }
 
-  protected function processForm(sfWebRequest $request, sfForm $form)
-  {
-    $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-    if ($form->isValid())
-    {
-      $course = $form->save();
-
-      $this->redirect('admincourse/edit?id='.$course->getId());
-    }
-  }
-
   protected function getCourselist(Criteria $c = null){
   	$pagenumber = 1;
     if($this->getRequestParameter('page')!==null){
@@ -257,17 +247,16 @@ class admincourseActions extends sfActions
       	  $noerror = false;
       	}
 
-      	//$noerror = $this->noerrDetails;
-        /*$this->noerrDisAssoc = $this->parseDisAssoc($courseDisAssocform, $courseform->getObject());
-        if($this->noerrDetails ==false || $this->noerrDisAssoc ==false){
-        	$noerror = false;
-        }*/
       }else{
       	$noerror = false;
       }
       
      if($noerror){
-       $this->redirect('admincourse/edit?id='.$courseresult->getId());
+       $par="";
+       if ($request->hasParameter("page")){
+         $par = "page=".$request->getParameter("page");
+       }
+       $this->redirect('admincourse/index?'.$par);
      }
   }
   

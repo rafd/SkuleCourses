@@ -5,7 +5,7 @@
 <table>
 <tr><td width="50%">
 <h3>
-<?php echo link_to('Custom Exams Manager', 'adminexam/list')?>
+<?php echo link_to('Custom Exams Manager', 'adminexam/custom')?>
 </h3>
 <p>
 The Custom Exam Manager allows admin to import and maintain exams individually.
@@ -13,7 +13,7 @@ The Custom Exam Manager allows admin to import and maintain exams individually.
 </td>
 <td width="50%">
 <h3>
-<?php echo link_to('Bulk Exams Manager', 'adminexam/list')?>
+<?php echo link_to('Bulk Exams Manager', 'adminexam/bulk')?>
 </h3>
 <p>
 The Bulk Exam Manager allows admin to import and maintain exams from discs or packages.

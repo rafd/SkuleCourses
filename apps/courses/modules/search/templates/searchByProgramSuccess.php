@@ -2,6 +2,9 @@
 <?php echo $submenu ?>
 <div id="main"><div id="critique_content">
 	<h2>Detailed Search</h2>
+	
+	<table><tr><td><a class="back" href='<?php echo url_for("search/index")?>' style="float:left; padding-left: 20px;width:auto;">Back to Simple Search...</a></td></tr></table><br/>
+	
 	<table>
 		<tr>
 			<td width="150">Search By: </td>
