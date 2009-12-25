@@ -85,6 +85,7 @@ class admincourseActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
+    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $id = $request->getParameter('id');
     $this->forward404Unless($course = CoursePeer::retrieveByPk($id), sprintf('Object course does not exist (%s).', $id));
@@ -220,17 +221,17 @@ class admincourseActions extends sfActions
   
   protected function submitForm(sfWebRequest $request, sfForm $courseform, sfForm $courseDetailform)
   {
-  	$noerror = true;
+  	  $noerror = true;
       $courseform->bind($request->getParameter($courseform->getName()), $request->getFiles($courseform->getName()));
       
       //grab the course id
-        if($courseform->getObject()->getId()===null || $courseform->getObject()->getId()=='')
-        {
-          $courseid= $courseform->getValue('dept_id').$courseform->getValue('code').$courseform->getValue('credit');
-          $courseform->getObject()->setId($courseid);
-        }else{
-          $courseid=$courseform->getObject()->getId();
-        }
+      if($courseform->getObject()->getId()===null || $courseform->getObject()->getId()=='')
+      {
+        $courseid= $courseform->getValue('dept_id').$courseform->getValue('code').$courseform->getValue('credit');
+        $courseform->getObject()->setId($courseid);
+      }else{
+        $courseid=$courseform->getObject()->getId();
+      }
       
       $courseDetailform->bind($request->getParameter($courseDetailform->getName()), $request->getFiles($courseDetailform->getName()));
       //$courseDisAssocform->bind($request->getParameter($courseDisAssocform->getName()), $request->getFiles($courseDisAssocform->getName()));

@@ -24,6 +24,10 @@ function skuleShutdown()
 // set to the user defined error handler
 // note: routing cache has been shut down to ensure that no random warnings are thrown
 // on production
+//FIXME we have trapped PHP errors with below, but we still need to trap symfony exceptions.
+// Note that symfony has customizable exception handling, but it only accepts a static exception
+// page. So we'll need to conform it to our PHP error handling. The only way that it seems feasible
+// is to modify the symfony base files
 $old_error_handler = set_error_handler("skuleErrorHandler");
 register_shutdown_function('skuleShutdown');
 

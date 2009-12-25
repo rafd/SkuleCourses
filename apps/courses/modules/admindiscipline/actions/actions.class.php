@@ -59,6 +59,7 @@ class admindisciplineActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
+    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $this->forward404Unless($enum_item = EnumItemPeer::retrieveByPk($request->getParameter('id')), sprintf('Object enum_item does not exist (%s).', $request->getParameter('id')));
     $values=array('discipline'=>1);

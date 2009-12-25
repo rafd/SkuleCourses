@@ -71,7 +71,7 @@ function nl2br(text) {
  * @return string
  */
 function br2nl(text) {
-  return text.replace(/<br\/>/g, "\n"); 
+  return text.replace(/<br\/>|<br \/>|<br>/g, "\n");
 }
 
 /**

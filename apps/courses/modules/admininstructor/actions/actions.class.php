@@ -61,6 +61,7 @@ class admininstructorActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
+    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $this->forward404Unless($instructor = InstructorPeer::retrieveByPk($request->getParameter('id')), sprintf('Object instructor does not exist (%s).', $request->getParameter('id')));
     $this->form = new InstructorForm($instructor);

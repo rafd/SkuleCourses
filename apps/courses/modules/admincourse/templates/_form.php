@@ -185,39 +185,5 @@
 	</tbody>
 </table>
 
-<?php //FIXME 
-/*<h3>Course Discipline Association:</h3>     
- 	<div>
-		<div id="_expand2" style="display: none"><?php echo link_to_function(image_tag('expand.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'more(2)') ?></div>
-    	<div id="_collapse2" style="display: none"><?php echo link_to_function(image_tag('collapse.gif',array('alt' => 'Alternative text', 'size' => '16x16')), 'less(2)') ?></div>
-    </div>
-    
-    <div id="_expand2_" style="display: block">
-       <?php echo $form3['discipline_id']->renderLabel() ?><br />
-       <?php echo $form3['discipline_id'] ?>
-       
-       <?php if(isset($omitdisassoc)): ?>
-       <div style="display: none">
-       <?php else: ?>
-       <div style="">
-       <?php endif; ?>
-       <?php echo $form3['discipline_id']->renderError() ?>
-       </div>
-       
-       <br />
-       <?php echo $form3['year_of_study']->renderLabel() ?><br />
-       <?php echo $form3['year_of_study'] ?>
-       
-       <?php if(isset($omitdisassoc)): ?>
-       <div style="display: none">
-       <?php else: ?>
-       <div style="">
-       <?php endif; ?>
-       <?php echo $form3['year_of_study']->renderError() ?>
-       </div>
-     </div>
-*/
-?>
-
 </fieldset>
 </form>

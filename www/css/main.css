@@ -94,9 +94,6 @@ a.btn {cursor: pointer;}
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../skule_images/reload.gif);}
 a.reload:hover {background: url(../skule_images/reload.on.gif);}
 
-a.find {position:relative; cursor: pointer; display:block; width: 19px; height: 21px; background: url(../skule_images/find.gif);}
-a.find:hover {background: url(../skule_images/find.on.gif);}
-
 a.back {position:relative; cursor: pointer; display:block; width: 16px; height: 16px; background: url(../skule_images/back.gif) no-repeat;}
 a.back:hover {background: url(../skule_images/back.on.gif) no-repeat;}
 
@@ -117,6 +114,18 @@ a.help:hover span{
 	padding: 5px;
 	z-index: 100;
 }
+
+a.previous {position:relative; cursor: pointer; display:block; width:16px; height:16px; background: url(../skule_images/previous.png) no-repeat;}
+a.previous:hover {background: url(../skule_images/previous.on.png) no-repeat;}
+
+a.next {position:relative; cursor: pointer; display:block; width:16px; height:16px; background: url(../skule_images/next.png) no-repeat;}
+a.next:hover {background: url(../skule_images/next.on.png) no-repeat;}
+
+a.first {position:relative; cursor: pointer; display:block; width:16px; height:16px; background: url(../skule_images/first.png) no-repeat;}
+a.first:hover {background: url(../skule_images/first.on.png) no-repeat;}
+
+a.last {position:relative; cursor: pointer; display:block; width:16px; height:16px; background: url(../skule_images/last.png) no-repeat;}
+a.last:hover {background: url(../skule_images/last.on.png) no-repeat;}
 
 /* popupmenu */
 

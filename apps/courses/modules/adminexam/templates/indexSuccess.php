@@ -13,7 +13,7 @@ The Custom Exam Manager allows admin to import and maintain exams individually.
 </td>
 <td width="50%">
 <h3>
-<?php echo link_to('Bulk Exams Manager', 'adminexam/bulk')?>
+<?php echo link_to('Bulk Exams Upload', 'adminexam/bulk')?>
 </h3>
 <p>
 The Bulk Exam Manager allows admin to import and maintain exams from discs or packages.

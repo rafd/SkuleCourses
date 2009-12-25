@@ -1,5 +1,10 @@
 <?PHP
 
+/**
+ * Global class containing static helper functions
+ * @author Jimmy
+ *
+ */
 class helperFunctions
 {
   /**
@@ -125,6 +130,7 @@ class helperFunctions
    * This function is called from event handler in the front controller to realize
    * custom php error handling (not sf app exception)
    */
+  //TODO: move this method to an app specific class
   public static function errorHandler($errno, $errstr, $errfile, $errline)
   {
     $dt = date("Y-m-d, H:i:s");

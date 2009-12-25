@@ -59,6 +59,8 @@ a.addbtn {cursor: pointer; float: right; display:block; width: 13px; height:13px
 a.savebtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/save.gif);}
 a.refreshbtn {cursor: pointer; margin-left: 5px; float: right; display:block; width: 15px; height: 16px; background: url(../skule_images/refresh.gif);}
 
+a.findbtn {cursor: pointer; float: right; display:block; width: 16px; height:16px; background: url(../skule_images/find.png);}
+
 input.fbuttons{
 	font-size: 10pt;
 }

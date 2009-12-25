@@ -163,16 +163,16 @@ class courseActions extends sfActions
   
   public function executeCommenting(sfWebRequest $request)
   {
-    //TODO paging for comments
     $this->buildSubmenu($request, subMenuOptions::COURSE_COMMENTING);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
     
-    if (!is_object($this->courseObj)) $this->forward404();
+    if (!is_object($this->courseObj)) $this->forward404("course object not found");
     
-    $this->commentList = $this->courseObj->getCourseComments(null, $conn);
+    $this->commentList = $this->getCommentList($this->courseObj->getId());
+    //$this->commentList = $this->courseObj->getCourseComments(null, $conn);
   }
   
   /**
@@ -373,11 +373,31 @@ class courseActions extends sfActions
     } elseif ($item->getParentId() == EnumItemPeer::RATING_SCALE){
       for ($i=0; $i<$item->getDescr(); $i++) $FC->addChartData($arr[$i], "name=$i");
     } else {
-      // FIXME
+      // FIXME type not supported
       throw new Exception ("type not supported");
     }
 
 	return $FC;
+  }
+  
+  private function getCommentList($courseId)
+  {
+    $pagenumber = 1;
+    if($this->hasRequestParameter('page')){
+      $pagenumber = $this->getRequestParameter('page');
+    }
+  	$pager = new sfPropelPager('CourseComment', 15);
+  	$c = new Criteria();
+  	$crit1 = $c->getNewCriterion(CourseCommentPeer::COURSE_ID, $courseId);
+  	$crit2 = $c->getNewCriterion(CourseCommentPeer::APPROVED, 1);
+  	$c->addAnd($crit1);
+  	$c->addAnd($crit2);
+  	$c->addAscendingOrderByColumn(CourseCommentPeer::INPUT_DT);
+  	
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
   
   private function buildSubmenu(sfWebRequest $request, $option=subMenuOptions::COURSE)

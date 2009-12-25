@@ -6,6 +6,14 @@
 			grayout("submitComment");
 			document.commentSubmissionForm.security.value="";
 			document.getElementById("commentSubmissionStatus").innerHTML="";
+			document.getElementById("commentInputBtns").style.display="block";
+			document.getElementById("commentSuccessBtns").style.display="none";
+		}
+
+		function preCommentSubmit(){
+			var newText = nl2br(document.commentSubmissionForm.pseudo_comment.value);
+			document.commentSubmissionForm.my_comment.value=newText;
+			document.getElementById("commentSubmitBtn").click();
 		}
 	</script>
 	<div class="title_bar">Leave My Comment</div>
@@ -32,7 +40,8 @@
 			</tr>
 		</table>
 		<p style="text-align:left; margin:5px 0 3px 5px">My comment:</p>
-		<textarea cols="39" rows="6" name="my_comment"></textarea>
+		<textarea style="display:none" name="my_comment"></textarea>
+		<textarea cols="39" rows="6" name="pseudo_comment"></textarea>
 		<table style="margin-top:5px">
 			<tr>
 				<td></td>
@@ -48,7 +57,10 @@
 			    'loading' => 'document.getElementById("commentSubmissionStatus").innerHTML="Please wait..."',
       			'update'  => 'commentSubmissionStatus',
 			    'script'  => true,
-      			'url'     => 'course/ajaxCommentSubmission?id='.$courseObj->getId()))?>
+      			'url'     => 'course/ajaxCommentSubmission?id='.$courseObj->getId()), array(
+			    'style'   => 'display:none',
+			    'id'      => 'commentSubmitBtn'))?>
+			<input type="button" value="Submit" onclick="preCommentSubmit()" />
 			<input type="button" value="Cancel" onclick="cancelCommentSubmission()" />
 		</div>
 		<div id="commentSuccessBtns" style="display:none"><input type='button' onclick='cancelCommentSubmission()' value='Close'/></div>
