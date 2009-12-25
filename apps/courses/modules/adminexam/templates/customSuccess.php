@@ -36,8 +36,15 @@
 	</td></tr></table>
 	
 </form>
-<form method="post" action="<?php echo url_for('adminexam/'.($form->getObject()->isNew() ? 'create?' : 'update?id='.$form->getObject()->getId().'&')
-    ."course=".$form->getObject()->getCourseId()."&year=".substr($form->getObject()->getYear(),0,4)."&term=".substr($form->getObject()->getYear(),4,1)) ?>" enctype="multipart/form-data">
+
+<form method="post" 
+<?php if (isset($courseId) && isset($year)):?>
+action="<?php echo url_for('adminexam/'.($form->getObject()->isNew() ? 'create?' : 'update?id='.$form->getObject()->getId().'&')
+    ."course=".$courseId."&year=".substr($year,0,4)."&term=".substr($year,4,1)) ?>" 
+<?php else:?>
+action="<?php echo url_for('adminexam/custom')?>"
+<?php endif;?>
+enctype="multipart/form-data">
 
 	<table>
 		<tr>
@@ -63,7 +70,8 @@
 							<?php foreach ($examList as $exam):?>
 							<tr>
 								<td><a class="select" href="<?php echo url_for("adminexam/edit?id=".$exam->getId()."&course=".$courseId."&year=".substr($exam->getYear(),0,4)."&term=".substr($exam->getYear(),4,1))?>"></a></td>
-								<td><a class="deletebtn" title="Delete this exam" style="margin:0 0 0 0;"></a></td>
+								<td><a class="deletebtn" title="Delete this exam" style="margin:0 0 0 0;" onclick="return confirm('Are you sure?');"
+									href="<?php echo url_for("adminexam/delete?id=".$exam->getId()."&course=".$courseId."&year=".substr($exam->getYear(),0,4)."&term=".substr($exam->getYear(),4,1))?>"></a></td>
 								<td><a class="findbtn" title="Preview this exam" href="/<?php echo $exam->getFilePath()?>" target="_blank"></a></td>
 								<td<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$exam->getId()):?> style="background:#FFE87C"<?php endif;?>>
 								  <?php echo $exam->getDescr()?>
@@ -80,13 +88,14 @@
 			</td>
 			<td style="vertical-align:top">
 				<fieldset style="width:342px">
-					<legend>Edit</legend>
+					<legend><?php if ($form->getObject()->isNew()):?>New Exam<?php else:?>Edit<?php endif;?></legend>
 					<?php echo $form->renderHiddenFields()?>
 					<table class="inputlayout">
 						<thead>
 							<?php if (isset($globalerrors)):?>
 							<tr>
-								<td colspan="1"><?php echo $globalerrors?></td>
+								<td colspan="3" class="error"><?php echo $globalerrors?></td>
+								<td></td>
 							</tr>
 							<?php endif;?>
 						</thead>
@@ -101,12 +110,12 @@
 							</tr>
 							<tr>
 								<th>Replace existing file</th>
-								<td><?php echo $form['file_path']?></td>
+								<td><input type="file" name="file_path" /></td>
 							</tr>
 						</tbody>
 					</table>
 					<br />
-					<input type="submit" value="Save" />
+					<input type="submit" <?php if (!isset($courseId) || !isset($year)):?>disabled <?php endif;?>value="Save" />
 					<?php if (!$form->getObject()->isNew()):?>
 					<input type="button" value="Cancel" />
 					<?php endif;?>

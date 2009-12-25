@@ -11,6 +11,8 @@
 class adminratingCriteriaActions extends sfActions
 { 
   public function preExecute(){
+    //FIXME make the admin work
+    $this->forward404();
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
     
     $submenu = new subMenu(subMenuOptions::MAINTENANCE_RATING);

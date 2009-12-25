@@ -33,4 +33,7 @@ function skuleShutdown()
 $old_error_handler = set_error_handler("skuleErrorHandler");
 register_shutdown_function('skuleShutdown');
 
+// set default timezone
+date_default_timezone_set('America/Toronto');
+
 sfContext::createInstance($configuration)->dispatch();

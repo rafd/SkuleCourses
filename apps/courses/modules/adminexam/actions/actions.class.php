@@ -25,7 +25,7 @@ class adminexamActions extends sfActions
   
   public function executeCustom(sfWebRequest $request)
   {
-    $this->form = new ExamForm();
+    $this->form = new ExamForm(new Exam() );
     
     if ($request->hasParameter("course") && $request->hasParameter("year") && $request->hasParameter("term")){
       // find the course and the semester in question
@@ -60,11 +60,16 @@ class adminexamActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod('post'));
+    $this->forward404Unless($request->hasParameter("course") && $request->hasParameter("year") && $request->hasParameter("term"));
+    $this->courseId = $request->getParameter("course");
+    $this->year = $request->getParameter("year").$request->getParameter("term"); 
+    $this->forward404Unless($course = CoursePeer::retrieveByPk($this->courseId), sprintf("Object course does not exist"));
 
     $this->form = new ExamForm(new Exam());
     $this->processForm($request, $this->form);
     
-    $this->examList = $this->getExamList();
+    // at this point, save has failed
+    $this->examList = $this->getExamList($this->courseId, $this->year);
     $this->setTemplate('custom');
   }
 
@@ -72,77 +77,83 @@ class adminexamActions extends sfActions
   {
     if (!$request->hasParameter("course") || !$request->hasParameter("year") || !$request->hasParameter("term")) $this->forward404("parameters incomplete");
     $this->forward404Unless($exam = ExamPeer::retrieveByPk($request->getParameter('id')), sprintf('Object exam does not exist (%s).', $request->getParameter('id')));
-    
     $this->courseId = $request->getParameter("course");
     $this->year = $request->getParameter("year").$request->getParameter("term");
-    
-    if ($exam->getCourseId() != $this->courseId) $this->forward404("course does not match");
+    $this->forward404Unless($exam->getCourseId() == $this->courseId, "course does not match");
     
     $this->examList = $this->getExamList($this->courseId, $this->year);
-    
-    $values=array('edit'=>'true','courseid'=>$exam->getCourseId());
-    $this->form = new ExamForm($exam,$values);
-    
-    $this->uploadpath = skuleadminConst::INDIVIDUALEXAMFOLDER.$exam->getYear().'/'; 
+    $this->form = new ExamForm($exam);
     $this->setTemplate('custom');
   }
 
   public function executeUpdate(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
-    $this->forward404Unless($request->hasParameter("course") && $request->hasParameter("year") && $request->hasParameter("term"));
+    $this->forward404Unless($request->hasParameter("course") && $request->hasParameter("year") && $request->hasParameter("term"), "missing parameters");
     $this->forward404Unless($exam = ExamPeer::retrieveByPk($request->getParameter('id')), sprintf('Object exam does not exist (%s).', $request->getParameter('id')));
-    
     $this->courseId = $request->getParameter("course");
     $this->year = $request->getParameter("year").$request->getParameter("term"); 
     $this->forward404Unless($exam->getCourseId() == $this->courseId);
     
-    $values=array('edit'=>'true','courseid'=>$exam->getCourseId());
-    $this->form = new ExamForm($exam,$values);
+    $this->form = new ExamForm($exam);
     
     $this->processForm($request, $this->form);
     
     // if we have reached this point, save has failed
     $this->examList = $this->getExamList($this->courseId, $this->year);
-    
-    $this->uploadpath = skuleadminConst::INDIVIDUALEXAMFOLDER.$year.'/'; 
     $this->setTemplate('custom');
   }
   
   public function executeDelete(sfWebRequest $request)
   {
     $request->checkCSRFProtection();
-
+    
+    $this->forward404Unless($request->hasParameter("course") && $request->hasParameter("year") && $request->hasParameter("term"), "missing parameters");
     $this->forward404Unless($exam = ExamPeer::retrieveByPk($request->getParameter('id')), sprintf('Object exam does not exist (%s).', $request->getParameter('id')));
-    $myfile = $exam->getFilePath();
-    $this->delExam($myfile);
-    $exam->delete();
+    $this->courseId = $request->getParameter("course");
+    $this->year = $request->getParameter("year").$request->getParameter("term"); 
+    $this->forward404Unless($exam->getCourseId() == $this->courseId);
+    
+    try {
+      $myfile = $exam->getFilePath();
+      if (!$this->delExam($myfile)) throw new Exception ("Unable to physically remove file");
+      $exam->delete();
+    } catch (Exception $e){
+      $this->globalerrors = $e->getMessage();
+      
+      $this->examList = $this->getExamList($this->courseId, $this->year);
+      $this->form = new ExamForm($exam);
+      $this->setTemplate('custom');
+    }
 
-    $this->redirect('adminexam/custom');
+    $this->redirect("adminexam/custom?course=$this->courseId&year=".substr($this->year,0,4)."&term=".substr($this->year,4,1));
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
-
-      $file=$request->getFiles($form->getName()."[file_path]");
+    $prefix = $form->getName();
+    
+    $file = $_FILES["file_path"];
       if(isset($file) && $file["name"] != '' ){
-        die("HERE");
         // check the file is pdf
-        $file=$form->getValue('file_path');
-        if (strtoupper(substr($file, -3, 3)) != "PDF") {
+        $_fpath = $file["name"];
+        if (strtoupper(substr($_fpath, -3, 3)) != "PDF") {
           $this->globalerrors = "File must be PDF";
           return;
         }
         
-        $myfile = $this->form->getObject()->getFilePath();
-        
-        if($myfile !== null || $myfile != ''){
+        $oldfile = $this->form->getObject()->getFilePath();
+        if($oldfile !== null || $oldfile != ''){
           //previously there was something there, delete it!
-    	  $this->delExam($myfile);
+    	  if (!$this->delExam($oldfile)){
+    	    $this->globalerrors = "Unable to physically remove file";
+    	    return;
+    	  }
         }
         
-        switch ($form->getObject()->getType()){
+        // determine what type of exam it is
+        switch ($request->getParameter($prefix."[type]")){
           case EnumItemPeer::EXAM:
             $examTypeAbbr = "exam";
             break;
@@ -158,27 +169,51 @@ class adminexamActions extends sfActions
         }
 
         $fileName = substr($this->courseId,0,6).'_'.substr($this->year,0,4).'_'.$examTypeAbbr.'_'.time().".pdf";
-        
-        $extension = $file->getOriginalExtension();
-        $path = sfConfig::get('sf_web_dir').skuleadminConst::INDIVIDUALEXAMFOLDER.$year.'/';
+        $path = skuleadminConst::INDIVIDUALEXAMFOLDER.$this->year.'/';
+        $filePath = $path.$fileName;
         
         try {
-	      if($file->save($path.$filename.$extension)){
-	   	    $exam = $form->save();
-	      	$this->redirect('adminexam/edit?id='.$exam->getId()."&course=".$this->courseId."&year=".substr($this->year,0,4)."&term=".substr($this->year,4,1));
-	      }else{
-	      	$this->globalerrors = "Unable to save file";
-	      }
+          // make sure the directories are set up properly
+          if (!is_dir($path)) {
+            if (!mkdir($path)) {
+              $globalerrors = "Unable to create directory";
+              return;
+            }
+          }
+          
+          if (move_uploaded_file($file['tmp_name'], $filePath)){
+            // now save the exam object
+            // TODO we have to do a manual save until we can figure out how to work the form with file upload
+            $exam = $form->getObject();
+            $exam->setCourseId($this->courseId);
+            $exam->setType($request->getParameter($prefix."[type]"));
+            $exam->setYear($this->year);
+            $exam->setDescr($request->getParameter($prefix."[descr]"));
+            $exam->setFilePath($filePath);
+            $exam->save();
+            
+            $this->redirect('adminexam/edit?id='.$exam->getId()."&course=".$this->courseId."&year=".substr($this->year,0,4)."&term=".substr($this->year,4,1));
+          } else {
+            $this->globalerrors = "Unable to save file";
+            return;
+          }
         } catch (Exception $e){
           $this->globalerrors = $e->getMessage();
+          return;
         }
       }else{
-        die("SDFSDFSD");
+        
+        if ($form->getObject()->isNew()){
+          $this->globalerrors = "A file must be uploaded";
+          return;
+        }
+        
         try {
       	  $exam = $form->save();
       	  $this->redirect('adminexam/edit?id='.$exam->getId()."&course=".$this->courseId."&year=".substr($this->year,0,4)."&term=".substr($this->year,4,1));
         } catch (Exception $e){
           $this->globalerrors = $e->getMessage();
+          return;
         }
       }
       
@@ -197,8 +232,7 @@ class adminexamActions extends sfActions
   }
   
   protected function delExam($myfile){
-  	if(!unlink($myfile)){
-      $this->redirect('adminexam/failederr?msg=unlink');
-  	}
+    if (!file_exists($myfile)) return true;
+  	return unlink($myfile);
   }
 }

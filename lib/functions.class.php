@@ -133,7 +133,7 @@ class helperFunctions
   //TODO: move this method to an app specific class
   public static function errorHandler($errno, $errstr, $errfile, $errline)
   {
-    $dt = date("Y-m-d, H:i:s");
+    $dt = date(skuleadminConst::TIMESTAMP_FORMAT);
     $msg = $dt." - [error ".$errno." at line ".$errline." in ".$errfile."] ".$errstr;
 
     switch ($errno) {

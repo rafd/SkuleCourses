@@ -9,7 +9,7 @@ class skuleadminConst
   const USERTYPE_PARENT_ID = 10;
   const RATING_META_TYPES_PID = 20;
   const RATING_SCALE_TYPES_PID = 22;
-  const INDIVIDUALEXAMFOLDER = '/exams/custom/';
+  const INDIVIDUALEXAMFOLDER = 'exams/custom/';
   const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
   
   const DEPARTMENT_RECORDNUMBER = 10;

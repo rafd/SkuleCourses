@@ -13,12 +13,8 @@ class ExamForm extends BaseExamForm
   public function configure()
   {
   	$c= new Criteria();
-    $c->add(EnumItemPeer::PARENT_ID, skuleadminConst::EXAMTYPE_PARENT_ID);
-    
-    $c2= new Criteria();
-    if($this->getOption('courseid')!==null){
-    	$c2->add(CoursePeer::ID, $this->getOption('courseid'));
-    }
+    $c->add(EnumItemPeer::PARENT_ID, EnumItemPeer::EXAM_TYPES_NODE_ID);
+
     //unset($this->year);
     //$this->unset['year'];
     

@@ -181,6 +181,8 @@ class subMenu
     			dispStatus('Only a PDF file can be submitted.');
     			return false;
     		}
+    		
+    		dispStatus('Please wait...');
 
     		return true;
     	}
@@ -233,7 +235,7 @@ class subMenu
     	<div id='successButtons' style='display:none'><input type='button' onclick='cancelAction()' value='Close'/></div>
     </form>
     <iframe name='hidSecurityFrame' style='display:none' onload='securityFrameOnLoad()';></iframe>
-    <br/><span style='display:none' id='statusSpan'>Please wait...</span>
+    <br/><span style='display:none' id='statusSpan'></span>
     </div>";
     
     if ($this->_menuOption == subMenuOptions::SEARCH)
