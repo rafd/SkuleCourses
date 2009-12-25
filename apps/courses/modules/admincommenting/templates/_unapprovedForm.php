@@ -1,6 +1,3 @@
-<?php use_helper('Javascript') ?>
-<?php use_helper("DateForm")?>
-
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>
 

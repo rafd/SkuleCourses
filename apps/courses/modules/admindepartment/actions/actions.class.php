@@ -46,7 +46,6 @@ class admindepartmentActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
-    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $this->forward404Unless($department = DepartmentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object department does not exist (%s).', $request->getParameter('id')));
     $this->form = new DepartmentForm($department);
@@ -86,7 +85,12 @@ class admindepartmentActions extends sfActions
     {
       try {
         $department = $form->save();
-        $this->redirect('admindepartment/edit?id='.$department->getId());
+        
+        $par="";
+        if ($request->hasParameter("page")){
+          $par = "&page=".$request->getParameter("page");
+        }
+        $this->redirect('admindepartment/edit?id='.$department->getId().$par);
       } catch (Exception $e) {
         $this->globalErrors = $e->getMessage();
       }      

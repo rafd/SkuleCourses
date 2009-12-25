@@ -35,12 +35,12 @@ class CourseCommentForm extends BaseCourseCommentForm
       'ip'         => new sfValidatorString(),
       'course_id'  => new sfValidatorPropelChoice(array('model' => 'Course', 'column' => 'id')),
       'comment'    => new sfValidatorString(),
-      'input_dt'   => new sfValidatorDate(),
+      'input_dt'   => new sfValidatorString(),
       'applies_to' => new sfValidatorInteger(),
       'approved'   => new sfValidatorBoolean(),
     ));
     
-    unset($this['input_dt']);
+    //unset($this['input_dt']);
     /*if($this->getOption('edit')==null){
       unset($this['course_id']);
     }*/

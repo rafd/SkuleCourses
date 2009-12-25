@@ -10,7 +10,7 @@ class skuleadminConst
   const RATING_META_TYPES_PID = 20;
   const RATING_SCALE_TYPES_PID = 22;
   const INDIVIDUALEXAMFOLDER = '/exams/custom/';
-  const EXAM_FILE_DATEFORMAT = 'Y-m-d-H-i-s';
+  const TIMESTAMP_FORMAT = 'Y-m-d H:i:s';
   
   const DEPARTMENT_RECORDNUMBER = 10;
   const DISCIPLINE_RECORDNUMBER = 10;

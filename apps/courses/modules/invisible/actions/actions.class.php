@@ -38,7 +38,7 @@ class invisibleActions extends sfActions
    
     //Free up resources
     ImageDestroy($image); 
-	exit();
+	return sfView::NONE;
   }
   
   /**
@@ -58,7 +58,7 @@ class invisibleActions extends sfActions
    
     //Free up resources
     ImageDestroy($image); 
-	exit();
+	return sfView::NONE;
   }
   
   /**
@@ -83,7 +83,7 @@ class invisibleActions extends sfActions
         
         if ($request->getParameter("security") != $_SESSION['securityImage']){
           echo "<input type='text' id='status' value='Security'/>";
-          exit();
+          return sfView::NONE;
         }
         
         $year = $request->getParameter("year").$request->getParameter("term");
@@ -92,14 +92,14 @@ class invisibleActions extends sfActions
         if (!is_dir("exams/custom")) {
           if (!mkdir("exams/custom")) {
             echo "<input type='text' id='status' value='Moving'/>";
-            exit();
+            return sfView::NONE;
           }
         }
         $tgt_path = "exams/custom/".$year;
         if (!is_dir($tgt_path)) {
           if (!mkdir($tgt_path)) {
             echo "<input type='text' id='status' value='Moving'/>";
-            exit();
+            return sfView::NONE;
           }
         }
 
@@ -140,7 +140,7 @@ class invisibleActions extends sfActions
 	    else echo "<input type='text' id='status' value='Moving'/>";
       } else echo "<input type='text' id='status' value='PDF'/>";
       
-      exit();
+      return sfView::NONE;
     } else {
       $this->forward404();
     }

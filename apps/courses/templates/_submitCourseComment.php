@@ -64,6 +64,6 @@
 			<input type="button" value="Cancel" onclick="cancelCommentSubmission()" />
 		</div>
 		<div id="commentSuccessBtns" style="display:none"><input type='button' onclick='cancelCommentSubmission()' value='Close'/></div>
-		<div id="commentSubmissionStatus" style="margin-top:7px"></div>
+		<div id="commentSubmissionStatus" style="padding-top:7px"></div>
 	</form>
 </div>

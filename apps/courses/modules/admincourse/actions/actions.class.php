@@ -3,15 +3,13 @@
 /**
  * admincourse actions.
  *
- * @package    sf_sandbox
+ * @package    SkuleCourses
  * @subpackage admincourse
- * @author     Your name here
- * @version    SVN: $Id: actions.class.php 12474 2008-10-31 10:41:27Z fabien $
+ * @author     Jimmy Lu, Jason Ko
  */
 class admincourseActions extends sfActions
 {
   protected $noerrDetails = false;
-  //protected $noerrDisAssoc = false;
   
   public function executeIndex(sfWebRequest $request)
   {
@@ -25,7 +23,6 @@ class admincourseActions extends sfActions
     
     $this->form = new CourseForm();
     $this->form2 = new CourseDetailForm();
-    //$this->form3 = new CourseDisciplineAssociationForm();
     
   }
   
@@ -39,14 +36,10 @@ class admincourseActions extends sfActions
   public function executeCreate(sfWebRequest $request)
   {
     $this->form = new CourseForm();
-    //beyond default
     $this->form2 = new CourseDetailForm(new CourseDetail());
-    //$this->form3 = new CourseDisciplineAssociationForm(new CourseDisciplineAssociation());
-    //$this->submitForm($request, $this->form, $this->form2, $this->form3);
     $this->submitForm($request, $this->form, $this->form2);
     
     //$this->omitdetailerror = $this->noerrDetails;
-    //$this->omitAssocerror = $this->noerrDisAssoc;
     
     $c = new Criteria();
   	//$c->addSelectColumn(CoursePeer::ID);
@@ -63,9 +56,6 @@ class admincourseActions extends sfActions
     $this->course_list = $this->getCourselist($cr);
     $this->courseDetail = CourseDetailPeer::getObjectForCourseId($request->getParameter('id'));
 
-    /*$c2 = new Criteria();
-  	$c2->add(CourseDisciplineAssociationPeer::COURSE_ID,$request->getParameter('id'));
-    $courseDisAssoc = CourseDisciplineAssociationPeer::doSelectOne($c2);*/
     $values=array('edit'=>'true');
     $this->form = new CourseForm($course,$values);
     
@@ -74,18 +64,12 @@ class admincourseActions extends sfActions
     }else{
       $this->form2 = new CourseDetailForm(new CourseDetail());
     }
-    /*if($courseDisAssoc!==null){
-      $this->form3 = new CourseDisciplineAssociationForm($courseDisAssoc);
-    }else{
-      $this->form3 = new CourseDisciplineAssociationForm(new CourseDisciplineAssociation());
-    }*/
     
     $this->setTemplate('index');
   }
 
   public function executeUpdate(sfWebRequest $request)
   {
-    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $id = $request->getParameter('id');
     $this->forward404Unless($course = CoursePeer::retrieveByPk($id), sprintf('Object course does not exist (%s).', $id));
@@ -105,15 +89,6 @@ class admincourseActions extends sfActions
       $this->form2 = new CourseDetailForm(new CourseDetail());
     }
     
-    /*$c2 = new Criteria();
-  	$c2->add(CourseDisciplineAssociationPeer::COURSE_ID,$request->getParameter('id'));
-    $courseDisAssoc = CourseDisciplineAssociationPeer::doSelectOne($c2);
-    
-    if($courseDisAssoc!==null){
-      $this->form3 = new CourseDisciplineAssociationForm($courseDisAssoc);
-    }else{
-      $this->form3 = new CourseDisciplineAssociationForm(new CourseDisciplineAssociation());
-    }*/
     $this->submitForm($request, $this->form, $this->form2);
     
     //at this point the save has failed
@@ -199,7 +174,7 @@ class admincourseActions extends sfActions
       }
     }
     
-    exit();
+    return sfView::NONE;
   }
 
   protected function getCourselist(Criteria $c = null){
@@ -234,10 +209,8 @@ class admincourseActions extends sfActions
       }
       
       $courseDetailform->bind($request->getParameter($courseDetailform->getName()), $request->getFiles($courseDetailform->getName()));
-      //$courseDisAssocform->bind($request->getParameter($courseDisAssocform->getName()), $request->getFiles($courseDisAssocform->getName()));
       
       $courseDetailObj = $courseDetailform->getObject()->setCourseId($courseid);
-      //$courseDisAssocObj = $courseDisAssocform->getObject()->setCourseId($courseid);
       
       if ($courseform->isValid()){
       	try {
@@ -257,7 +230,7 @@ class admincourseActions extends sfActions
        if ($request->hasParameter("page")){
          $par = "page=".$request->getParameter("page");
        }
-       $this->redirect('admincourse/index?'.$par);
+       $this->redirect('admincourse/edit?'.$par."&id=".$courseform->getObject()->getId());
      }
   }
   
@@ -274,7 +247,7 @@ class admincourseActions extends sfActions
           // replace the existing object with the new one
           $detailObj = $arr[0];
         } elseif ($arr !== null && count($arr)>1){
-          //TODO: multiple courseDetail objects.
+          //FIXME: multiple courseDetail objects.
           throw new Exception("Multiple course detail objects found.");
         } else {
           // insert a new object

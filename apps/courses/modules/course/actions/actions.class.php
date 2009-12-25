@@ -196,7 +196,7 @@ class courseActions extends sfActions
         $code = $_SESSION['securityImage'];
         if (trim($request->getParameter("security")) != $code){
           echo "Security string does not match.";
-          return sfView::SUCCESS;
+          return sfView::NONE;
         }
         
         // second, get the course object
@@ -205,7 +205,7 @@ class courseActions extends sfActions
         $courseObj = CoursePeer::retrieveByPK($id, $conn);
         if (!is_object($courseObj)) {
           echo "Error with comment submission. Please try again later.";
-          return sfView::SUCCESS;
+          return sfView::NONE;
         }
         
         // third, check for spam
@@ -227,13 +227,13 @@ class courseActions extends sfActions
         }
         if ($isSpam){
           echo "You cannot comment on the same semester twice!";
-          return sfView::SUCCESS;
+          return sfView::NONE;
         }
         
         // now we can save
         try {
           $_comment = trim($request->getParameter("my_comment"));
-          $date = date('Y-m-d H:i:s');
+          $date = date(skuleadminConst::TIMESTAMP_FORMAT);
           
           $newComment = new CourseComment();
           $newComment->setComment($_comment);
@@ -252,15 +252,17 @@ class courseActions extends sfActions
           helperFunctions::sendEmailNotice("Comment Submission", $msg);
           echo "Submission successful. Pending moderator review.
           <script type='text/javascript'>eval(\"document.getElementById('commentInputBtns').style.display='none'; document.getElementById('commentSuccessBtns').style.display='block';\")</script>";
-          return sfView::SUCCESS;
+          return sfView::NONE;
           
         } catch (Exception $e){
           echo "Error with comment submission. Please try again later.";
           helperFunctions::sendEmailNotice("Comment Submission Error", $e->getMessage());
-          return sfView::SUCCESS;
+          return sfView::NONE;
         }
       }
     }
+    
+    return sfView::NONE;
   }
   
   public function executeExam(sfWebRequest $request)

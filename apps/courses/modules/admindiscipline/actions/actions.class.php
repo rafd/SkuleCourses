@@ -59,7 +59,6 @@ class admindisciplineActions extends sfActions
 
   public function executeUpdate(sfWebRequest $request)
   {
-    //FIXME after saving, the paging is messed up
     $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
     $this->forward404Unless($enum_item = EnumItemPeer::retrieveByPk($request->getParameter('id')), sprintf('Object enum_item does not exist (%s).', $request->getParameter('id')));
     $values=array('discipline'=>1);
@@ -87,6 +86,7 @@ class admindisciplineActions extends sfActions
     try {
       $enum_item->delete();
 
+      $par="";
       if ($request->hasParameter("page")){
         $par = "?page=".$request->getParameter("page");
       }
@@ -114,7 +114,12 @@ class admindisciplineActions extends sfActions
       try{
         $enum_item = $form->save();
         $this->parseDisAssoc($enum_item, $request);
-        $this->redirect('admindiscipline/edit?id='.$enum_item->getId());
+        
+        $par="";
+        if ($request->hasParameter("page")){
+          $par = "&page=".$request->getParameter("page");
+        }
+        $this->redirect('admindiscipline/edit?id='.$enum_item->getId().$par);
       } catch (Exception $e){
         $this->globalErrors = $e->getMessage();
       }

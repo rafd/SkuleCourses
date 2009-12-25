@@ -82,7 +82,6 @@ class admincommentingActions extends sfActions
       if ($request->hasParameter("page")){
         $par = "?page=".$request->getParameter("page");
       }
-
       $this->redirect('admincommenting/unapproved'.$par);
     } catch (Exception $e) {
       $this->globalErrors = $e->getMessage();
@@ -170,22 +169,87 @@ class admincommentingActions extends sfActions
   
   public function executeCreateCourse(sfWebRequest $request)
   {
+    $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
+    $this->forward404Unless($request->hasParameter("course"));
+    $this->courseId = $request->getParameter("course");
+    $this->forward404Unless($_course = CoursePeer::retrieveByPk($this->courseId), sprintf('Object course does not exist (%s).', $this->courseId));
     
+    $comment = new CourseComment();
+    $values=array('courseid'=>$this->courseId);
+    $this->form = new CourseCommentForm($comment,$values);
+    
+    $this->submitCourseForm($request, $this->form);
+    
+    // if we have reached this point, save has failed
+    $this->commentList = $this->getCourseList($this->courseId);
+    $this->setTemplate('coursecommenting');
   }
   
   public function executeEditCourse(sfWebRequest $request)
   {
+    if (!$request->hasParameter("course")) $this->forward404("parameters incomplete");
+    $this->forward404Unless($comment = CourseCommentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object comment does not exist (%s).', $request->getParameter('id')));
     
+    $this->courseId = $request->getParameter("course");
+    
+    if ($comment->getCourseId() != $this->courseId) $this->forward404("course does not match");
+    
+    $this->commentList = $this->getCourseList($this->courseId);
+    
+    $values=array('courseid'=>$comment->getCourseId());
+    $this->form = new CourseCommentForm($comment,$values);
+    
+    $this->setTemplate('coursecommenting');
   }
   
   public function executeUpdateCourse(sfWebRequest $request)
   {
+    $this->forward404Unless($request->isMethod('post') || $request->isMethod('put'));
+    $this->forward404Unless($request->hasParameter("course"));
+    $this->forward404Unless($comment = CourseCommentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object comment does not exist (%s).', $request->getParameter('id')));
     
+    $this->courseId = $request->getParameter("course");
+    $this->forward404Unless($comment->getCourseId() == $this->courseId);
+    
+    $values=array('courseid'=>$comment->getCourseId());
+    $this->form = new CourseCommentForm($comment,$values);
+    
+    $this->submitCourseForm($request, $this->form);
+    
+    // if we have reached this point, save has failed
+    // redirect address
+    $par="";
+    if ($request->hasParameter("page")){
+      $par = "&page=".$request->getParameter("page");
+    }
+    $this->redirectAddress = "admincommenting/coursecommenting?course=".$this->courseId.$par;
+    $this->commentList = $this->getCourseList($this->courseId);
+    $this->setTemplate('coursecommenting');
   }
   
   public function executeDeleteCourse(sfWebRequest $request)
   {
+    $request->checkCSRFProtection();
+    $this->forward404Unless($request->hasParameter("course"), "parameters missing");
+    $this->forward404Unless($comment = CourseCommentPeer::retrieveByPk($request->getParameter('id')), sprintf('Object comment does not exist (%s).', $request->getParameter('id')));
+    $this->courseId = $request->getParameter("course");
+    $this->forward404Unless($comment->getCourseId() == $this->courseId);
     
+    try {
+      $comment->delete();
+      
+      $par = "";
+      if ($request->hasParameter("page")){
+        $par = "&page=".$request->getParameter("page");
+      }
+      $this->redirect('admincommenting/coursecommenting?course='.$this->courseId.$par);
+    } catch (Exception $e) {
+      $this->globalErrors = $e->getMessage();
+      
+      $this->commentList = $this->getCourseList($this->courseId);
+
+      $this->form = new CourseForm($comment,array());
+    }
   }
   
   /**
@@ -194,11 +258,38 @@ class admincommentingActions extends sfActions
    */
   protected function getCourseList($courseId)
   {
-    
+    $pagenumber = 1;
+    if($this->hasRequestParameter('page')){
+      $pagenumber = $this->getRequestParameter('page');
+    }
+  	$pager = new sfPropelPager('CourseComment', skuleadminConst::EXAM_RECORDNUMBER);
+  	$c = new Criteria();
+  	$crit1 = $c->getNewCriterion(CourseCommentPeer::COURSE_ID, $courseId);
+  	$c->addAnd($crit1);
+  	$c->addAscendingOrderByColumn(CourseCommentPeer::INPUT_DT);
+  	
+    $pager->setCriteria($c);
+    $pager->setPage($pagenumber);
+    $pager->init();
+    return $pager;
   }
   
-  protected function submitCourseForm(sfWebRequest $request, sfForm $form)
+  protected function submitCourseForm(sfWebRequest $request, sfForm $commentform)
   {
-    
+    $noerror = true;
+    $commentform->bind($request->getParameter($commentform->getName()), $request->getFiles($commentform->getName()));
+
+    try {
+      $commentform->save();
+      
+      $par="";
+      if ($request->hasParameter("page")){
+        $par = "&page=".$request->getParameter("page");
+      }
+      $this->redirect('admincommenting/editCourse?id='.$commentform->getObject()->getId()."&course=".$this->courseId.$par);
+    } catch (Exception $e) {
+      $this->globalErrors = $e->getMessage();
+      return;
+    }
   }
 }

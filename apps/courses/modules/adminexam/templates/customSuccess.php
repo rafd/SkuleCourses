@@ -1,10 +1,13 @@
 <?php use_helper('Object')?>
 <?php echo $submenu ?>
+<?php include_stylesheets_for_form($form) ?>
+<?php include_javascripts_for_form($form) ?>
+
 <div id="main"><div id="critique_content">
 <h2>Custom Exams Manager</h2>
 <p><a class="back" href='<?php echo url_for("adminexam/index")?>' style="padding-left: 20px;width:auto;">Back to Exam Menu</a></p>
 
-<form name="search_form" method="post" action="<?php echo url_for("adminexam/custom")?>">
+<form name="search_form" method="get" action="<?php echo url_for("adminexam/custom")?>">
     
 	<table><tr><td>
 	<fieldset style='width:730px'>
@@ -41,7 +44,7 @@
 			<td style="vertical-align:top">
 				<fieldset style="width:350px">
 					<legend>Exams Found <?php if (isset($courseId)):?>(<?php echo $courseId?>, <?php echo helperFunctions::translateTerm($year)?>)<?php endif;?></legend>
-					<table class="disptable">
+					<table>
 						<thead>
 							<tr>
 								<th width="14"></th>
@@ -65,7 +68,7 @@
 								<td<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$exam->getId()):?> style="background:#FFE87C"<?php endif;?>>
 								  <?php echo $exam->getDescr()?>
 								</td>
-								<td style="text-align:center<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$exam->getId()):?>;background:#FFE87C<?php endif;?>">
+								<td<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$exam->getId()):?> style="background:#FFE87C"<?php endif;?>>
 								  <?php echo $exam->getEnumItem()->getDescr()?>
 								</td>
 							</tr>
