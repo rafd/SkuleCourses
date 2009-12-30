@@ -218,7 +218,8 @@ class courseActions extends sfActions
         $_list = $courseObj->getCourseComments($c, $conn, true);
         
         $ip = $_SERVER['REMOTE_ADDR'];
-        $isSpam = false;
+        //FIXME i have disabled spam checking because computers in the computer lab might all have the same ip
+        /*$isSpam = false;
         foreach ($_list as $commentObj){
           if ($commentObj->getIp() == $ip){
             $isSpam = true;
@@ -228,7 +229,7 @@ class courseActions extends sfActions
         if ($isSpam){
           echo "You cannot comment on the same semester twice!";
           return sfView::NONE;
-        }
+        }*/
         
         // now we can save
         try {
