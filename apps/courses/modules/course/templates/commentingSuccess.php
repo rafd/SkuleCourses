@@ -11,10 +11,18 @@
 	<center><?php echo $commentList->getPage()?> / <?php echo ($commentList->getLastPage()==0)? 1 : $commentList->getLastPage()?></center>
 	</div>
 	
+	<?php if (!$courseObj->getIsEng()):?>
+	<div class="critique_block">
+		<div class="box">
+			<div class="title_bar">No comments</div>
+			This is not a course offered by the Faculty of Applied Science and Engineering. Commenting has been disabled.
+		</div>
+	</div>
+	<?php else:?>
 	<?php if (count($commentList->getResults()) == 0):?>
 	<div class="critique_block">
 		<div class="box">
-			<div class="title_bar">No comment as of yet</div>
+			<div class="title_bar">No comments as of yet</div>
 			<a class="btn" onclick="grayout('submitComment');">I would like to leave a comment for this course...</a>
 		</div>
 	</div>
@@ -37,6 +45,7 @@
 	</div></div>
 	<?php endif;?>
 	<?php include_partial("global/submitCourseComment", array("courseObj"=>$courseObj))?>
+	<?php endif;?>
 	
 	<img class="hidden" src="/skule_images/previous.on.png" />
 	<img class="hidden" src="/skule_images/next.on.png" />

@@ -70,7 +70,9 @@
 					and provide opportunity to give constructive feedback on the instructors and the course materials.</span></a>
 					<ul>
 						<li><?php echo link_to("View Comments", "course/commenting?id=".$sf_request->getParameter('id'))?></li>
+						<?php if ($courseObj->getIsEng()):?>
 						<li><a class="btn" onclick="grayout('submitComment');">Leave My Comment</a></li>
+						<?php endif;?>
 					</ul>
 					<br/>
 					Official Course Critiques
