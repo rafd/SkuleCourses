@@ -199,6 +199,14 @@ class subMenu
     		document.getElementById('successButtons').style.display = 'none';
     		document.exam_submission.security.value='';
     	}
+    	
+    	function reloadAction(){
+    		document.getElementById('statusSpan').style.display = 'none';
+    		document.getElementById('inputButtons').style.display = 'block';
+    		document.getElementById('successButtons').style.display = 'none';
+    		document.getElementById('exam_descr').value = '';
+    		document.getElementById('exam_file').value = '';
+    	}
     </script>
     <div class='title_bar'>Submit Exam</div>
     <form name='exam_submission' method='post' enctype='multipart/form-data' action='".url_for("invisible/submitExam")."' target='hidSecurityFrame'>
@@ -225,14 +233,20 @@ class subMenu
 		    	<input type='radio' name='term' id='radioWinter' value='1'><label for='radioWinter'>Winter</label>
 		    	<input type='radio' name='term' id='radioSummer' value='5'><label for='radioSummer'>Summer</label>
 		    </td></tr>
-		    <tr><td>Display Title:</td><td align='left'><input type='text' name='descr' /></td></tr>
-		    <tr><td>File:</td><td align='left'><input type='file' name='file' /></td></tr>
+		    <tr><td>Display Title:</td><td align='left'><input type='text' name='descr' id='exam_descr' /></td></tr>
+		    <tr><td>File:</td><td align='left'><input type='file' name='file' id='exam_file' /></td></tr>
 		    <tr><td>&nbsp;</td></tr>
 		    <tr><td></td><td align='left'><img src='".url_for('invisible/securityImage')."'/></td></tr>
 		    <tr><td>Security String:</td><td><input type='text' name='security' /></td></tr>
 	    </table>
-    	<div id='inputButtons'><input type='submit' onclick='return submitExamOnSubmit();' value='Submit'/><input type='button' onclick='cancelAction()' value='Cancel'/></div>
-    	<div id='successButtons' style='display:none'><input type='button' onclick='cancelAction()' value='Close'/></div>
+    	<div id='inputButtons'>
+    		<input type='submit' onclick='return submitExamOnSubmit();' value='Submit'/>
+    		<input type='button' onclick='cancelAction()' value='Cancel'/>
+    	</div>
+    	<div id='successButtons' style='display:none'>
+    		<input type='button' onclick='reloadAction()' value='Submit Another'/>
+    		<input type='button' onclick='cancelAction()' value='Close'/>
+    	</div>
     </form>
     <iframe name='hidSecurityFrame' style='display:none' onload='securityFrameOnLoad()';></iframe>
     <br/><span style='display:none' id='statusSpan'></span>
