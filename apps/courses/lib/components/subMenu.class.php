@@ -8,19 +8,17 @@ class subMenu
   private $_menuOption;
   private $_examYearArray;
   private $_ratingYearArray;
-  private $_subOrderSelection;
   
-  public function __construct($subMenuOption, $subOrderSelection=null)
+  public function __construct($subMenuOption)
   {
     // load helpers for url
     sfProjectConfiguration::getActive()->loadHelpers(array("Url"));
     sfProjectConfiguration::getActive()->loadHelpers(array("Tag"));
     
     $this->_menuOption=$subMenuOption;
-    $this->_subOrderSelection = $subOrderSelection;
     
-    $courseId = sfContext::getInstance()->getRequest()->getCookie('courseId');
-    if ($courseId) $this->_courseId = $courseId;
+    //$courseId = sfContext::getInstance()->getRequest()->getCookie('courseId');
+    //if ($courseId) $this->_courseId = $courseId;
   }
   
   public function setCourseId($id)
