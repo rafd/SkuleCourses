@@ -40,6 +40,35 @@ class courseActions extends sfActions
     if (count($detList) > 0){
       $this->programList = $detList;
     }
+    
+    // full exam data
+    $conn = Propel::getConnection();
+    $c = new Criteria();
+    $courseCrit = $c->getNewCriterion(ExamPeer::COURSE_ID, $this->courseObj->getId());
+    $c->addAnd($courseCrit);
+    $c->addAscendingOrderByColumn(ExamPeer::YEAR);
+    $c->addAscendingOrderByColumn(ExamPeer::TYPE);
+    $c->addAscendingOrderByColumn(ExamPeer::DESCR);
+    $examData = ExamPeer::doSelect($c, $conn);
+    
+    // now splice the data up and send it to the frontend
+    $this->examData = array();
+    $year = "";
+    $type = "";
+    foreach ($examData as $exam){
+      if ($year != $exam->getYear()){
+        $year = $exam->getYear();
+        $this->examData[$year] = array();
+        $type = "";
+      }
+      
+      if ($type != $exam->getType()){
+        $type = $exam->getType();
+        $this->examData[$year][$type] = array();
+      }
+      
+      $this->examData[$year][$type][] = $exam;
+    }
   }
   
   public function executeCritique(sfWebRequest $request)

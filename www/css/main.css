@@ -54,6 +54,8 @@ div.critique_block div.box div.title_bar {
 	padding-left: 5px;
 }
 
+div.exam_block { display: none; margin:5px 0 5px 0;overflow:auto;max-height:200px;border:solid #5970B2 1px;width:380px }
+
 #submenu
 {
 	text-align: right;
@@ -84,11 +86,14 @@ table.critiquetable { border-collapse: collapse; border: 1px solid #000;}
 table.critiquetable td{ padding:2px; border: 1px solid #000; vertical-align: middle; text-align:center}
 table.critiquetable th{ font-weight:bold; padding:2px; text-align:center; border: 1px solid #000; vertical-align: middle;}
 
+table.examtable { width:100% }
+table.examtable td {padding: 0 0 0 8px; width:auto;}
+
 dd.pointer, dt.pointer {cursor:pointer;}
 
 /* buttons */
 
-img.btn {cursor: pointer; margin-left: 5px; }
+img.btn {cursor: pointer; }
 a.btn {cursor: pointer;}
 
 a.reload {position:relative; cursor: pointer; display:block; width: 22px; height:20px; background: url(../skule_images/reload.gif);}
