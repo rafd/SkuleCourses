@@ -20,7 +20,7 @@ form label{font: inherit;width:auto;display:inline;}
 
 div.search_block {
 	border: 1px solid gray;
-	background-color: #C0C0C0; 
+	background-color: threedface; 
 	padding: 5px; 
 	margin:0 5px 0 5px;
 	-moz-border-radius: 5px 5px 5px 5px;
@@ -39,7 +39,7 @@ div.search_block div.title_bar {
 div.critique_block {border-top: 1px solid #EEEEEE; padding:7px 0 0 0; margin: 0 5px 15px 5px}
 div.critique_block div.box {
 	margin:5px 0 0 0;
-	background-color:#ccc;
+	background-color:threedface;
 	border: 1px solid gray;
 	padding: 5px; 
 	-moz-border-radius: 5px 5px 5px 5px;

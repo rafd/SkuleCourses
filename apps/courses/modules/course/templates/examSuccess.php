@@ -1,4 +1,4 @@
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::COURSE_EXAM, "courseId"=>$courseObj->getId(), "ratingYearArray"=>$ratingYearArray, "examYearArray"=>$examYearArray))?>
 <div id="main"><div id="critique_content">
 	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
 	<h3>Exams Repository of <?php echo helperFunctions::translateTerm($year)?></h3>

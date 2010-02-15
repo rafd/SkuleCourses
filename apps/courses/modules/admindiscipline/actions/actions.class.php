@@ -11,10 +11,7 @@ class admindisciplineActions extends sfActions
 {
   public function preExecute(){
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
-    
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE_DISCIPLINE);
-    $this->submenu = $submenu->get();
-    
+
     // separator used for course_discipl assoc data
     $this->separator = "&&**&&";
   }

@@ -21,15 +21,9 @@ class siteadminActions extends sfActions
     
     $this->sectionNames = subMenuOptions::getMaintenanceSectionNames();
     $this->sectionDetails = subMenuOptions::getMaintenanceSectionDetails();
-    
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE);
-    $this->submenu = $submenu->get();
   }
   
   public function executeLogin(sfWebRequest $request){
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE_LOGIN);
-    $this->submenu = $submenu->get();
-    
     if (helperFunctions::isLoggedIn($request)) $this->redirect("siteadmin/index");
     
     if ($request->isMethod(sfRequest::POST) && $request->hasParameter('username') && $request->hasParameter('password')){

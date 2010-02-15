@@ -1,4 +1,4 @@
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::ERROR))?>
 <div id="main"><div id="critique_content">
 	<h2>We couldn't find what you are looking for...</h2>
 	<p>This is likely the result of an incorrectly formatted URL. However, this could also arise if our resources

@@ -1,6 +1,8 @@
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::COURSE, "courseId"=>$courseObj->getId(), "ratingYearArray"=>$ratingYearArray, "examYearArray"=>$examYearArray))?>
 <div id="main"><div id="critique_content">
 	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
+	
+	<?php if (isset($courseDetail) || isset($currentInstructorList) || isset($programList)):?>
 	<div class="critique_block">
 		<?php if ($courseObj->getIsEng()==0):?>
 		<p style="font-style:italic">This is not a course offered by the Faculty of Applied Science and Engineering.</p>
@@ -59,6 +61,7 @@
 		</table>
 		<?php endif;?>
 	</div>
+	<?php endif;?>
 	
 	<div class="critique_block">
 		<table style="width:100%">

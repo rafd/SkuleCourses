@@ -1,4 +1,4 @@
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::MAINTENANCE_COMMENTING))?>
 <?php use_helper('Object')?>
 <?php include_stylesheets_for_form($form) ?>
 <?php include_javascripts_for_form($form) ?>

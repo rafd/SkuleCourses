@@ -12,9 +12,6 @@ class admindepartmentActions extends sfActions
 {
   public function preExecute(){
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
-    
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE_DEPARTMENT);
-    $this->submenu = $submenu->get();
   }
   
   public function executeIndex(sfWebRequest $request)

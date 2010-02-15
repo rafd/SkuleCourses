@@ -1,4 +1,4 @@
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::ERROR))?>
 <div id="main"><div id="critique_content">
 	<h2>An internal error occurred...</h2>
 	<p>Don't worry, this is not your fault. This is likely a bug within our system. An emergency call

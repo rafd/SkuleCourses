@@ -1,5 +1,5 @@
 <?php use_helper('Object')?>
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::MAINTENANCE_COMMENTING))?>
 <div id="main"><div id="critique_content">
 <h2>Unapproved Comments</h2>
 

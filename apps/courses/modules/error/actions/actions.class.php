@@ -18,10 +18,4 @@ class errorActions extends sfActions
   public function executeError500(sfWebRequest $request)
   {
   }
-  
-  public function preExecute()
-  {
-    $submenu = new subMenu(subMenuOptions::ERROR);
-    $this->submenu = $submenu->get();
-  }
 }

@@ -1,5 +1,5 @@
 <?php use_helper('Object')?>
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::MAINTENANCE_EXAM))?>
 <div id="main"><div id="critique_content">
 <h2>Exams Manager</h2>
 <table>

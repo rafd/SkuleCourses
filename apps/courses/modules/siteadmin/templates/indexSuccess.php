@@ -1,5 +1,5 @@
 <?php use_helper('Object')?>
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::MAINTENANCE))?>
 <div id="main"><div id="critique_content">
 <h2>Skule Courses Maintenance</h2>
 <p>This section provides means to manage SkuleCourses. Please note that modifications to the system are irreversible once saved. 

@@ -14,9 +14,6 @@ class adminratingCriteriaActions extends sfActions
     //FIXME make the admin work
     $this->forward404();
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
-    
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE_RATING);
-    $this->submenu = $submenu->get();
   }
   
   //creating a new rating field has been deprecated to executeList

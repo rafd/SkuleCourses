@@ -1,6 +1,6 @@
 <?php use_helper('Url')?>
 <?php use_helper('Tag')?>
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::SEARCH))?>
 <div id="main"><div id="critique_content">
 	<h2>Search Results for "<?php echo $query?>"</h2>
 	

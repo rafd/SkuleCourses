@@ -1,5 +1,5 @@
 <?php use_helper('Object')?>
-<?php echo $submenu ?>
+<?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::MAINTENANCE_LOGIN))?>
 <div id="main"><div id="critique_content">
 <h2>Skule Courses Maintenance</h2>
 <p>You must have administrator credentials to access the Maintenance section of Skule Courses. Please login below.</p>

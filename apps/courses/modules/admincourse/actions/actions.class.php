@@ -28,9 +28,6 @@ class admincourseActions extends sfActions
   
   public function preExecute(){
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
-    
-    $submenu = new subMenu(subMenuOptions::MAINTENANCE_COURSE);
-    $this->submenu = $submenu->get();
   }
 
   public function executeCreate(sfWebRequest $request)

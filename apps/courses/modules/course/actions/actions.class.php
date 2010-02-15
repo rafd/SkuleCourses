@@ -44,7 +44,7 @@ class courseActions extends sfActions
   
   public function executeCritique(sfWebRequest $request)
   {
-    $this->buildSubmenu($request, subMenuOptions::COURSE_CRITIQUE);
+    $this->buildSubmenu($request);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
@@ -163,7 +163,7 @@ class courseActions extends sfActions
   
   public function executeCommenting(sfWebRequest $request)
   {
-    $this->buildSubmenu($request, subMenuOptions::COURSE_COMMENTING);
+    $this->buildSubmenu($request);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
@@ -268,7 +268,7 @@ class courseActions extends sfActions
   
   public function executeExam(sfWebRequest $request)
   {
-    $this->buildSubmenu($request, subMenuOptions::COURSE_EXAM);
+    $this->buildSubmenu($request);
     
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
@@ -403,27 +403,20 @@ class courseActions extends sfActions
     return $pager;
   }
   
-  private function buildSubmenu(sfWebRequest $request, $option=subMenuOptions::COURSE)
+  private function buildSubmenu(sfWebRequest $request)
   {
     if (!$request->hasParameter("id") || trim($request->getParameter("id"))=="") $this->forward404();
     
     // set cookie to remember
     $id = $request->getParameter("id");
-    $this->getResponse()->setCookie('courseId', $id);
+    //$this->getResponse()->setCookie('courseId', $id);
     
     $conn = Propel::getConnection();
     
-    $submenu = new subMenu($option);
-    $submenu->setCourseId($id);
-    
     // get rating data
     $this->ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
-    $submenu->setRatingYearArray($this->ratingYearArray);
     // get exam data
     $this->examYearArray = ExamPeer::getAvailableYearsForCourseId($id, $conn);
-    $submenu->setExamYearArray($this->examYearArray);
-    
-    $this->submenu = $submenu->get();
   }
 
 }
