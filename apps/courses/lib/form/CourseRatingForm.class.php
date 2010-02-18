@@ -24,7 +24,7 @@ class CourseRatingForm extends BaseCourseRatingForm
 
     $this->setValidators(array(
       'id'            => new sfValidatorPropelChoice(array('model' => 'CourseRating', 'column' => 'id', 'required' => false)),
-      'user_id'       => new sfValidatorPropelChoice(array('model' => 'User', 'column' => 'id')),
+      'user_id'       => new sfValidatorPropelChoice(array('model' => 'User', 'column' => 'user_name')),
       'field_id'      => new sfValidatorPropelChoice(array('model' => 'RatingField', 'column' => 'id')),
       'course_ins_id' => new sfValidatorPropelChoice(array('model' => 'CourseInstructorAssociation', 'column' => 'id', 'required' => false)),
       'rating'        => new sfValidatorInteger(),

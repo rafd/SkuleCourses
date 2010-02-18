@@ -46,7 +46,7 @@ propel:
   course_rating_data:
     _attributes:       { phpName: CourseRating }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    user_id:           { type: integer, required: true, foreignTable: user, foreignReference: id }
+    user_id:           { type: integer, required: true, foreignTable: user, foreignReference: user_name }
     field_id:          { type: integer, required: true, foreignTable: rating_field, foreignReference: id }
     course_ins_id:     { type: integer, required: true, primaryKey: true, foreignTable: course_instructor_assoc, foreignReference: id, onDelete: cascade }
     rating:            { type: tinyint, required: true }
@@ -124,8 +124,7 @@ propel:
     
   user:
     _attributes:       { phpName: User }
-    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
-    user_name:         { type: varchar(50), required: true, index: true }
+    user_name:         { type: varchar(50), required: true, primaryKey: true }
     password:          { type: varchar(50), required: true }
     type_id:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
     email:             { type: varchar(50), required: true }

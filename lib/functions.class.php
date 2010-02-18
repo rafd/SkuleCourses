@@ -49,6 +49,7 @@ class helperFunctions
 
   public static function isLoggedIn(sfWebRequest $request)
   {
+    // FIXME may also need to check what type of user it is
     return $request->getCookie("username");
   }
 
@@ -160,7 +161,57 @@ class helperFunctions
         return "qs";
     }
   }
+  
+  public static function getUserType($type)
+  {
+    switch ($type){
+      case EnumItemPeer::USER_ADMIN:
+        return "Admin";
+      case EnumItemPeer::USER_GUEST:
+        return "Guest";
+      case EnumItemPeer::USER_MODERATOR:
+        return "Moderator";
+      case EnumItemPeer::USER_NORMAL:
+        return "Normal";
+    }
+  }
+  
+  /**
+   * Send email to destinations as specified using the system default 
+   * email address
+   * @param $toEmailArr An array of destination emails
+   * @param $subject
+   * @param $msg
+   * @return unknown_type
+   */
+  public static function sendEmail($toEmailArr, $subject, $msg)
+  {
+    // register email notification parameters
+    include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
 
+    $connection = new Swift_Connection_SMTP($mailNotificationParams['sender_smtp'], 465,
+      ($mailNotificationParams['sender_ssl']?Swift_Connection_SMTP::ENC_SSL:Swift_Connection_SMTP::ENC_OFF));
+    $connection->setUsername($mailNotificationParams['sender_username']);
+    $connection->setPassword($mailNotificationParams['sender_password']);
+
+    $mailer = new Swift($connection);
+    $message = new Swift_Message($subject, $msg);
+
+    $recipients = new Swift_RecipientList();
+    foreach ($toEmailArr as $address){
+      $recipients->addTo($address);
+    }
+
+    $mailer->send($message, $recipients, $mailNotificationParams['sender_address']);
+    $mailer->disconnect();
+  }
+
+  /**
+   * Used for sending errors/notices/warnings to a list of prescribed destinations
+   * @param $subject
+   * @param $msg
+   * @return unknown_type
+   */
   public static function sendEmailNotice($subject, $msg)
   {
     // register email notification parameters

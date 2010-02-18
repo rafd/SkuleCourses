@@ -34,7 +34,7 @@ class siteadminActions extends sfActions
         $this->error = "* Malicious keywords detected. Do not attempt this again!";
       } else {
         $conn = Propel::getConnection();
-        $admin = UserPeer::getByUsername($username, $conn);
+        $admin = UserPeer::retrieveByPK($username, $conn);
         
         if (!is_object($admin) || $admin->getPassword() != $password){
           $this->error = "* Incorrect credentials.";

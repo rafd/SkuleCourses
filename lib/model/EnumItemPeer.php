@@ -37,6 +37,7 @@ class EnumItemPeer extends BaseEnumItemPeer
   const USER_ADMIN = 11;
   const USER_MODERATOR = 12;
   const USER_GUEST = 13;
+  const USER_NORMAL = 14;
     
   public static function getAllForParentNodeId($parentId, PropelPDO $propelConnection=null)
   {

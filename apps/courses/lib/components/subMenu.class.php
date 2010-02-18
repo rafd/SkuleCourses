@@ -16,6 +16,7 @@ class subMenuOptions
   const MAINTENANCE_RATING = 16;
   const MAINTENANCE_LOGIN = 17;
   const MAINTENANCE_COMMENTING = 18;
+  const MAINTENANCE_USER = 19;
   const ERROR = 20;
   
   public static function getMaintenanceSectionNames(){
@@ -25,7 +26,8 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"Disciplines",
     subMenuOptions::MAINTENANCE_EXAM=>"Exams",
     subMenuOptions::MAINTENANCE_RATING=>"Ratings",
-    subMenuOptions::MAINTENANCE_COMMENTING=>"Commenting");
+    subMenuOptions::MAINTENANCE_COMMENTING=>"Commenting",
+    subMenuOptions::MAINTENANCE_USER => "Users");
   }
   
   public static function getMaintenanceSections()
@@ -36,7 +38,8 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"admindiscipline/index",
     subMenuOptions::MAINTENANCE_EXAM=>"adminexam/index",
     subMenuOptions::MAINTENANCE_RATING=>"adminratingCriteria/index",
-    subMenuOptions::MAINTENANCE_COMMENTING=>"admincommenting/index");
+    subMenuOptions::MAINTENANCE_COMMENTING=>"admincommenting/index",
+    subMenuOptions::MAINTENANCE_USER => "adminuser/index");
   }
   
   public static function getMaintenanceSectionDetails(){
@@ -46,6 +49,7 @@ class subMenuOptions
     subMenuOptions::MAINTENANCE_DISCIPLINE=>"Add, modify or remove disciplines (academic programs).",
     subMenuOptions::MAINTENANCE_EXAM=>"Add, modify or remove exams.",
     subMenuOptions::MAINTENANCE_RATING=>"Manage course ratings.",
-    subMenuOptions::MAINTENANCE_COMMENTING=>"Manage course commenting.");
+    subMenuOptions::MAINTENANCE_COMMENTING=>"Manage course commenting.",
+    subMenuOptions::MAINTENANCE_USER=>"Manage users for SkuleCourses");
   }
 }

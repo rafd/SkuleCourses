@@ -6,6 +6,7 @@ INSERT INTO `enum_item` (`id`,`parent_id`,`descr`) VALUES
  (11,10,'Admin'),
  (12,10,'Moderator'),
  (13,10,'Guest'),
+ (14,10,'Normal'),
  (20,1,'META_RATING_TYPES'),
  (21,20,'Boolean'),
  (22,20,'Scale'),

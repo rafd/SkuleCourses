@@ -157,7 +157,7 @@ CREATE TABLE `course_rating_data`
 	INDEX `course_rating_data_FI_1` (`user_id`),
 	CONSTRAINT `course_rating_data_FK_1`
 		FOREIGN KEY (`user_id`)
-		REFERENCES `user` (`id`),
+		REFERENCES `user` (`user_name`),
 	INDEX `course_rating_data_FI_2` (`field_id`),
 	CONSTRAINT `course_rating_data_FK_2`
 		FOREIGN KEY (`field_id`)
@@ -403,14 +403,12 @@ DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
 (
-	`id` INTEGER  NOT NULL AUTO_INCREMENT,
 	`user_name` VARCHAR(50)  NOT NULL,
 	`password` VARCHAR(50)  NOT NULL,
 	`type_id` INTEGER  NOT NULL,
 	`email` VARCHAR(50)  NOT NULL,
 	`registered_on` DATETIME  NOT NULL,
-	PRIMARY KEY (`id`),
-	KEY `user_I_1`(`user_name`),
+	PRIMARY KEY (`user_name`),
 	INDEX `user_FI_1` (`type_id`),
 	CONSTRAINT `user_FK_1`
 		FOREIGN KEY (`type_id`)

@@ -20,11 +20,12 @@
 <div id="main"><div id="critique_content">
 	<h2><?php echo $courseObj->getId()?> (<?php echo $courseObj->getDescr()?>)</h2>
 	
+	<?php if ($courseObj->getIsEng()==0):?>
+		<div class="critique_block"><p style="padding-left:5px;margin-bottom:-5px;font-style:italic">This is not a course offered by the Faculty of Applied Science and Engineering.</p></div>
+	<?php endif;?>
+	
 	<?php if (isset($courseDetail) || isset($currentInstructorList) || isset($programList)):?>
 	<div class="critique_block">
-		<?php if ($courseObj->getIsEng()==0):?>
-		<p style="font-style:italic">This is not a course offered by the Faculty of Applied Science and Engineering.</p>
-		<?php endif;?>
 		<?php if (isset($courseDetail)):?>
 		<table class="description">
 			<tr>
