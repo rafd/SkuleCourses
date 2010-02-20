@@ -4,9 +4,20 @@
 <?php include_javascripts_for_form($form) ?>
 
 <form action="<?php echo url_for('adminratingCriteria/'.($form->getObject()->isNew() ? 'create' : 'update').(!$form->getObject()->isNew() ? '?id='.$form->getObject()->getId() : '')) ?>" method="post" <?php $form->isMultipart() and print 'enctype="multipart/form-data" ' ?>>
+
 <?php if (!$form->getObject()->isNew()): ?>
 <input type="hidden" name="sf_method" value="put" />
 <?php endif; ?>
+
+<fieldset style='width:360px'>
+
+<?php if (!$form->getObject()->isNew()): ?>
+<input type="hidden" name="sf_method" value="put" />
+<legend>Edit Criterion</legend>
+<?php else: ?>
+<legend>New Criterion</legend>
+<?php endif; ?>
+
   <table>
     <tfoot>
       <tr>
@@ -22,21 +33,28 @@
       </tr>
     </tfoot>
     <tbody>
+      <?php if (isset($globalErrors)):?>
+      <tr><td colspan="3" class="error"><?php echo $globalErrors?></td>
+      <?php endif;?>
       <?php echo $form->renderGlobalErrors() ?>
       <tr>
-        <th>Question</th>
-        <td>
-          <?php echo $form['descr']->renderError() ?>
-          <?php echo $form['descr'] ?>
-        </td>
+		<th>Question</th>
+        <td><?php echo $form['descr'] ?></td>
+      </tr>
+      <tr>
+      	<td></td>
+      	<td><?php echo $form['descr']->renderError() ?></td>
       </tr>
       
-     <tr>
+      <tr>
         <th>Type:</th>
         <td>
-          <?php echo $form['type_scale']->renderError() ?>
           <?php echo $form['type_scale'] ?>
         </td>
+      </tr>
+      <tr>
+      	<td></td>
+      	<td><?php echo $form['type_scale']->renderError() ?></td>
       </tr>
       
       <?php if($form->getObject()->getTypeId()>30 && $form->getObject()->getTypeId()<40): ?>
@@ -52,7 +70,11 @@
       </tr>
     </tbody>
   </table>
+  
+  </fieldset>
+  
 </form>
+
 <?php echo javascript_tag("
   function changeType(self)
   {

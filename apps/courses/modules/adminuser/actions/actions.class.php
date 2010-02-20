@@ -80,6 +80,7 @@ class adminuserActions extends sfActions
       $this->user_list = $this->getUserList();
       $values=array('edit'=>'true');
       $this->form = new UserForm($user,$values);
+      $this->setTemplate("index");
     }
   }
 

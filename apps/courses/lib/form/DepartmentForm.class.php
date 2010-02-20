@@ -15,7 +15,7 @@ class DepartmentForm extends BaseDepartmentForm
   	if($this->getOption('edit')!==null){
 	  	$this->setWidgets(array(
 	      'id'    => new sfWidgetFormInputHidden(),
-	      'descr' => new sfWidgetFormInput(),
+	      'descr' => new sfWidgetFormInput(array(), array('style'=>'width:300px')),
 	    ));
 	
 	    $this->setValidators(array(
@@ -25,7 +25,7 @@ class DepartmentForm extends BaseDepartmentForm
   	}else{
 	  	$this->setWidgets(array(
 	      'id'    => new sfWidgetFormInput(),
-	      'descr' => new sfWidgetFormInput(),
+	      'descr' => new sfWidgetFormInput(array(), array('style'=>'width:300px')),
 	    ));
 	
 	    $this->setValidators(array(

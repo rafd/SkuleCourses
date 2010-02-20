@@ -6,18 +6,21 @@
 <table>
 <tr><td width="50%">
 <h3>
-<?php echo link_to('Rating Questions Manager', 'adminratingCriteria/list')?>
+<?php echo link_to('Rating Criteria Manager', 'adminratingCriteria/list')?>
 </h3>
 <p>
-This shows a list of rating questions that are set default to all courses.
+Rating criteria are the list of questions used to gauge the performance of an instructor.
+</p><p>
+Before importing new critique data, one should make sure that all the critique questions are contained within
+this list.
 </p>
 </td>
-<td>
+<td style="vertical-align:top">
 <h3>
 <?php echo link_to('Rating Import Manager', 'adminratingCriteria/list')?>
 </h3>
 <p>
-This contains the import history and data of the ratings documents from skule officials.
+Use this manager to view import history and import new critique data.
 </p>
 </td></tr></table>
 </div></div>

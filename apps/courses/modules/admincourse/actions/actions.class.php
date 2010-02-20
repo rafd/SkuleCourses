@@ -139,6 +139,8 @@ class admincourseActions extends sfActions
       }else{
         $this->form2 = new CourseDetailForm(new CourseDetail());
       }
+      
+      $this->setTemplate('index');
     }
   }
   

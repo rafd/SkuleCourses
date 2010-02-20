@@ -4,7 +4,7 @@ class RatingField extends BaseRatingField
 {
   public function getRatingTypeString(PropelPDO $conn=null)
   {
-    if ($conn == null) $conn = Propel::getConnection();
+    if ($conn === null) $conn = Propel::getConnection();
     $item = $this->getEnumItem($conn);
     
     if ($item->getId() == EnumItemPeer::RATING_BOOLEAN)
@@ -24,5 +24,19 @@ class RatingField extends BaseRatingField
   public function __toString()
   {
     return strval($this->getDescr());
+  }
+  
+  public function hasRatingData(PropelPDO $conn=null){
+    if ($conn === null) $conn = Propel::getConnection();
+    
+    $c = new Criteria();
+    $c->add(AutoCourseRatingPeer::FIELD_ID, $this->getId());
+    $result = AutoCourseRatingPeer::doSelectOne($c, $conn);
+    
+    if ($result === null || !is_object($result)){
+      return false;
+    } else {
+      return true;
+    }
   }
 }

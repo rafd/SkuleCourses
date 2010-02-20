@@ -21,11 +21,11 @@ class RatingFieldForm extends BaseRatingFieldForm
   	$c2->add(EnumItemPeer::PARENT_ID, skuleadminConst::RATING_SCALE_TYPES_PID);
   	
   	//need to add a extra field for SCALE TYPES
-  	$this->unset['is_reserved'];
-  	$this->unset['type_id'];
+  	//$this->unset['is_reserved'];
+  	//$this->unset['type_id'];
     $this->setWidgets(array(
       'id'          => new sfWidgetFormInputHidden(),
-      'descr'       => new sfWidgetFormInput(),
+      'descr'       => new sfWidgetFormTextarea(array(),array("rows"=>"2")),
       //'is_reserved' => new sfWidgetFormChoice(array('choices' =>  self::$tf)),
       'type_scale'       => new sfWidgetFormPropelChoice(array('model' => 'EnumItem', 'add_empty' => false, 'criteria' => $c)
                           , array('onchange' => 'changeType(this)')),

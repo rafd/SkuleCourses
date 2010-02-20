@@ -586,7 +586,7 @@ CREATE TABLE `user`
 		REFERENCES `enum_item` (`id`)
 )Type=InnoDB;
 
-INSERT INTO `user` VALUES (1, 'wildabyss', 'test', 11, 'wildabyss@gmail.com', '2009-06-19 00:00:00');
+INSERT INTO `user` VALUES ('admin', 'admin', 11, 'engscipraxis@gmail.com', '2009-06-19 00:00:00');
 
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

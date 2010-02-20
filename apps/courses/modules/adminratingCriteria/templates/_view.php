@@ -1,3 +1,8 @@
+<form>
+
+<fieldset style='width:360px'>
+<legend>System Reserved Criterion</legend>
+
 <table>
       <tr>
         <th>Question</th>
@@ -26,6 +31,9 @@
         </td>
       </tr>
       <?php endif; ?>
-  </table>
+</table>
+
+</fieldset>
+</form>
  
 

@@ -158,4 +158,4 @@ INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
 
 # user
 
-INSERT INTO `user` VALUES (1, 'admin', 'test', 11, 'courses@webdev.skule.ca', '2009-09-09 00:00:00');
+INSERT INTO `user` VALUES ('admin', 'admin', 11, 'courses@webdev.skule.ca', '2009-09-09 00:00:00');

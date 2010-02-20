@@ -87,6 +87,7 @@ class admincommentingActions extends sfActions
 
       $values=array('edit'=>'true');
       $this->form = new CourseForm($comment,$values);
+      $this->setTemplate('unapproved');
     }
   }
   
@@ -246,6 +247,7 @@ class admincommentingActions extends sfActions
       $this->commentList = $this->getCourseList($this->courseId);
 
       $this->form = new CourseForm($comment,array());
+      $this->setTemplate('coursecommenting');
     }
   }
   

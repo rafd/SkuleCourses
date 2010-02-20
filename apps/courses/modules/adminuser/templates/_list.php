@@ -10,11 +10,16 @@
     <tr>
       <td width="30">
       <?php if($sf_request->getParameter('page') ===null):?>
+      	<?php if ($user->getUserName() != UserPeer::ADMIN):?>
 	      <?php echo link_to(" ", 'adminuser/delete?id='.$user->getUserName(), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
-	      <?php echo link_to(" ", 'adminuser/edit?id='.$user->getUserName(), array('class'=>'select'))?>
+	    <?php else:?>
+	    <?php endif;?>
+	      <?php echo link_to(" ", 'adminuser/edit?id='.$user->getUserName(), array('class'=>'select', 'style'=>'float:left'))?>
 	  <?php else:?>
+	  	<?php if ($user->getUserName() != UserPeer::ADMIN):?>
 	      <?php echo link_to(" ", 'adminuser/delete?id='.$user->getUserName().'&page='.$sf_request->getParameter('page'), array('method' => 'delete', 'class'=>'deletebtn', 'confirm' => 'Are you sure?')) ?>
-	      <?php echo link_to(" ", 'adminuser/edit?id='.$user->getUserName().'&page='.$sf_request->getParameter('page'), array('class'=>'select'))?>
+	    <?php endif;?>
+	      <?php echo link_to(" ", 'adminuser/edit?id='.$user->getUserName().'&page='.$sf_request->getParameter('page'), array('class'=>'select', 'style'=>'float:left'))?>
       <?php endif;?>
       </td>
       <td<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$user->getUserName()):?> style='background:#FFE87C'<?php endif;?>>

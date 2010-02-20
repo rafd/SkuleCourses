@@ -5,22 +5,20 @@
  *
  * @package    sf_sandbox
  * @subpackage adminratingCriteria
- * @author     Your name here
+ * @author     Jimmy Lu, Jason Ko
  * @version    SVN: $Id: actions.class.php 12474 2008-10-31 10:41:27Z fabien $
  */
 class adminratingCriteriaActions extends sfActions
 { 
   public function preExecute(){
     //FIXME make the admin work
-    $this->forward404();
+    //$this->forward404();
     if (!helperFunctions::isLoggedIn(sfContext::getInstance()->getRequest())) $this->redirect("siteadmin/login");
   }
   
   //creating a new rating field has been deprecated to executeList
   public function executeIndex(sfWebRequest $request)
   {
-    //$this->rating_field_list = $this->getRatingCriteriaList();
-    //$this->form = new RatingFieldForm();
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -28,7 +26,7 @@ class adminratingCriteriaActions extends sfActions
     $this->forward404Unless($request->isMethod('post'));
 
     $this->form = new RatingFieldForm();
-
+    $this->form->getObject()->setIsReserved(0);
     $this->processForm($request, $this->form);
     $this->rating_field_list = $this->getRatingCriteriaList();
     $this->setTemplate('list');
@@ -82,11 +80,28 @@ class adminratingCriteriaActions extends sfActions
   public function executeDelete(sfWebRequest $request)
   {
     $request->checkCSRFProtection();
+    $err = false;
 
     $this->forward404Unless($rating_field = RatingFieldPeer::retrieveByPk($request->getParameter('id')), sprintf('Object rating_field does not exist (%s).', $request->getParameter('id')));
-    $rating_field->delete();
-
-    $this->redirect('adminratingCriteria/list');
+    if ($rating_field->hasRatingData()){
+      $this->globalErrors = "Cannot delete criterion that already has rating data associated with it.";
+      $err = true;
+    } else {
+      try {
+        $rating_field->delete();
+        $this->redirect('adminratingCriteria/list');
+      } catch (Exception $e){
+        $this->globalErrors = $e->getMessage();
+        $err = true;
+      }
+    }
+    
+    if ($err){
+      $this->rating_field_list = $this->getRatingCriteriaList();
+      $this->scale_PID = skuleadminConst::RATING_SCALE_TYPES_PID;
+      $this->form = new RatingFieldForm();
+      $this->setTemplate('list');
+    }
   }
 
   protected function processForm(sfWebRequest $request, sfForm $form)
@@ -94,17 +109,18 @@ class adminratingCriteriaActions extends sfActions
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     if ($form->isValid())
     {
-    	
-
       if($form->getValue('type_scale')==skuleadminConst::RATING_SCALE_TYPES_PID){
       	$form->getObject()->setTypeId($form->getValue('scale'));
       }else{
         $form->getObject()->setTypeId($form->getValue('type_scale'));
       }
       
-      $rating_field = $form->save();
-
-      $this->redirect('adminratingCriteria/edit?id='.$rating_field->getId());
+      try {
+        $rating_field = $form->save();
+        $this->redirect('adminratingCriteria/edit?id='.$rating_field->getId());
+      } catch (Exception $e){
+        $this->globalErrors = $e->getMessage();
+      }
     }
   }
   
