@@ -108,10 +108,12 @@ CREATE TABLE `course_instructor_assoc`
 	KEY `course_instructor_assoc_I_2`(`course_id`),
 	CONSTRAINT `course_instructor_assoc_FK_1`
 		FOREIGN KEY (`instructor_id`)
-		REFERENCES `instructor` (`id`),
+		REFERENCES `instructor` (`id`)
+		ON DELETE CASCADE,
 	CONSTRAINT `course_instructor_assoc_FK_2`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -132,10 +134,12 @@ CREATE TABLE `course_discipline_assoc`
 	KEY `course_discipline_assoc_I_2`(`discipline_id`),
 	CONSTRAINT `course_discipline_assoc_FK_1`
 		FOREIGN KEY (`course_id`)
-		REFERENCES `course` (`id`),
+		REFERENCES `course` (`id`)
+		ON DELETE CASCADE,
 	CONSTRAINT `course_discipline_assoc_FK_2`
 		FOREIGN KEY (`discipline_id`)
 		REFERENCES `enum_item` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -148,21 +152,23 @@ DROP TABLE IF EXISTS `course_rating_data`;
 CREATE TABLE `course_rating_data`
 (
 	`id` INTEGER  NOT NULL AUTO_INCREMENT,
-	`user_id` INTEGER  NOT NULL,
+	`user_id` VARCHAR(50)  NOT NULL,
 	`field_id` INTEGER  NOT NULL,
 	`course_ins_id` INTEGER  NOT NULL,
 	`rating` TINYINT  NOT NULL,
 	`input_dt` DATETIME  NOT NULL,
-	PRIMARY KEY (`id`,`course_ins_id`),
-	INDEX `course_rating_data_FI_1` (`user_id`),
+	PRIMARY KEY (`id`),
+	KEY `course_rating_data_I_1`(`user_id`),
+	KEY `course_rating_data_I_2`(`course_ins_id`),
 	CONSTRAINT `course_rating_data_FK_1`
 		FOREIGN KEY (`user_id`)
-		REFERENCES `user` (`user_name`),
+		REFERENCES `user` (`user_name`)
+		ON DELETE CASCADE,
 	INDEX `course_rating_data_FI_2` (`field_id`),
 	CONSTRAINT `course_rating_data_FK_2`
 		FOREIGN KEY (`field_id`)
-		REFERENCES `rating_field` (`id`),
-	INDEX `course_rating_data_FI_3` (`course_ins_id`),
+		REFERENCES `rating_field` (`id`)
+		ON DELETE CASCADE,
 	CONSTRAINT `course_rating_data_FK_3`
 		FOREIGN KEY (`course_ins_id`)
 		REFERENCES `course_instructor_assoc` (`id`)
@@ -189,7 +195,8 @@ CREATE TABLE `auto_course_rating_data`
 	KEY `auto_course_rating_data_I_2`(`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
-		REFERENCES `rating_field` (`id`),
+		REFERENCES `rating_field` (`id`)
+		ON DELETE CASCADE,
 	CONSTRAINT `auto_course_rating_data_FK_2`
 		FOREIGN KEY (`course_ins_id`)
 		REFERENCES `course_instructor_assoc` (`id`)
@@ -322,6 +329,7 @@ CREATE TABLE `instructor`
 	CONSTRAINT `instructor_FK_1`
 		FOREIGN KEY (`dept_id`)
 		REFERENCES `department` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -362,7 +370,8 @@ CREATE TABLE `import_mapping`
 	INDEX `import_mapping_FI_1` (`import_file_type`),
 	CONSTRAINT `import_mapping_FK_1`
 		FOREIGN KEY (`import_file_type`)
-		REFERENCES `enum_item` (`id`),
+		REFERENCES `enum_item` (`id`)
+		ON DELETE CASCADE,
 	INDEX `import_mapping_FI_2` (`mapping`),
 	CONSTRAINT `import_mapping_FK_2`
 		FOREIGN KEY (`mapping`)
@@ -371,6 +380,7 @@ CREATE TABLE `import_mapping`
 	CONSTRAINT `import_mapping_FK_3`
 		FOREIGN KEY (`rating_field_id`)
 		REFERENCES `rating_field` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
@@ -392,6 +402,7 @@ CREATE TABLE `rating_field`
 	CONSTRAINT `rating_field_FK_1`
 		FOREIGN KEY (`type_id`)
 		REFERENCES `enum_item` (`id`)
+		ON DELETE CASCADE
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
