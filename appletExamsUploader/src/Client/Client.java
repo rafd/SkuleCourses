@@ -35,6 +35,7 @@ public class Client extends JApplet {
                     String username = getParameter("username");
                     String password = getParameter("password");
                     String handlerPath = getParameter("handlerPath");
+                    String registrationPath = getParameter("registrationPath");
                     String year = getParameter("year");
                     String redirectPath = getParameter("url");
                     
@@ -43,7 +44,7 @@ public class Client extends JApplet {
                     try {
                         url = new URL(redirectPath);
                         if (username!=null && password !=null && handlerPath!=null && year!=null) 
-                            pane = new AppletPane(ac, url, handlerPath, username, password, year); 
+                            pane = new AppletPane(ac, url, handlerPath, registrationPath, username, password, year); 
                         cp.add(pane);
                     } catch (java.net.MalformedURLException e){
                         System.out.println("Cannot parse redirect info");

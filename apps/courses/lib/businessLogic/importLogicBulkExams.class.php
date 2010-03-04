@@ -8,7 +8,7 @@
  *
  * @author     Jimmy Lu
  */
-class importLogicOfficialExams
+class importLogicBulkExams
 {
   private $_dir;
   private $_year;
@@ -28,7 +28,7 @@ class importLogicOfficialExams
    */
   public function doImport()
   {
-    if (!file_exists($this->_dir)) throw new Exception("directory non-existent", 400);
+    if (!file_exists($this->_dir)) throw new Exception("Directory Non-Existent", 400);
 
     $errArr = array();
     $handler = opendir($this->_dir);

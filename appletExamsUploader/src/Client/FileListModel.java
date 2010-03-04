@@ -13,7 +13,7 @@ public class FileListModel implements ListModel{
     private Vector<FileNode> _children;
     private int _childCount;
     private FileNode _parent;
-            
+    
     public FileListModel(FileNode parent){
         _childCount = parent.getFileCount();
         _children = parent.getFiles();

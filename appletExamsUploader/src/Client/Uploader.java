@@ -2,7 +2,6 @@
 
 package Client;
 
-import java.applet.AppletContext;
 import java.io.*;
 import java.util.Vector;
 import java.net.HttpURLConnection;
@@ -14,7 +13,7 @@ public class Uploader {
     private final String username;
     private final String password;
     private String phpHandlerPath;
-    private Thread uploaderThread;
+    private String registrationPath;
     private Vector<File> filesVector;
     private boolean isUploading;
     private String metadata;
@@ -22,14 +21,14 @@ public class Uploader {
 
     private JTextArea txtStatus;
     private JProgressBar barProgress;
-    private URL redirectURL;
-    private AppletContext appletContext;
 
     // constructor
-    public Uploader(String un, String pw, String handlerPath){
-        username = un;
-        password = pw;
-        phpHandlerPath = handlerPath;
+    public Uploader(String un, String pw, String handlerPath, String registrationPath, String year){
+        this.username = un;
+        this.password = pw;
+        this.phpHandlerPath = handlerPath;
+        this.registrationPath = registrationPath;
+        this.year = year;
         isUploading = false;
     }
 
@@ -40,12 +39,6 @@ public class Uploader {
     // parse in the files to be uploaded
     public void setFiles(Vector<File> files){
         filesVector = files;
-    }
-    
-    // if formName == null, do not form submit
-    public void setRedirectWhenUploadFinished(AppletContext ac, URL u){
-        appletContext = ac;
-        redirectURL = u;
     }
 
     // these info are necessary for the successful creation
@@ -64,223 +57,324 @@ public class Uploader {
         return isUploading;
     }
 
-    // immediately cancel the upload thread
-    public void cancelUpload(){
-	uploaderThread.interrupt();
-    }
-
-    // begin the upload thread
+    // begin upload
     public void uploadFiles()
     {
+      isUploading = true;
 
-      uploaderThread = new Thread( new Runnable()
+      // http connection
+      HttpURLConnection.setFollowRedirects(false);
+      HttpURLConnection conn = null;
+
+      // authorization
+      String authHash = null;
+      if ( username != null && password != null )
       {
-        public void run()
-        {
-          isUploading = true;
+          String s = username + ":" + password;
+          //authHash = new sun.misc.BASE64Encoder().encode(s.getBytes());
+          authHash = Base64Coder.encodeString(s);
+      }
 
-          // http connection
-          HttpURLConnection.setFollowRedirects(false);
-          HttpURLConnection conn = null;
+      //-- make an upload request for each file
 
-          // authorization
-          String authHash = null;
-          if ( username != null && password != null )
-          {
-              String s = username + ":" + password;
-              //authHash = new sun.misc.BASE64Encoder().encode(s.getBytes());
-              authHash = Base64Coder.encodeString(s);
-          }
+      int len = filesVector.size();
+      for (int i = 0; i < len; i++ )
+      {
 
-          // make an upload request for each file
-          int len = filesVector.size();
-          for (int i = 0; i < len; i++ )
-          {
+        // check for interrupt
+        if ( Thread.currentThread().isInterrupted() ) continue;
 
-            // check for interrupt
-            if ( Thread.currentThread().isInterrupted() ) continue;
+        File f = (File) filesVector.get(i);
+        String fileName = f.getName();
+        int fileSize = (int) Math.floor(  (double) f.length() / 1024 );
+        String statsMsg = "Uploading " + fileName + " (" + fileSize + "kB)";
 
-            File f = (File) filesVector.get(i);
-            String fileName = f.getName();
-            int fileSize = (int) Math.floor(  (double) f.length() / 1024 );
-            String statsMsg = "Uploading " + fileName + " (" + fileSize + "kB)";
-            //System.out.println(statsMsg);
-
-            // refresh display elements
-            if (txtStatus != null){
-                writeToStatus(statsMsg);
-            }
-            if (barProgress != null){
-                barProgress.setMaximum(len);
-                barProgress.setValue(i+1);
-                SwingUtilities.invokeLater( new Runnable(){
-                  public void run()
-                  {
-                    barProgress.revalidate();
-                  }
-                });
-            }
-
-            try
-            {
-              conn = (HttpURLConnection) new URL(phpHandlerPath).openConnection();
-
-              /*Authenticator.setDefault(new Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication (username, password.toCharArray());
-                }
-              });*/
-
-              // authorize the connection to script
-              if ( authHash != null )
-              {
-                conn.setDoInput( true );
-                conn.setRequestProperty( "Authorization", "Basic " + authHash );
-                conn.connect();
-                conn.disconnect();
-              }
-
-              // POST data to script
-              conn.setRequestMethod("POST");
-
-              // http boundary string to encapsulate the multipart data
-              String boundary = "boundary220394209402349823";
-
-              //tail string
-              String tail    = "\r\n--" + boundary + "--\r\n";
-
-              // set content type to multipart
-              conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary );
-
-              conn.setDoOutput(true);
-
-              // create metadata
-              String metadataPart = "--" + boundary + "\r\n"
-                + "Content-Disposition: form-data; name=\"metadata\"\r\n\r\n"
-                + metadata + "\r\n";
-
-              // create file data header
-              String fileHeader1 = "--" + boundary + "\r\n"
-                + "Content-Disposition: form-data; name=\"uploadfile\"; filename=\"" + fileName + "\"\r\n"
-                + "Content-Type: application/octet-stream\r\n"
-                + "Content-Transfer-Encoding: binary\r\n";
-
-              long   fileLength  = f.length() + tail.length();
-              String fileHeader2 = "Content-length: " + fileLength + "\r\n";
-              String fileHeader  = fileHeader1 + fileHeader2 + "\r\n";
-
-              // non-binar part of the message
-              String stringData = metadataPart + fileHeader;
-              String yearData=null;
-
-              // write out album info data if applicable
-              if (year != null){
-                fileHeader1 = "--" + boundary + "\r\n"
-                    + "Content-Disposition: form-data; name=\"albumYear\"\r\n"
-                    + "Content-Type: text/plain; charset=UTF-8\r\n"
-                    + "Content-Transfer-Encoding: 8bit\r\n";
-
-                fileLength  = year.length() + tail.length();
-                fileHeader2 = "Content-length: " + fileLength + "\r\n";
-                fileHeader  = fileHeader1 + fileHeader2 + "\r\n";
-
-              	yearData = fileHeader + year + tail;
-              }
-
-              // request length
-              long requestLength = stringData.length() + f.length() + tail.length();
-              if (yearData != null) requestLength += yearData.length();
-              conn.setRequestProperty("Content-length", "" + requestLength );
-
-              // upload fresh data without buffering
-              conn.setFixedLengthStreamingMode((int) requestLength );
-
-              // server connection
-              conn.connect();
-              DataOutputStream out = new DataOutputStream( conn.getOutputStream() );
-              out.writeBytes(stringData);
-              out.flush();
-
-              // write out main data
-              int bytesRead = 0;
-              byte b[] = new byte[1024];
-              BufferedInputStream bufin = new BufferedInputStream(new FileInputStream(f));
-              while ((bytesRead = bufin.read(b)) != -1)
-              {
-                if ( Thread.currentThread().isInterrupted() )
-                {
-                  // todo : graceful abort
-                }
-                out.write(b, 0, bytesRead);
-                out.flush();
-              }
-
-              // write closing boundary
-              out.writeBytes(tail);
-              out.flush();
-
-              // write id and year info if applicable
-              if (yearData != null){
-              	out.writeBytes(yearData);
-              	out.flush();
-              }
-
-              // close data output stream
-              out.close();
-
-              // get server response
-              BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-              String line;
-              System.out.print("Server response: ");
-              while ((line = rd.readLine()) != null)
-              {
-                final String l = line;
-                System.out.print(l+"  ");
-              }
-              System.out.print("\n");
-
-              try
-              {
-                /*
-                 * If we got a 401 (unauthorized), we can't get that data. We will
-                 * get an IOException. This makes no sense since a 401 does not
-                 * consitute an IOException, it just says we need to provide the
-                 * username again.
-                 */
-                int responseCode        = conn.getResponseCode();
-                String responseMessage  = conn.getResponseMessage();
-                System.out.println("conn.getResponseCode(): " + responseCode);
-                System.out.println("conn.getResponseMessage(): " + responseMessage);
-              }
-              catch (IOException ioe)
-              {
-                  System.out.println(ioe.getMessage());
-              }
-
-            }
-            catch (Exception e)
-            {
-                System.out.println("ERROR WITH UPLOADING");
-                e.printStackTrace();
-            }
-            finally
-            {
-              // close connection
-              if (conn != null) conn.disconnect();
-            }
-          }
-
-          isUploading = false;
-          
-          // redirect when done?
-          if (redirectURL != null && appletContext != null){
-              appletContext.showDocument(redirectURL);
-              System.out.println("Redirected");
-          }
+        // refresh display elements
+        if (txtStatus != null){
+            writeToStatus(statsMsg);
         }
-      } );
+        if (barProgress != null){
+            barProgress.setMaximum(len);
+            barProgress.setValue(i+1);
+            SwingUtilities.invokeLater( new Runnable(){
+              public void run()
+              {
+                barProgress.revalidate();
+              }
+            });
+        }
 
-      uploaderThread.start();
+        try
+        {
+          conn = (HttpURLConnection) new URL(phpHandlerPath).openConnection();
+
+          // authorize the connection to script
+          if ( authHash != null )
+          {
+            conn.setDoInput( true );
+            conn.setRequestProperty( "Authorization", "Basic " + authHash );
+            conn.connect();
+            conn.disconnect();
+          }
+
+          // POST data to script
+          conn.setRequestMethod("POST");
+
+          // http boundary string to encapsulate the multipart data
+          String boundary = "boundary220394209402349823";
+
+          //tail string
+          String tail    = "\r\n--" + boundary + "--\r\n";
+
+          // set content type to multipart
+          conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary );
+
+          conn.setDoOutput(true);
+
+          // create metadata
+          String metadataPart = "--" + boundary + "\r\n"
+            + "Content-Disposition: form-data; name=\"metadata\"\r\n\r\n"
+            + metadata + "\r\n";
+
+          // create file data header
+          String fileHeader1 = "--" + boundary + "\r\n"
+            + "Content-Disposition: form-data; name=\"uploadfile\"; filename=\"" + fileName + "\"\r\n"
+            + "Content-Type: application/octet-stream\r\n"
+            + "Content-Transfer-Encoding: binary\r\n";
+
+          long   fileLength  = f.length() + tail.length();
+          String fileHeader2 = "Content-length: " + fileLength + "\r\n";
+          String fileHeader  = fileHeader1 + fileHeader2 + "\r\n";
+
+          // non-binar part of the message
+          String stringData = metadataPart + fileHeader;
+          String yearData=null;
+
+          // write out album info data if applicable
+          if (year != null){
+            fileHeader1 = "--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"year\"\r\n"
+                + "Content-Type: text/plain; charset=UTF-8\r\n"
+                + "Content-Transfer-Encoding: 8bit\r\n";
+
+            fileLength  = year.length() + tail.length();
+            fileHeader2 = "Content-length: " + fileLength + "\r\n";
+            fileHeader  = fileHeader1 + fileHeader2 + "\r\n";
+
+            yearData = fileHeader + year + tail;
+          }
+
+          // request length
+          long requestLength = stringData.length() + f.length() + tail.length();
+          if (yearData != null) requestLength += yearData.length();
+          conn.setRequestProperty("Content-length", "" + requestLength );
+
+          // upload fresh data without buffering
+          conn.setFixedLengthStreamingMode((int) requestLength );
+
+          // server connection
+          conn.connect();
+          DataOutputStream out = new DataOutputStream( conn.getOutputStream() );
+          out.writeBytes(stringData);
+          out.flush();
+
+          // write out main data
+          int bytesRead = 0;
+          byte b[] = new byte[1024];
+          BufferedInputStream bufin = new BufferedInputStream(new FileInputStream(f));
+          while ((bytesRead = bufin.read(b)) != -1)
+          {
+            if ( Thread.currentThread().isInterrupted() )
+            {
+              // todo : graceful abort
+            }
+            out.write(b, 0, bytesRead);
+            out.flush();
+          }
+
+          // write closing boundary
+          out.writeBytes(tail);
+          out.flush();
+
+          // write id and year info if applicable
+          if (yearData != null){
+            out.writeBytes(yearData);
+            out.flush();
+          }
+
+          // close data output stream
+          out.close();
+
+          // get server response
+          BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+          String line;
+          String res = "";
+          while ((line = rd.readLine()) != null)
+          {
+            final String l = line;
+            res += l+"  ";
+          }
+          System.out.println(res+"\n");
+          writeToStatus(res);
+
+          try
+          {
+            /*
+             * If we got a 401 (unauthorized), we can't get that data. We will
+             * get an IOException. This makes no sense since a 401 does not
+             * consitute an IOException, it just says we need to provide the
+             * username again.
+             */
+            int responseCode        = conn.getResponseCode();
+            String responseMessage  = conn.getResponseMessage();
+            System.out.println("conn.getResponseCode(): " + responseCode);
+            System.out.println("conn.getResponseMessage(): " + responseMessage);
+          }
+          catch (IOException ioe)
+          {
+              System.out.println(ioe.getMessage());
+          }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("ERROR WITH UPLOADING");
+            writeToStatus("ERROR WITH UPLOADING");
+            e.printStackTrace();
+        }
+        finally
+        {
+          // close connection
+          if (conn != null) conn.disconnect();
+        }
+      }
+
+      //-- call exam registration script
+
+      // refresh display elements
+      if (txtStatus != null){
+          writeToStatus("\nRegistering exams with the database...");
+      }
+      if (barProgress != null){
+          barProgress.setIndeterminate(true);
+          SwingUtilities.invokeLater( new Runnable(){
+            public void run()
+            {
+              barProgress.revalidate();
+            }
+          });
+      }
+
+      // call script
+      try
+        {
+          conn = (HttpURLConnection) new URL(registrationPath).openConnection();
+
+          // authorize the connection to script
+          if ( authHash != null )
+          {
+            conn.setDoInput( true );
+            conn.setRequestProperty( "Authorization", "Basic " + authHash );
+            conn.connect();
+            conn.disconnect();
+          }
+
+          // POST data to script
+          conn.setRequestMethod("POST");
+
+          // http boundary string to encapsulate the multipart data
+          String boundary = "boundary220394209402349823";
+
+          //tail string
+          String tail    = "\r\n--" + boundary + "--\r\n";
+
+          // set content type to multipart
+          conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary );
+
+          conn.setDoOutput(true);
+
+          // year
+          String yearData=null;
+          if (year != null){
+            String header1 = "--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"year\"\r\n"
+                + "Content-Type: text/plain; charset=UTF-8\r\n"
+                + "Content-Transfer-Encoding: 8bit\r\n";
+
+            long length  = year.length() + tail.length();
+            String header2 = "Content-length: " + length + "\r\n";
+            String header  = header1 + header2 + "\r\n";
+
+            yearData = header + year + tail;
+          }
+
+          // request length
+          long requestLength = 0;
+          if (yearData != null) requestLength += yearData.length();
+          conn.setRequestProperty("Content-length", "" + requestLength );
+
+          // upload fresh data without buffering
+          conn.setFixedLengthStreamingMode((int) requestLength );
+
+          // server connection
+          conn.connect();
+          DataOutputStream out = new DataOutputStream( conn.getOutputStream() );
+
+          // write directory and year info if applicable
+          if (yearData != null){
+            out.writeBytes(yearData);
+            out.flush();
+          }
+
+          // close data output stream
+          out.close();
+
+          // get server response
+          BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+          String line;
+          String res = "";
+          while ((line = rd.readLine()) != null)
+          {
+            final String l = line;
+            res += l+"  ";
+          }
+          System.out.println(res+"\n");
+          writeToStatus(res);
+
+          try
+          {
+            /*
+             * If we got a 401 (unauthorized), we can't get that data. We will
+             * get an IOException. This makes no sense since a 401 does not
+             * consitute an IOException, it just says we need to provide the
+             * username again.
+             */
+            int responseCode        = conn.getResponseCode();
+            String responseMessage  = conn.getResponseMessage();
+            System.out.println("conn.getResponseCode(): " + responseCode);
+            System.out.println("conn.getResponseMessage(): " + responseMessage);
+          }
+          catch (IOException ioe)
+          {
+              System.out.println(ioe.getMessage());
+          }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("IMPORT FAILED");
+            writeToStatus("IMPORT FAILED");
+            e.printStackTrace();
+        }
+        finally
+        {
+          // close connection
+          if (conn != null) conn.disconnect();
+        }
+
+      //-- all finished
+
+      isUploading = false;
     }
 
     private void writeToStatus(String msg){

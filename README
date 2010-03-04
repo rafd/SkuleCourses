@@ -16,8 +16,8 @@ Initial Configuration
 5. Run system.data.sql under /data/sql to populate necessary system data
 6. Modify the admin password in user table
 7. Delete all files and subdirectories under /cache
-8. Change php.ini max_upload_size and max_form_size to 10M, max_post_time and 
-max_input_time to 300
+8. Change php.ini max_upload_size and max_form_size to 10M, max_execution_time and 
+max_input_time to 900, max_file_uploads to 200
 9. Require third party (from skule.ca) screen.css in www/css, and images in
 www
 

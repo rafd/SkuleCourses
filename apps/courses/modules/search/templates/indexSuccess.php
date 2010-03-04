@@ -11,9 +11,9 @@
 		</form>
 		<p style="margin: 3px 0 0 0">Type in the course code, course name, instructor name, or program, and away you go!</p>
 	</div>
-	
+
 	<p style="text-align:center; margin: 10px 0 10px 0;font-size:16px; font-weight:bold">OR</p>
-	
+
 	<div class="search_block" onmouseover="this.style.backgroundColor='threedface'" onmouseout="this.style.backgroundColor='#EAEDF4'">
 		<p class="title" style="margin-top:-2px">B.</p>
 		Use <?php echo link_to("Detailed Search", "search/index?selSearchType=1")?> for more refined results.

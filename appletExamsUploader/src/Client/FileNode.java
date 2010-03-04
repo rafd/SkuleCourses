@@ -15,6 +15,15 @@ public class FileNode{
     private File _file;
     private Vector<FileNode> _children;
     private Vector<FileNode> _fileList;
+    private boolean _selected;
+    
+    public void setSelected(boolean selected){
+        this._selected = selected;
+    }
+    
+    public boolean isSelected(){
+        return this._selected;
+    }
     
     // gets only non hidden directories
     public static FileFilter directoryFilter = new FileFilter(){
@@ -48,6 +57,7 @@ public class FileNode{
         return _childCount;
     }
     
+    // only get the directories
     public void setChildren(){
         _children.clear();
         File[] f = _file.listFiles(directoryFilter);
@@ -71,6 +81,7 @@ public class FileNode{
         return _fileList;
     }
     
+    // only get the files
     public void setFiles(){
         File[] f = _file.listFiles(fileFilter);
         if (f==null) return;

@@ -52,7 +52,24 @@ class adminexamActions extends sfActions
   
   public function executeBulk(sfWebRequest $request)
   {
+  }
+  
+  public function executeBulkTwo(sfWebRequest $request)
+  {
+    if (!$request->isMethod(sfWebRequest::POST) || !$request->hasParameter('bulk_year') || !$request->hasParameter('bulk_term'))
+      $this->forward404("Not valid way to access this page");
     
+    $this->bulkYear = $request->getParameter('bulk_year').$request->getParameter('bulk_term');
+    $tgtPath = "exams/bulk/".$this->bulkYear;
+    if (is_dir($tgtPath)){
+      // if this directory exists, caution user
+      $this->caution = true;
+    }
+    
+  }
+  
+  public function executeBulkThree(sfWebRequest $request)
+  {
   }
 
   public function executeCreate(sfWebRequest $request)

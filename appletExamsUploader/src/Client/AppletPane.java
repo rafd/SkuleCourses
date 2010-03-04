@@ -1,5 +1,6 @@
 /*
  * AppletPane.java
+ * Author: Jimmy Lu
  *
  * Created on August 27, 2009, 10:27 PM
  */
@@ -7,6 +8,8 @@
 package Client;
 
 import java.applet.AppletContext;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Vector;
@@ -14,24 +17,23 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
-/**
- *
- * @author  Jimmy
- */
 public class AppletPane extends javax.swing.JPanel {
     
     private Vector<FileNode> _roots;
     private String _username;
     private String _password;
     private String _handlerPath;
+    private String _registrationPath;
     private String _year;
     private FileNode _currentFileNode;
+    
+    private Vector<File> _selectedList;
     
     // for uploader class
     private AppletContext _appletContext;
     private URL _redirectURL;
     
-    public AppletPane(AppletContext ac, URL redirectURL, String handlerPath, String username, String password, String year) {
+    public AppletPane(AppletContext ac, URL redirectURL, String handlerPath, String registrationPath, String username, String password, String year) {
         // initialization
         _roots = new Vector<FileNode>();
         File[] f = File.listRoots();
@@ -39,6 +41,7 @@ public class AppletPane extends javax.swing.JPanel {
             _roots.add(new FileNode(f[i]));
         }
         initializeFileRoot();
+        _selectedList = new Vector<File>();
 
         // DO NOT DELETE
         initComponents();
@@ -46,7 +49,29 @@ public class AppletPane extends javax.swing.JPanel {
 
         // local file system
         _currentFileNode = _roots.elementAt(0);
+        
         listLocal.setModel(new FileListModel(_currentFileNode));
+        listLocal.setCellRenderer(new FileListCellRenderer(listLocal));
+        listLocal.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e){
+                int i = listLocal.locationToIndex(e.getPoint());
+
+                if (i != -1) {
+                    FileNode node = (FileNode)listLocal.getModel().getElementAt(i);
+                    node.setSelected(!node.isSelected());
+                    
+                    int selIndex = _selectedList.indexOf(node.getUnderlyingFile());
+                    if (node.isSelected() && selIndex == -1)
+                        _selectedList.addElement(node.getUnderlyingFile());
+                    else if (!node.isSelected() && selIndex > -1)
+                        _selectedList.removeElementAt(selIndex);
+                    
+                    listLocal.revalidate();
+               }
+            }
+        });
+        
         treeLocal.addTreeWillExpandListener(new TreeWillExpandListener(){
             public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
                 fileNodeExpansion(event);
@@ -62,15 +87,14 @@ public class AppletPane extends javax.swing.JPanel {
         
         _year=year;
         _handlerPath=handlerPath;
+        _registrationPath = registrationPath;
         _username=username;
         _password=password;
-        lblRemoteDescr.setText("Remote: "+year);
         
         // uploader class info
         _redirectURL = redirectURL;
         _appletContext = ac;
         
-        resetControls(true);
     }
     
     private void initializeFileRoot(){
@@ -103,11 +127,6 @@ public class AppletPane extends javax.swing.JPanel {
         // scroll to bottom
         txtStatus.setCaretPosition(txtStatus.getDocument().getLength());
     }
-    
-    private void resetControls(boolean wantEnabled){
-        btnToRemote.setEnabled(wantEnabled);
-        btnDelete.setEnabled(wantEnabled);
-    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -122,16 +141,8 @@ public class AppletPane extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtStatus = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        btnToRemote = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        remoteScrollPanel = new javax.swing.JScrollPane();
-        listRemote = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
-        lblRemoteDescr = new javax.swing.JLabel();
         btnStart = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         localSplitPane = new javax.swing.JSplitPane();
         localListScrollPane = new javax.swing.JScrollPane();
         listLocal = new javax.swing.JList();
@@ -139,6 +150,8 @@ public class AppletPane extends javax.swing.JPanel {
         comboDriver = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         treeLocal = new javax.swing.JTree();
+        btnAll = new javax.swing.JButton();
+        btnUnAll = new javax.swing.JButton();
 
         txtStatus.setColumns(20);
         txtStatus.setEditable(false);
@@ -146,30 +159,7 @@ public class AppletPane extends javax.swing.JPanel {
         txtStatus.setRows(5);
         jScrollPane2.setViewportView(txtStatus);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
-        jLabel2.setText("Local");
-
-        btnToRemote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/rightArrow.png"))); // NOI18N
-        btnToRemote.setToolTipText("Upload selected file/files from local side to remote side (no actual transfering done)");
-        btnToRemote.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnToRemoteActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/delete.gif"))); // NOI18N
-        btnDelete.setToolTipText("Remove the selected remote itmes");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
-        remoteScrollPanel.setViewportView(listRemote);
-
-        lblRemoteDescr.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblRemoteDescr.setText("Remote");
-
+        btnStart.setBackground(new java.awt.Color(102, 153, 255));
         btnStart.setText("Start Transfering");
         btnStart.setToolTipText("Proceed to transfer the local files to remote");
         btnStart.addActionListener(new java.awt.event.ActionListener() {
@@ -178,14 +168,9 @@ public class AppletPane extends javax.swing.JPanel {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/local_icon.gif"))); // NOI18N
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12));
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Client/remote-icon.gif"))); // NOI18N
-
         localSplitPane.setDividerSize(3);
 
+        listLocal.setCellRenderer(null);
         localListScrollPane.setViewportView(listLocal);
 
         localSplitPane.setRightComponent(localListScrollPane);
@@ -212,6 +197,22 @@ public class AppletPane extends javax.swing.JPanel {
 
         localSplitPane.setLeftComponent(jSplitPane1);
 
+        btnAll.setText("Select All");
+        btnAll.setToolTipText("Proceed to transfer the local files to remote");
+        btnAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAllActionPerformed(evt);
+            }
+        });
+
+        btnUnAll.setText("Unselect All");
+        btnUnAll.setToolTipText("Proceed to transfer the local files to remote");
+        btnUnAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnAllActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -220,37 +221,18 @@ public class AppletPane extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel4)
-                            .add(jLabel5))
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(jLabel2))
-                            .add(layout.createSequentialGroup()
-                                .add(439, 439, 439)
-                                .add(jLabel3))))
+                        .add(jLabel4)
+                        .add(464, 464, 464)
+                        .add(jLabel3))
+                    .add(progressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                    .add(localSplitPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(progressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                            .add(jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
-                            .add(localSplitPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(layout.createSequentialGroup()
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(btnDelete, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 28, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(btnStart))
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                                .add(6, 6, 6)
-                                .add(btnToRemote, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(layout.createSequentialGroup()
-                                        .add(jLabel6)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(lblRemoteDescr))
-                                    .add(remoteScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE))))))
+                        .add(btnAll)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(btnUnAll)
+                        .add(37, 37, 37)
+                        .add(btnStart)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -259,81 +241,62 @@ public class AppletPane extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jLabel4)
-                    .add(jLabel3)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jLabel2)
-                        .add(jLabel5))
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(lblRemoteDescr)
-                        .add(jLabel6)))
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(localSplitPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                            .add(remoteScrollPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
-                        .add(6, 6, 6)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, btnDelete, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, btnStart, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .add(layout.createSequentialGroup()
-                        .add(164, 164, 164)
-                        .add(btnToRemote, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 21, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(jLabel3))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(localSplitPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 331, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnAll)
+                    .add(btnUnAll)
+                    .add(btnStart))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-private void btnToRemoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToRemoteActionPerformed
-
-    // upload from local
-    Object[] objArr = listLocal.getSelectedValues();
-    int len = objArr.length;
-    String err = "";
-
-    FileNode parent;
-    if (listRemote.getModel() != null && listRemote.getModel() instanceof FileListModel)
-        parent = ((FileListModel)listRemote.getModel()).getParent();
-    else
-        parent = new FileNode(null);
-
-    for (int i=0; i<len; i++){
-        FileNode file = (FileNode)objArr[i];
-        if (parent.getFiles()==null || !parent.getFiles().contains(file))
-            parent.addFile(file);
-        else
-            err += file.toString() + "\n";
-    }
-
-    listRemote.setModel(new FileListModel(parent));
-    if (!err.equals("")) JOptionPane.showMessageDialog(this, "The following files weren't added because they already exist in remote:\n\n"
-                + err, "Unadded Files", JOptionPane.OK_OPTION);
-}//GEN-LAST:event_btnToRemoteActionPerformed
-
-private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-    if (listRemote.getModel()!= null && listRemote.getModel() instanceof FileListModel){
-        FileNode node = ((FileListModel)listRemote.getModel()).getParent();
-        node.removeFile((FileNode)listRemote.getSelectedValue());
-        listRemote.setModel(new FileListModel(node));
-    }
-}//GEN-LAST:event_btnDeleteActionPerformed
-
 private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-    Uploader upl = new Uploader(_username, _password, _handlerPath);
-    Vector<File> vec = new Vector<File>();
-    int len = listRemote.getSelectedValues().length;
-    for (int i=0; i<len; i++){
-        vec.add((File)listRemote.getSelectedValues()[i]);
+    if (btnStart.getText().equals("Next")){
+        
+        // redirect
+        _appletContext.showDocument(_redirectURL);
+        
+    } else {
+        
+        // make sure first that the selected list is not emptys
+        if (_selectedList.size() <= 0){
+            JOptionPane.showMessageDialog(this, "Nothing has been selected!", "Nothing Uploaded", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        // disable all buttons
+        btnAll.setEnabled(false);
+        btnUnAll.setEnabled(false);
+        treeLocal.setEnabled(false);
+        comboDriver.setEnabled(false);
+        btnStart.setEnabled(false);
+
+        // toggle the uploader object
+        Thread uploaderThread = new Thread( new Runnable()
+        {
+            public void run()
+            {
+                Uploader upl = new Uploader(_username, _password, _handlerPath, _registrationPath, _year);
+                upl.setFiles(_selectedList);
+                upl.setDisplays(txtStatus, progressBar);
+                upl.setYear(_year);
+                upl.uploadFiles();
+
+                btnStart.setText("Next");
+                btnStart.setEnabled(true);
+                txtStatus.setText(txtStatus.getText()+"\nClick on Next to continue...");
+                txtStatus.setCaretPosition(txtStatus.getDocument().getLength());
+            }
+        });
+        uploaderThread.start();
     }
-    upl.setFiles(vec);
-    upl.setDisplays(txtStatus, progressBar);
-    upl.setYear(_year);
-    upl.setRedirectWhenUploadFinished(_appletContext, _redirectURL);
-    upl.uploadFiles();
 }//GEN-LAST:event_btnStartActionPerformed
 
 private void comboDriverOnSelectChanged(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboDriverOnSelectChanged
@@ -344,6 +307,32 @@ private void comboDriverOnSelectChanged(java.awt.event.ActionEvent evt) {//GEN-F
     treeLocal.setSelectionPath(treeLocal.getPathForRow(0));
 }//GEN-LAST:event_comboDriverOnSelectChanged
 
+private void btnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllActionPerformed
+    FileListModel model = (FileListModel)listLocal.getModel();
+    int size = model.getSize();
+    for (int i=0; i<size; i++){
+        FileNode node = (FileNode)model.getElementAt(i);
+        if (!node.isSelected()){
+            node.setSelected(true);
+            _selectedList.addElement(node.getUnderlyingFile());
+        }
+    }
+    listLocal.repaint();
+}//GEN-LAST:event_btnAllActionPerformed
+
+private void btnUnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnAllActionPerformed
+    FileListModel model = (FileListModel)listLocal.getModel();
+    int size = model.getSize();
+    for (int i=0; i<size; i++){
+        FileNode node = (FileNode)model.getElementAt(i);
+        if (node.isSelected()){
+            node.setSelected(false);
+            _selectedList.removeElement(node.getUnderlyingFile());
+        }
+    }
+    listLocal.repaint();
+}//GEN-LAST:event_btnUnAllActionPerformed
+
 private void localTreeNodeSelection(TreeSelectionEvent e){
     TreePath path = e.getPath();
     _currentFileNode = (FileNode)path.getLastPathComponent();
@@ -352,25 +341,19 @@ private void localTreeNodeSelection(TreeSelectionEvent e){
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnAll;
     private javax.swing.JButton btnStart;
-    private javax.swing.JButton btnToRemote;
+    private javax.swing.JButton btnUnAll;
     private javax.swing.JComboBox comboDriver;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JLabel lblRemoteDescr;
     private javax.swing.JList listLocal;
-    private javax.swing.JList listRemote;
     private javax.swing.JScrollPane localListScrollPane;
     private javax.swing.JSplitPane localSplitPane;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JScrollPane remoteScrollPanel;
     private javax.swing.JTree treeLocal;
     private javax.swing.JTextArea txtStatus;
     // End of variables declaration//GEN-END:variables

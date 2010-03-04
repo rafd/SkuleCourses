@@ -60,3 +60,4 @@
 	<?php endif;?>
 </div></div>
 <img class='hidden' src='/skule_images/reload.on.gif' />
+<img class='hidden' src='/skule_images/back.on.gif' />

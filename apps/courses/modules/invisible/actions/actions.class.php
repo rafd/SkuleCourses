@@ -3,6 +3,161 @@
 class invisibleActions extends sfActions
 {
   /**
+   * 
+   */
+  public function executeBulkExamsHandler(sfWebRequest $request)
+  {
+    /*
+	 * check http basic authentication
+	 */
+	if ( !isset($_SERVER['PHP_AUTH_USER']))
+	{
+	  echo 'Access denied';
+	  return sfView::HEADER_ONLY;
+	}
+	else
+	{
+	  $username = $_SERVER['PHP_AUTH_USER'];
+	  $password = $_SERVER['PHP_AUTH_PW'];
+	
+	  // get authorization info from configs
+	  include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
+	
+	  if ( $username != $appletUploaderParams['username'] or $password != $appletUploaderParams['password'] ){ 
+	    echo "Authentication failed!";
+	    return sfView::HEADER_ONLY;
+	  }
+	}
+	
+	/*
+	 * check if something has been uploaded
+	 */
+	if ( !isset($_FILES) or !count ($_FILES) or !isset ( $_FILES['uploadfile'] ) )
+	{
+	  echo "No file data received (File might be to large).";
+	  return sfView::HEADER_ONLY;
+	}
+	if (!isset($_POST['year'])){
+	  echo "No year info received.";
+	  return sfView::HEADER_ONLY;
+	}
+	
+	/*
+	 * check file size
+	 */
+	$maxfilesize = 10000; //kByte
+	if ($_FILES['uploadfile']['size'] > $maxfilesize*1024)
+	{
+	  echo "File exceeds maximum filesize: $maxfilesize kByte.";
+	  return sfView::HEADER_ONLY;
+	}
+	
+	// Check if the target directory exists
+	// If not, we create the directory
+	
+	$year = $_POST['year'];
+	$tgt_path = "exams/bulk/".$year;
+	
+	//make directories
+	if (!is_dir($tgt_path)) {
+	  if (!mkdir($tgt_path)){
+	    echo "Error at creating directories";
+	    return sfView::HEADER_ONLY;
+	  }
+	}
+	
+	/*
+	 * get file info
+	 */
+	$tmp_name  = $_FILES['uploadfile']['tmp_name'];
+	$file_name = $_FILES['uploadfile']['name'];
+	
+	/*
+	 * check file name for validity
+	 */
+	
+	if ( strstr($file_name, ".." ) )
+	{
+	  echo "Illegal filename.";
+	  return sfView::HEADER_ONLY;
+	}
+	
+	$tgt_path = $tgt_path."/".$file_name;
+	
+	/*
+	 * check if file exists
+	 */
+	if ( file_exists ( $tgt_path) )
+	{
+	  echo "File {$_FILES['uploadfile']['name']} exists - not uploaded.";
+	  return sfView::HEADER_ONLY;
+	}
+	
+	/*
+	 * move temporary file to target location and check for errors
+	 */
+	if ( !move_uploaded_file( $tmp_name, $tgt_path ) )
+	{
+	  echo "Problem occurred during upload.";
+	  return sfView::HEADER_ONLY;
+	}
+	
+	/*
+	 * report upload succes
+	 */
+	echo "Upload successful.";
+	return sfView::HEADER_ONLY;
+  }
+  
+  /**
+   * 
+   */
+  public function executeBulkExamsRegistration(sfWebRequest $request)
+  {
+	/*
+	 * check http basic authentication
+	 */
+	if ( !isset($_SERVER['PHP_AUTH_USER']))
+	{
+	  echo 'Access denied';
+	  return sfView::HEADER_ONLY;
+	}
+	else
+	{
+	  $username = $_SERVER['PHP_AUTH_USER'];
+	  $password = $_SERVER['PHP_AUTH_PW'];
+	
+	  // get authorization info from configs
+	  include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
+	
+	  if ( $username != $appletUploaderParams['username'] or $password != $appletUploaderParams['password'] ){ 
+	    echo "Authentication failed!";
+	    return sfView::HEADER_ONLY;
+	  }
+	}
+	
+	/*
+	 * check if all necessary parameters have been posted
+	 */
+	if (!isset($_POST['year'])) die ("No year info received.");
+	
+	$logicObj = new importLogicBulkExams("exams/bulk/".$_POST['year'], $_POST['year']);
+	try{
+	  $nonImportArr = $logicObj->doImport();
+	} catch (Exception $e){
+	  echo $e->getMessage();
+	  return sfView::HEADER_ONLY;
+	}
+	
+	echo "Registration completed.\n\n";
+	echo "The following files have NOT been registered:\n";
+	foreach ($nonImportArr as $f){
+	  echo "- ".$f."\n";
+	}
+	return sfView::HEADER_ONLY;
+  }
+  
+  /**
    * Randomly generate a security string and save into session variable "securityImage"
    * Then outputs a JPEG image of the security string
    * @param sfWebRequest $request
