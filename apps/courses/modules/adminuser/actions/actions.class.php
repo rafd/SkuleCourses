@@ -115,7 +115,10 @@ class adminuserActions extends sfActions
       	  $user = $userform->save();
       	  
       	  // send out an email to the newly created user
-      	  $msg = "Dear ".$user->getUserName().",\n\nYou have been registered with SkuleCourses (http://courses.skule.ca). Please note the following information:\n\n";
+      	  include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml'));
+      	  $msg = "Dear ".$user->getUserName().",\n\nYou have been registered with SkuleCourses (http://{$skuleGlobalParams['domain']}";
+      	  if (isset($skuleGlobalParams['port']) && $skuleGlobalParams['port']!="") $msg .= ":{$skuleGlobalParams['port']}";
+      	  $msg .= "). Please note the following information:\n\n";
       	  $msg .= "Credential Level: ".helperFunctions::getUserType($user->getTypeId());
       	  $msg .= "\nPassword: ".$user->getPassword()."\n\nSkuleCourses Webmaster";
       	  helperFunctions::sendEmail(array($user->getEmail()),"SkuleCourses User Registration", $msg);
