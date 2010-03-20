@@ -86,10 +86,13 @@
 		<table style="width:100%">
 			<tr>
 				<td style="vertical-align:top; width:310px">
-					Course Commenting
-					<a class="help" style="right:170px; float:right">
+				
+					<table><tr><td>Course Commenting</td>
+					<td><a class="help">
 					<span>Course Commenting contains comments submitted by students directly to Skule Courses. This module aims to accurately reflect students' experience of the course
 					and provide opportunity to give constructive feedback on the instructors and the course materials.</span></a>
+					</td></tr></table>
+					
 					<ul>
 						<li><?php echo link_to("View Comments", "course/commenting?id=".$sf_request->getParameter('id'))?></li>
 						<?php if ($courseObj->getIsEng()):?>
@@ -97,9 +100,12 @@
 						<?php endif;?>
 					</ul>
 					<br/>
-					Official Course Critiques
-					<a class="help" style="right:150px; float:right">
+					
+					<table><tr><td>Official Course Critiques</td>
+					<td><a class="help">
 					<span>Course Critiques uses the course evaluation data provided by the Faculty of Applied Science and Engineering, which were gathered at the end of every semester, and accurately report them.</span></a>
+					</td></tr></table>
+					
 					<ul>
 						<?php foreach ($ratingYearArray as $year):?>
 						<li><?php echo link_to(helperFunctions::translateTerm($year), "course/critique?id=".$sf_request->getParameter('id')."&year=".$year)?></li>

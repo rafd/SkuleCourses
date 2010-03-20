@@ -27,8 +27,8 @@
 			<tr>
 				<th width="100">Number Enrolled</th>
 				<th width="100">Number Responded</th>
-				<th width="150">Aggregated Rating<a class="help" style="float: right; right: 5px">
-				<span>The aggregated rating is the arithmetic average of the mean ratings of all questions below.</span></a></th>
+				<th width="150">Aggregated Rating<center><a class="help">
+				<span>The aggregated rating is the arithmetic average of the mean ratings of all questions below.</span></a></center></th>
 				<th width="100">Percent Retake</th>
 			</tr>
 			<tr>
