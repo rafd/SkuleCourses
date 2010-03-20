@@ -18,9 +18,8 @@ class EnumItemPeer extends BaseEnumItemPeer
   const MAPPING_COURSE_CODE = 222;
   const MAPPING_COURSE_NAME = 223;
   const MAPPING_INSTRUCTOR_NAME = 224;
-  const MAPPING_NUMBER_ENROLLED = 225;
-  const MAPPING_NUMBER_RESPONSE = 226;
   const MAPPING_QUESTION = 227;
+  const MAPPING_NUMBER = 231;
   
   // exam types
   const QUIZ = 61;
@@ -45,5 +44,28 @@ class EnumItemPeer extends BaseEnumItemPeer
     $c->add(EnumItemPeer::PARENT_ID, $parentId);
     $c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
     return EnumItemPeer::doselect($c, $propelConnection);
+  }
+  
+  /**
+   * Returns the largest available ID for a given parent id
+   * If none available, returns 0
+   * @param PropelPDO $parentId
+   * @param $conn
+   * @return unknown_type
+   */
+  public static function getLargestAvailableIdForNodeId($parentId, PropelPDO $conn=null)
+  {
+    if (!isset($conn)) $conn = Propel::getConnection();
+    
+    $query = "SELECT MAX(%s) FROM %s WHERE %s=%s";
+    $query = sprintf($query, EnumItemPeer::ID, EnumItemPeer::TABLE_NAME, EnumItemPeer::PARENT_ID, $parentId);
+    $statement = $conn->prepare($query);
+    $statement->execute();
+    $resultset = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+    $id = $resultset[0] + 1;
+    
+    $item = EnumItemPeer::retrieveByPK($id, $conn);
+    if (!isset($item)) return $id;
+    else return 0;
   }
 }

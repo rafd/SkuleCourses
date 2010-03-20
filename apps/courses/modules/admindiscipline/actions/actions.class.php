@@ -33,8 +33,11 @@ class admindisciplineActions extends sfActions
     
     $values=array('discipline'=>1);
     $this->form = new EnumItemForm(new EnumItem(),$values);
-
-    $this->processForm($request, $this->form);
+    
+    $id = EnumItemPeer::getLargestAvailableIdForNodeId(EnumItemPeer::DISCIPLINES_NODE_ID);
+    $this->processForm($request, $this->form, $id);
+    
+    // at this point, save has failed
     $c = new Criteria();
   	$c->add(EnumItemPeer::PARENT_ID,skuleadminConst::DISCIPLINE_PARENT_ID);
     $this->enum_item_list = $this->getDisciplineList($c);
@@ -102,14 +105,17 @@ class admindisciplineActions extends sfActions
   }
 
   /* process the forms being submitted, do validation and saving */
-  protected function processForm(sfWebRequest $request, sfForm $form)
+  protected function processForm(sfWebRequest $request, sfForm $form, $id=0)
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
+    $form->updateObject();
     $form->getObject()->setParentId(skuleadminConst::DISCIPLINE_PARENT_ID);
+    if ($id !=0) $form->getObject()->setId($id);
     if ($form->isValid())
     {
       try{
-        $enum_item = $form->save();
+        $enum_item = $form->getObject();
+        $enum_item->save();
         $this->parseDisAssoc($enum_item, $request);
         
         $par="";
