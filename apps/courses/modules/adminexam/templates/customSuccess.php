@@ -109,6 +109,26 @@ enctype="multipart/form-data">
 								<td><?php echo $form['descr']?></td>
 							</tr>
 							<tr>
+								<th>Year</th>
+								<td>
+									<select name="post_year">
+									<?php for ($i=$date["year"]+1; $i>=$earliestYear; $i--):?>
+							      	<option value="<?php echo $i?>"<?php if (isset($year) && $i==substr($year,0,4)):?> selected<?php endif;?>><?php echo $i?></option>
+							      	<?php endfor;?>
+							      	</select>
+								</td>
+							</tr>
+							<tr>
+								<th>Term</th>
+								<td>
+									<select name="post_term">
+					      				<option value="9" <?php if (isset($year) && substr($year,4,1)==9):?>selected<?php endif?>>Fall</option>
+					      				<option value="1" <?php if (isset($year) && substr($year,4,1)==1):?>selected<?php endif?>>Winter</option>
+					      				<option value="5" <?php if (isset($year) && substr($year,4,1)==5):?>selected<?php endif?>>Summer</option>
+					      			</select>
+								</td>
+							</tr>
+							<tr>
 								<th>Replace existing file</th>
 								<td><input type="file" name="file_path" /></td>
 							</tr>
