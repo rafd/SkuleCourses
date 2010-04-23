@@ -202,6 +202,21 @@ CREATE TABLE `auto_course_rating_data`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
+#-- auto_course_rating_mismatched
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `auto_course_rating_mismatched`;
+
+
+CREATE TABLE `auto_course_rating_mismatched`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`row` TEXT  NOT NULL,
+	`import_dt` DATETIME  NOT NULL,
+	PRIMARY KEY (`id`)
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
 #-- department
 #-----------------------------------------------------------------------------
 
@@ -225,7 +240,7 @@ DROP TABLE IF EXISTS `enum_item`;
 
 CREATE TABLE `enum_item`
 (
-	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`id` INTEGER  NOT NULL,
 	`parent_id` INTEGER  NOT NULL,
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
@@ -363,7 +378,7 @@ CREATE TABLE `import_mapping`
 	`mapping` INTEGER  NOT NULL,
 	`rating_field_id` INTEGER,
 	`question_rating` TINYINT,
-	PRIMARY KEY (`column`,`import_file_type`),
+	PRIMARY KEY (`column`,`import_file_type`,`mapping`),
 	INDEX `import_mapping_FI_1` (`import_file_type`),
 	CONSTRAINT `import_mapping_FK_1`
 		FOREIGN KEY (`import_file_type`)

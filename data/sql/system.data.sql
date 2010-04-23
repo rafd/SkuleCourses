@@ -75,7 +75,8 @@ INSERT INTO `enum_item` (`id`,`parent_id`,`descr`) VALUES
  (227,220,'Question'),
  (228,220,'Question Mean'),
  (229,220,'Question Median'),
- (230,220,'Department Name');
+ (230,220,'Department Name'),
+ (231,220,'Number');
 
 
 # department
@@ -154,6 +155,8 @@ INSERT INTO `department` (`id`,`descr`) VALUES
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
+INSERT INTO `rating_field` VALUES (3, 'Ignore', 23, 1);
+INSERT INTO `rating_field` VALUES (4, 'Percent retake', 23, 1);
 
 
 # user

@@ -60,6 +60,12 @@ propel:
     import_dt:         { type: timestamp, required: true }
     course_ins_id:     { type: integer, required: true, foreignTable: course_instructor_assoc, foreignReference: id, onDelete: cascade, index: true }
     number:            { type: smallint, required: true }
+    
+  auto_course_rating_mismatched:
+    _attributes:       { phpName: AutoCourseRatingMismatched }
+    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    row:               { type: longvarchar, required: true }
+    import_dt:         { type: timestamp, required: true }
 
   department:
     _attributes:       { phpName: Department }
@@ -68,7 +74,7 @@ propel:
     
   enum_item:
     _attributes:       { phpName: EnumItem }
-    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    id:                { type: integer, required: true, primaryKey: true }
     parent_id:         { type: integer, required: true, foreignTable: enum_item, foreignReference: id, index: true }
     descr:             { type: varchar(255), required: true, index: true }
     
@@ -111,7 +117,7 @@ propel:
     _attributes:       { phpName: ImportMapping }
     column:            { type: smallint, required: true, primaryKey: true }
     import_file_type:  { type: integer, required: true, primaryKey: true, foreignTable: enum_item, foreignReference: id }
-    mapping:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
+    mapping:           { type: integer, required: true, primaryKey: true, foreignTable: enum_item, foreignReference: id }
     rating_field_id:   { type: integer, required: false, foreignTable: rating_field, foreignReference: id, onDelete: cascade }
     question_rating:   { type: tinyint, required: false }
 
