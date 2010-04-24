@@ -10,15 +10,15 @@
  */
 class courseActions extends sfActions
 {
-  
+
   public function executeIndex(sfWebRequest $request)
   {
     $this->buildSubmenu($request);
-    
+
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
-    
+
     if (!is_object($this->courseObj)) $this->forward404();
 
     // courseDetail
@@ -26,7 +26,7 @@ class courseActions extends sfActions
     if (count($detList) > 0){
       $this->courseDetail = $detList[0];
     }
-    
+
     // instructor
     $detList = CourseInstructorAssociationPeer::getLatestInstructorsForCourseId($this->courseObj->getId(), $conn);
     $newList = CourseInstructorAssociationPeer::getHistoricalInstructorsForCourseId($this->courseObj->getId(), $conn);
@@ -34,13 +34,13 @@ class courseActions extends sfActions
       $this->currentInstructorList = $detList;
       $this->pastInstructorList = $newList;
     }
-    
+
     // program
     $detList = CourseDisciplineAssociationPeer::getRelatedDisciplinesForCourse($this->courseObj, $conn);
     if (count($detList) > 0){
       $this->programList = $detList;
     }
-    
+
     // full exam data
     $conn = Propel::getConnection();
     $c = new Criteria();
@@ -50,7 +50,7 @@ class courseActions extends sfActions
     $c->addAscendingOrderByColumn(ExamPeer::TYPE);
     $c->addAscendingOrderByColumn(ExamPeer::DESCR);
     $examData = ExamPeer::doSelect($c, $conn);
-    
+
     // now splice the data up and send it to the frontend
     $this->examData = array();
     $year = "";
@@ -61,30 +61,30 @@ class courseActions extends sfActions
         $this->examData[$year] = array();
         $type = "";
       }
-      
+
       if ($type != $exam->getType()){
         $type = $exam->getType();
         $this->examData[$year][$type] = array();
       }
-      
+
       $this->examData[$year][$type][] = $exam;
     }
   }
-  
+
   public function executeCritique(sfWebRequest $request)
   {
     $this->buildSubmenu($request);
-    
+
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
-    
+
     if (!is_object($this->courseObj)) $this->forward404();
-    
+
     if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $year = $request->getParameter("year");
-      
+
       // check if the year exists
       $yearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
       $err = true;
@@ -95,10 +95,10 @@ class courseActions extends sfActions
         }
       }
       if ($err) $this->forward404();
-      
+
       $this->year = $year;
       $this->instructorArr = AutoCourseRatingPeer::getAvailableInstructorsForCourseIdAndYear($id, $year, $conn);
-                  
+
       if ($request->hasParameter("instructor")){
         $insId = $request->getParameter("instructor");
         $found = false;
@@ -113,11 +113,11 @@ class courseActions extends sfActions
         $insId = $this->instructorArr[0]->getId();
       }
       $this->currInstructor = InstructorPeer::retrieveByPK($insId, $conn);
-      
+
       // note that the below logic is predicated on getCourseDataArrayForCourseAndInstructorAndYear
       // sorting by Field, Id, Rating, in the respective order
       $dataObjArr = AutoCourseRatingPeer::getCourseDataArrayForCourseAndInstructorAndYear($id, $insId, $year, $conn);
-      
+
       // $dataArr is an array of dictionaries (arr) that contain ratings/info
       $this->dataArr = array();
       // $arr = dictionary
@@ -154,12 +154,12 @@ class courseActions extends sfActions
               $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
               $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
             }
-          
+
             if ($currentNode!=$obj->getFieldId()){
               $arr = $this->setMeanAndMedian($arr);
               $arr["chart"] = $this->getFusionChartFromDataArr($arr);
               $this->dataArr[] = $arr;
-            
+
               unset($arr);
               $currentNode = $obj->getFieldId();
               $arr["type"] = $obj->getRatingField()->getRatingTypeString($conn);
@@ -167,13 +167,13 @@ class courseActions extends sfActions
               $arr["instructor"] = $obj->getCourseInstructorAssociation($conn)->getInstructor()->getLastName();
               $arr["typeObj"] = $obj->getRatingField()->getEnumItem($conn);
             }
-            
+
             if (isset($arr[$obj->getRating()])) $arr[$obj->getRating()] += $obj->getNumber();
             else $arr[$obj->getRating()] = $obj->getNumber();
             break;
         }
       }
-      
+
       // for the last critique field
       if ($_prv){
         $arr = $this->setMeanAndMedian($arr);
@@ -181,7 +181,7 @@ class courseActions extends sfActions
         $arr["chart"] = $this->getFusionChartFromDataArr($arr);
         $this->dataArr[] = $arr;
       }
-      
+
       $this->aggregatedRating = $this->calcAggregatedRating($this->dataArr);
     }
     else
@@ -189,21 +189,21 @@ class courseActions extends sfActions
       $this->forward404();
     }
   }
-  
+
   public function executeCommenting(sfWebRequest $request)
   {
     $this->buildSubmenu($request);
-    
+
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
-    
+
     if (!is_object($this->courseObj)) $this->forward404("course object not found");
-    
+
     $this->commentList = $this->getCommentList($this->courseObj->getId());
     //$this->commentList = $this->courseObj->getCourseComments(null, $conn);
   }
-  
+
   /**
    * Ajax request to comment submission
    * @param sfWebRequest $request
@@ -220,14 +220,14 @@ class courseActions extends sfActions
       } elseif (!$request->hasParameter("security") || trim($request->getParameter("security"))==""){
         echo "Must type in the security string.";
       } else {
-        
+
         // first, check for security string
         $code = $_SESSION['securityImage'];
         if (trim($request->getParameter("security")) != $code){
           echo "Security string does not match.";
           return sfView::NONE;
         }
-        
+
         // second, get the course object
         $id = $request->getParameter("id");
         $conn = Propel::getConnection();
@@ -236,16 +236,16 @@ class courseActions extends sfActions
           echo "Error with comment submission. Please try again later.";
           return sfView::NONE;
         }
-        
+
         // third, check for spam
-        
+
         $c = new Criteria();
         $year = $request->getParameter("year");
         $term = $request->getParameter("term");
         $crit = $c->getNewCriterion(CourseCommentPeer::APPLIES_TO, $year.$term);
         $c->addAnd($crit);
         $_list = $courseObj->getCourseComments($c, $conn, true);
-        
+
         $ip = $_SERVER['REMOTE_ADDR'];
         //FIXME i have disabled spam checking because computers in the computer lab might all have the same ip
         /*$isSpam = false;
@@ -259,12 +259,12 @@ class courseActions extends sfActions
           echo "You cannot comment on the same semester twice!";
           return sfView::NONE;
         }*/
-        
+
         // now we can save
         try {
           $_comment = trim($request->getParameter("my_comment"));
           $date = date(skuleadminConst::TIMESTAMP_FORMAT);
-          
+
           $newComment = new CourseComment();
           $newComment->setComment($_comment);
           $newComment->setAppliesTo($year.$term);
@@ -273,7 +273,7 @@ class courseActions extends sfActions
           $newComment->setIp($ip);
           $newComment->setInputDt($date);
           $newComment->save($conn);
-          
+
           // send notification
           $msg = "A new comment on [course=".$courseObj->getId()."; term=".$year.$term."] has been submitted by ".
             $ip." on ".$date.".\n\n";
@@ -283,7 +283,7 @@ class courseActions extends sfActions
           echo "Submission successful. Pending moderator review.
           <script type='text/javascript'>eval(\"document.getElementById('commentInputBtns').style.display='none'; document.getElementById('commentSuccessBtns').style.display='block';\")</script>";
           return sfView::NONE;
-          
+
         } catch (Exception $e){
           echo "Error with comment submission. Please try again later.";
           helperFunctions::sendEmailNotice("Comment Submission Error", $e->getMessage());
@@ -291,28 +291,28 @@ class courseActions extends sfActions
         }
       }
     }
-    
+
     return sfView::NONE;
   }
-  
+
   public function executeExam(sfWebRequest $request)
   {
     $this->buildSubmenu($request);
-    
+
     $id = $request->getParameter("id");
     $conn = Propel::getConnection();
     $this->courseObj = CoursePeer::retrieveByPK($id, $conn);
-    
+
     if (!is_object($this->courseObj)) $this->forward404();
-    
+
     if ($request->hasParameter("year") && trim($request->getParameter("year"))!="")
     {
       $this->year = $request->getParameter("year");
-      
+
       $results = ExamPeer::getExamsForYearAndCourseId($id, $this->year, $conn);
-      
+
       if (count($results)==0) $this->forward404();
-      
+
       $examArr = array();
       $testArr = array();
       $quizArr = array();
@@ -333,7 +333,7 @@ class courseActions extends sfActions
             break;
         }
       }
-      
+
       if (count($examArr)!=0) $this->examArr=$examArr;
       if (count($testArr)!=0) $this->testArr=$testArr;
       if (count($quizArr)!=0) $this->quizArr=$quizArr;
@@ -344,7 +344,7 @@ class courseActions extends sfActions
       $this->forward404();
     }
   }
-  
+
   private function calcNR($arr, $totResponded){
     $tot = 0;
     foreach ($arr as $key=>$value){
@@ -352,7 +352,7 @@ class courseActions extends sfActions
     }
     return $totResponded - $tot;
   }
-  
+
   private function calcAggregatedRating($dataArr)
   {
     $total = 0;
@@ -364,16 +364,16 @@ class courseActions extends sfActions
 	    $total += $arr["mean"];
       }
     }
-    
+
     if ($counter > 0) $result = $total/$counter;
     else $result = 0;
-    
+
     return $result;
   }
-  
+
   private function setMeanAndMedian($arr){
     $item = $arr["typeObj"];
-    
+
     if ($item->getId() == EnumItemPeer::RATING_BOOLEAN){
       $arr["mean"] = "N/A";
       $arr["median"] = "N/A";
@@ -387,18 +387,18 @@ class courseActions extends sfActions
 
     return $arr;
   }
-  
+
   private function getFusionChartFromDataArr($arr){
     $FC = new FusionCharts("Column2D","500","350",null,true);
 	$FC->setSWFPath("/fusionCharts_swf/");
-	
+
 	$strParam="xAxisName=Rating;yAxisName=Number;decimalPrecision=0;formatNumberScale=1";
 	$FC->setChartParams($strParam);
-	
+
 	if (isset($arr["NA"])) {
 	  $FC->addChartData($arr["NA"], "name=N/R");
 	}
-	
+
 	$item = $arr["typeObj"];
     if ($item->getId() == EnumItemPeer::RATING_BOOLEAN){
       for ($i=0; $i<2; $i++) $FC->addChartData($arr[$i], "name=$i");
@@ -411,7 +411,7 @@ class courseActions extends sfActions
 
 	return $FC;
   }
-  
+
   private function getCommentList($courseId)
   {
     $pagenumber = 1;
@@ -424,24 +424,24 @@ class courseActions extends sfActions
   	$crit2 = $c->getNewCriterion(CourseCommentPeer::APPROVED, 1);
   	$c->addAnd($crit1);
   	$c->addAnd($crit2);
-  	$c->addAscendingOrderByColumn(CourseCommentPeer::INPUT_DT);
-  	
+  	$c->addDescendingOrderByColumn(CourseCommentPeer::INPUT_DT);
+
     $pager->setCriteria($c);
     $pager->setPage($pagenumber);
     $pager->init();
     return $pager;
   }
-  
+
   private function buildSubmenu(sfWebRequest $request)
   {
     if (!$request->hasParameter("id") || trim($request->getParameter("id"))=="") $this->forward404();
-    
+
     // set cookie to remember
     $id = $request->getParameter("id");
     //$this->getResponse()->setCookie('courseId', $id);
-    
+
     $conn = Propel::getConnection();
-    
+
     // get rating data
     $this->ratingYearArray = AutoCourseRatingPeer::getAvailableYearsForCourseId($id, $conn);
     // get exam data

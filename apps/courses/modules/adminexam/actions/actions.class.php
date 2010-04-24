@@ -38,15 +38,17 @@ class adminexamActions extends sfActions
       }
       
       $this->courseId = $_res[0]->getId();
-      $rawyear = $request->getParameter("year");
+      $year = $request->getParameter("year");
       $term = $request->getParameter("term");
-      $this->year = $request->getParameter("year").$request->getParameter("term");
+      $this->year = $year.$term;
       
       if ($request->hasParameter("id")){
         $this->redirect("adminexam/edit?id=".$request->getParameter("id")."&course=".$this->courseId."&year=".$year."&term=".$term);
       }
       
       $this->examList = $this->getExamList($this->courseId, $this->year);
+      $this->form->setDefault("year", $year);
+      $this->form->setDefault("term", $term);
     }
   }
   
@@ -98,6 +100,8 @@ class adminexamActions extends sfActions
     
     $this->examList = $this->getExamList($this->courseId, $this->year);
     $this->form = new ExamForm($exam);
+    $this->form->setDefault("year", substr($this->form->getObject()->getYear(),0,4));
+    $this->form->setDefault("term", substr($this->form->getObject()->getYear(),4,1));
     $this->setTemplate('custom');
   }
 
@@ -111,7 +115,6 @@ class adminexamActions extends sfActions
     $this->forward404Unless($exam->getCourseId() == $this->courseId);
     
     $this->form = new ExamForm($exam);
-    
     $this->processForm($request, $this->form);
     
     // if we have reached this point, save has failed
@@ -148,6 +151,9 @@ class adminexamActions extends sfActions
   {
     $form->bind($request->getParameter($form->getName()), $request->getFiles($form->getName()));
     $prefix = $form->getName();
+    
+    // get year
+    $year = $form->getValue("year").$form->getValue("term");
     
     $file = $_FILES["file_path"];
       if(isset($file) && $file["name"] != '' ){
@@ -197,15 +203,14 @@ class adminexamActions extends sfActions
           }
           
           if (move_uploaded_file($file['tmp_name'], $filePath)){
-            // get year
-            $year = $request->getParameter("post_year").$request->getParameter("post_term");
+            //die($form->getValue("descr"));
             
             // now save the exam object
             // TODO we have to do a manual save until we can figure out how to work the form with file upload
             $exam = $form->getObject();
             $exam->setCourseId($this->courseId);
             $exam->setType($request->getParameter($prefix."[type]"));
-            $exam->setYear($year);
+            $exam->setYear($request->getParameter($prefix."[year]").$request->getParameter($prefix."[term]"));
             $exam->setDescr($request->getParameter($prefix."[descr]"));
             $exam->setFilePath($filePath);
             $exam->save();
@@ -226,12 +231,12 @@ class adminexamActions extends sfActions
           return;
         }
         
-        // get year
-        $year = $request->getParameter("post_year").$request->getParameter("post_term");
-        
         try {
-          $form->getObject()->setYear($year);
-      	  $form->getObject()->save();
+          $exam = $form->getObject();
+          $exam->setYear($year);
+      	  $exam->setType($form->getValue("type"));
+      	  $exam->setDescr($form->getValue("descr"));
+      	  $exam->save();
       	  $this->redirect('adminexam/edit?id='.$form->getObject()->getId()."&course=".$this->courseId."&year=".substr($this->year,0,4)."&term=".substr($this->year,4,1));
         } catch (Exception $e){
           $this->globalerrors = $e->getMessage();

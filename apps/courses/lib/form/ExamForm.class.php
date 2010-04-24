@@ -10,6 +10,18 @@
  */
 class ExamForm extends BaseExamForm
 {	
+  protected static $terms = array("9"=>"Fall", "1"=>"Winter", "5"=>"Summer");
+  protected static function getYears(){
+    $date = getdate();
+    $yearsArr = array();
+    
+    for ($i=$date["year"]+1; $i>=skuleadminConst::EARLIEST_YEAR; $i--){
+      $yearsArr[$i]=$i;
+    }
+    
+    return $yearsArr;
+  }
+  
   public function configure()
   {
   	$c= new Criteria();
@@ -22,7 +34,9 @@ class ExamForm extends BaseExamForm
       'id'        => new sfWidgetFormInputHidden(),
       'course_id' => new sfWidgetFormInputHidden(),
       'type'      => new sfWidgetFormPropelChoice(array('model' => 'EnumItem', 'add_empty' => false,'criteria' => $c)),
-      'year'      => new sfWidgetFormInputHidden(),
+      'year'      => new sfWidgetFormChoice(array('choices' =>  self::getYears())),
+      'term'      => new sfWidgetFormChoice(array('choices' =>  self::$terms)),
+      //'year'      => new sfWidgetFormInputHidden(),
       'descr'     => new sfWidgetFormInput(),
       'file_path' => new sfWidgetFormInputFile(),
     ));
@@ -31,7 +45,9 @@ class ExamForm extends BaseExamForm
       'id'        => new sfValidatorPropelChoice(array('model' => 'Exam', 'column' => 'id' )),
       'course_id' => new sfValidatorPropelChoice(array('model' => 'Course', 'column' => 'id')),
       'type'      => new sfValidatorPropelChoice(array('model' => 'EnumItem', 'column' => 'id')),
-      'year'      => new sfValidatorInteger(),
+      'year'      => new sfValidatorChoice(array('choices' =>  array_keys(self::getYears()))),
+      'term'	  => new sfValidatorChoice(array('choices' =>  array_keys(self::$terms))),
+      //'year'      => new sfValidatorInteger(),
       'descr'     => new sfValidatorString(array('max_length' => 255)),
       'file_path' => new sfValidatorFile(array('required' => false)),
     ));
