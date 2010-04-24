@@ -138,7 +138,7 @@ CREATE TABLE `course_discipline_assoc`
 		ON DELETE CASCADE,
 	CONSTRAINT `course_discipline_assoc_FK_2`
 		FOREIGN KEY (`discipline_id`)
-		REFERENCES `enum_item` (`id`)
+		REFERENCES `discipline` (`id`)
 		ON DELETE CASCADE
 )Type=InnoDB;
 
@@ -229,6 +229,22 @@ CREATE TABLE `department`
 	`descr` VARCHAR(255)  NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `department_I_1`(`descr`)
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
+#-- discipline
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `discipline`;
+
+
+CREATE TABLE `discipline`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`descr` VARCHAR(255)  NOT NULL,
+	`short_descr` VARCHAR(255)  NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `discipline_I_1`(`short_descr`)
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------

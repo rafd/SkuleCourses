@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base class that represents a row from the 'course_discipline_assoc' table.
+ * Base class that represents a row from the 'discipline' table.
  *
  * 
  *
@@ -11,16 +11,16 @@
  *
  * @package    lib.model.om
  */
-abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Persistent {
+abstract class BaseDiscipline extends BaseObject  implements Persistent {
 
 
-  const PEER = 'CourseDisciplineAssociationPeer';
+  const PEER = 'DisciplinePeer';
 
 	/**
 	 * The Peer class.
 	 * Instance provides a convenient way of calling static methods on a class
 	 * that calling code may not be able to identify.
-	 * @var        CourseDisciplineAssociationPeer
+	 * @var        DisciplinePeer
 	 */
 	protected static $peer;
 
@@ -31,32 +31,26 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	protected $id;
 
 	/**
-	 * The value for the course_id field.
+	 * The value for the descr field.
 	 * @var        string
 	 */
-	protected $course_id;
+	protected $descr;
 
 	/**
-	 * The value for the discipline_id field.
-	 * @var        int
+	 * The value for the short_descr field.
+	 * @var        string
 	 */
-	protected $discipline_id;
+	protected $short_descr;
 
 	/**
-	 * The value for the year_of_study field.
-	 * @var        int
+	 * @var        array CourseDisciplineAssociation[] Collection to store aggregation of CourseDisciplineAssociation objects.
 	 */
-	protected $year_of_study;
+	protected $collCourseDisciplineAssociations;
 
 	/**
-	 * @var        Course
+	 * @var        Criteria The criteria used to select the current contents of collCourseDisciplineAssociations.
 	 */
-	protected $aCourse;
-
-	/**
-	 * @var        Discipline
-	 */
-	protected $aDiscipline;
+	private $lastCourseDisciplineAssociationCriteria = null;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -73,7 +67,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	protected $alreadyInValidation = false;
 
 	/**
-	 * Initializes internal state of BaseCourseDisciplineAssociation object.
+	 * Initializes internal state of BaseDiscipline object.
 	 * @see        applyDefaults()
 	 */
 	public function __construct()
@@ -103,40 +97,30 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	}
 
 	/**
-	 * Get the [course_id] column value.
+	 * Get the [descr] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getCourseId()
+	public function getDescr()
 	{
-		return $this->course_id;
+		return $this->descr;
 	}
 
 	/**
-	 * Get the [discipline_id] column value.
+	 * Get the [short_descr] column value.
 	 * 
-	 * @return     int
+	 * @return     string
 	 */
-	public function getDisciplineId()
+	public function getShortDescr()
 	{
-		return $this->discipline_id;
-	}
-
-	/**
-	 * Get the [year_of_study] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getYearOfStudy()
-	{
-		return $this->year_of_study;
+		return $this->short_descr;
 	}
 
 	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
+	 * @return     Discipline The current object (for fluent API support)
 	 */
 	public function setId($v)
 	{
@@ -146,79 +130,51 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 
 		if ($this->id !== $v) {
 			$this->id = $v;
-			$this->modifiedColumns[] = CourseDisciplineAssociationPeer::ID;
+			$this->modifiedColumns[] = DisciplinePeer::ID;
 		}
 
 		return $this;
 	} // setId()
 
 	/**
-	 * Set the value of [course_id] column.
+	 * Set the value of [descr] column.
 	 * 
 	 * @param      string $v new value
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
+	 * @return     Discipline The current object (for fluent API support)
 	 */
-	public function setCourseId($v)
+	public function setDescr($v)
 	{
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->course_id !== $v) {
-			$this->course_id = $v;
-			$this->modifiedColumns[] = CourseDisciplineAssociationPeer::COURSE_ID;
-		}
-
-		if ($this->aCourse !== null && $this->aCourse->getId() !== $v) {
-			$this->aCourse = null;
+		if ($this->descr !== $v) {
+			$this->descr = $v;
+			$this->modifiedColumns[] = DisciplinePeer::DESCR;
 		}
 
 		return $this;
-	} // setCourseId()
+	} // setDescr()
 
 	/**
-	 * Set the value of [discipline_id] column.
+	 * Set the value of [short_descr] column.
 	 * 
-	 * @param      int $v new value
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
+	 * @param      string $v new value
+	 * @return     Discipline The current object (for fluent API support)
 	 */
-	public function setDisciplineId($v)
+	public function setShortDescr($v)
 	{
 		if ($v !== null) {
-			$v = (int) $v;
+			$v = (string) $v;
 		}
 
-		if ($this->discipline_id !== $v) {
-			$this->discipline_id = $v;
-			$this->modifiedColumns[] = CourseDisciplineAssociationPeer::DISCIPLINE_ID;
-		}
-
-		if ($this->aDiscipline !== null && $this->aDiscipline->getId() !== $v) {
-			$this->aDiscipline = null;
+		if ($this->short_descr !== $v) {
+			$this->short_descr = $v;
+			$this->modifiedColumns[] = DisciplinePeer::SHORT_DESCR;
 		}
 
 		return $this;
-	} // setDisciplineId()
-
-	/**
-	 * Set the value of [year_of_study] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
-	 */
-	public function setYearOfStudy($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->year_of_study !== $v) {
-			$this->year_of_study = $v;
-			$this->modifiedColumns[] = CourseDisciplineAssociationPeer::YEAR_OF_STUDY;
-		}
-
-		return $this;
-	} // setYearOfStudy()
+	} // setShortDescr()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -258,9 +214,8 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->course_id = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
-			$this->discipline_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->year_of_study = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
+			$this->descr = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
+			$this->short_descr = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -270,10 +225,10 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 			}
 
 			// FIXME - using NUM_COLUMNS may be clearer.
-			return $startcol + 4; // 4 = CourseDisciplineAssociationPeer::NUM_COLUMNS - CourseDisciplineAssociationPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 3; // 3 = DisciplinePeer::NUM_COLUMNS - DisciplinePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
-			throw new PropelException("Error populating CourseDisciplineAssociation object", $e);
+			throw new PropelException("Error populating Discipline object", $e);
 		}
 	}
 
@@ -293,12 +248,6 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	public function ensureConsistency()
 	{
 
-		if ($this->aCourse !== null && $this->course_id !== $this->aCourse->getId()) {
-			$this->aCourse = null;
-		}
-		if ($this->aDiscipline !== null && $this->discipline_id !== $this->aDiscipline->getId()) {
-			$this->aDiscipline = null;
-		}
 	} // ensureConsistency
 
 	/**
@@ -322,13 +271,13 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(CourseDisciplineAssociationPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		// We don't need to alter the object instance pool; we're just modifying this instance
 		// already in the pool.
 
-		$stmt = CourseDisciplineAssociationPeer::doSelectStmt($this->buildPkeyCriteria(), $con);
+		$stmt = DisciplinePeer::doSelectStmt($this->buildPkeyCriteria(), $con);
 		$row = $stmt->fetch(PDO::FETCH_NUM);
 		$stmt->closeCursor();
 		if (!$row) {
@@ -338,8 +287,9 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->aCourse = null;
-			$this->aDiscipline = null;
+			$this->collCourseDisciplineAssociations = null;
+			$this->lastCourseDisciplineAssociationCriteria = null;
+
 		} // if (deep)
 	}
 
@@ -355,7 +305,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	public function delete(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseCourseDisciplineAssociation:delete:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseDiscipline:delete:pre') as $callable)
     {
       $ret = call_user_func($callable, $this, $con);
       if ($ret)
@@ -370,12 +320,12 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(CourseDisciplineAssociationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
-			CourseDisciplineAssociationPeer::doDelete($this, $con);
+			DisciplinePeer::doDelete($this, $con);
 			$this->setDeleted(true);
 			$con->commit();
 		} catch (PropelException $e) {
@@ -384,7 +334,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		}
 	
 
-    foreach (sfMixer::getCallables('BaseCourseDisciplineAssociation:delete:post') as $callable)
+    foreach (sfMixer::getCallables('BaseDiscipline:delete:post') as $callable)
     {
       call_user_func($callable, $this, $con);
     }
@@ -406,7 +356,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	public function save(PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseCourseDisciplineAssociation:save:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseDiscipline:save:pre') as $callable)
     {
       $affectedRows = call_user_func($callable, $this, $con);
       if (is_int($affectedRows))
@@ -421,19 +371,19 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(CourseDisciplineAssociationPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		
 		$con->beginTransaction();
 		try {
 			$affectedRows = $this->doSave($con);
 			$con->commit();
-    foreach (sfMixer::getCallables('BaseCourseDisciplineAssociation:save:post') as $callable)
+    foreach (sfMixer::getCallables('BaseDiscipline:save:post') as $callable)
     {
       call_user_func($callable, $this, $con, $affectedRows);
     }
 
-			CourseDisciplineAssociationPeer::addInstanceToPool($this);
+			DisciplinePeer::addInstanceToPool($this);
 			return $affectedRows;
 		} catch (PropelException $e) {
 			$con->rollBack();
@@ -458,33 +408,14 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			// We call the save method on the following object(s) if they
-			// were passed to this object by their coresponding set
-			// method.  This object relates to these object(s) by a
-			// foreign key reference.
-
-			if ($this->aCourse !== null) {
-				if ($this->aCourse->isModified() || $this->aCourse->isNew()) {
-					$affectedRows += $this->aCourse->save($con);
-				}
-				$this->setCourse($this->aCourse);
-			}
-
-			if ($this->aDiscipline !== null) {
-				if ($this->aDiscipline->isModified() || $this->aDiscipline->isNew()) {
-					$affectedRows += $this->aDiscipline->save($con);
-				}
-				$this->setDiscipline($this->aDiscipline);
-			}
-
 			if ($this->isNew() ) {
-				$this->modifiedColumns[] = CourseDisciplineAssociationPeer::ID;
+				$this->modifiedColumns[] = DisciplinePeer::ID;
 			}
 
 			// If this object has been modified, then save it to the database.
 			if ($this->isModified()) {
 				if ($this->isNew()) {
-					$pk = CourseDisciplineAssociationPeer::doInsert($this, $con);
+					$pk = DisciplinePeer::doInsert($this, $con);
 					$affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
 										 // should always be true here (even though technically
 										 // BasePeer::doInsert() can insert multiple rows).
@@ -493,10 +424,18 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 
 					$this->setNew(false);
 				} else {
-					$affectedRows += CourseDisciplineAssociationPeer::doUpdate($this, $con);
+					$affectedRows += DisciplinePeer::doUpdate($this, $con);
 				}
 
 				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+			}
+
+			if ($this->collCourseDisciplineAssociations !== null) {
+				foreach ($this->collCourseDisciplineAssociations as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
 			}
 
 			$this->alreadyInSave = false;
@@ -565,28 +504,18 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 			$failureMap = array();
 
 
-			// We call the validate method on the following object(s) if they
-			// were passed to this object by their coresponding set
-			// method.  This object relates to these object(s) by a
-			// foreign key reference.
-
-			if ($this->aCourse !== null) {
-				if (!$this->aCourse->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aCourse->getValidationFailures());
-				}
-			}
-
-			if ($this->aDiscipline !== null) {
-				if (!$this->aDiscipline->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aDiscipline->getValidationFailures());
-				}
-			}
-
-
-			if (($retval = CourseDisciplineAssociationPeer::doValidate($this, $columns)) !== true) {
+			if (($retval = DisciplinePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
 			}
 
+
+				if ($this->collCourseDisciplineAssociations !== null) {
+					foreach ($this->collCourseDisciplineAssociations as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
 
 
 			$this->alreadyInValidation = false;
@@ -606,7 +535,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function getByName($name, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = CourseDisciplineAssociationPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = DisciplinePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		$field = $this->getByPosition($pos);
 		return $field;
 	}
@@ -625,13 +554,10 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getCourseId();
+				return $this->getDescr();
 				break;
 			case 2:
-				return $this->getDisciplineId();
-				break;
-			case 3:
-				return $this->getYearOfStudy();
+				return $this->getShortDescr();
 				break;
 			default:
 				return null;
@@ -652,12 +578,11 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
-		$keys = CourseDisciplineAssociationPeer::getFieldNames($keyType);
+		$keys = DisciplinePeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getCourseId(),
-			$keys[2] => $this->getDisciplineId(),
-			$keys[3] => $this->getYearOfStudy(),
+			$keys[1] => $this->getDescr(),
+			$keys[2] => $this->getShortDescr(),
 		);
 		return $result;
 	}
@@ -674,7 +599,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function setByName($name, $value, $type = BasePeer::TYPE_PHPNAME)
 	{
-		$pos = CourseDisciplineAssociationPeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
+		$pos = DisciplinePeer::translateFieldName($name, $type, BasePeer::TYPE_NUM);
 		return $this->setByPosition($pos, $value);
 	}
 
@@ -693,13 +618,10 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setCourseId($value);
+				$this->setDescr($value);
 				break;
 			case 2:
-				$this->setDisciplineId($value);
-				break;
-			case 3:
-				$this->setYearOfStudy($value);
+				$this->setShortDescr($value);
 				break;
 		} // switch()
 	}
@@ -723,12 +645,11 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function fromArray($arr, $keyType = BasePeer::TYPE_PHPNAME)
 	{
-		$keys = CourseDisciplineAssociationPeer::getFieldNames($keyType);
+		$keys = DisciplinePeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setCourseId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setDisciplineId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setYearOfStudy($arr[$keys[3]]);
+		if (array_key_exists($keys[1], $arr)) $this->setDescr($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setShortDescr($arr[$keys[2]]);
 	}
 
 	/**
@@ -738,12 +659,11 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function buildCriteria()
 	{
-		$criteria = new Criteria(CourseDisciplineAssociationPeer::DATABASE_NAME);
+		$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
 
-		if ($this->isColumnModified(CourseDisciplineAssociationPeer::ID)) $criteria->add(CourseDisciplineAssociationPeer::ID, $this->id);
-		if ($this->isColumnModified(CourseDisciplineAssociationPeer::COURSE_ID)) $criteria->add(CourseDisciplineAssociationPeer::COURSE_ID, $this->course_id);
-		if ($this->isColumnModified(CourseDisciplineAssociationPeer::DISCIPLINE_ID)) $criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->discipline_id);
-		if ($this->isColumnModified(CourseDisciplineAssociationPeer::YEAR_OF_STUDY)) $criteria->add(CourseDisciplineAssociationPeer::YEAR_OF_STUDY, $this->year_of_study);
+		if ($this->isColumnModified(DisciplinePeer::ID)) $criteria->add(DisciplinePeer::ID, $this->id);
+		if ($this->isColumnModified(DisciplinePeer::DESCR)) $criteria->add(DisciplinePeer::DESCR, $this->descr);
+		if ($this->isColumnModified(DisciplinePeer::SHORT_DESCR)) $criteria->add(DisciplinePeer::SHORT_DESCR, $this->short_descr);
 
 		return $criteria;
 	}
@@ -758,9 +678,9 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 */
 	public function buildPkeyCriteria()
 	{
-		$criteria = new Criteria(CourseDisciplineAssociationPeer::DATABASE_NAME);
+		$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
 
-		$criteria->add(CourseDisciplineAssociationPeer::ID, $this->id);
+		$criteria->add(DisciplinePeer::ID, $this->id);
 
 		return $criteria;
 	}
@@ -791,18 +711,30 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 * If desired, this method can also make copies of all associated (fkey referrers)
 	 * objects.
 	 *
-	 * @param      object $copyObj An object of CourseDisciplineAssociation (or compatible) type.
+	 * @param      object $copyObj An object of Discipline (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
 	 * @throws     PropelException
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 
-		$copyObj->setCourseId($this->course_id);
+		$copyObj->setDescr($this->descr);
 
-		$copyObj->setDisciplineId($this->discipline_id);
+		$copyObj->setShortDescr($this->short_descr);
 
-		$copyObj->setYearOfStudy($this->year_of_study);
+
+		if ($deepCopy) {
+			// important: temporarily setNew(false) because this affects the behavior of
+			// the getter/setter methods for fkey referrer objects.
+			$copyObj->setNew(false);
+
+			foreach ($this->getCourseDisciplineAssociations() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addCourseDisciplineAssociation($relObj->copy($deepCopy));
+				}
+			}
+
+		} // if ($deepCopy)
 
 
 		$copyObj->setNew(true);
@@ -820,7 +752,7 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 * objects.
 	 *
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-	 * @return     CourseDisciplineAssociation Clone of current object.
+	 * @return     Discipline Clone of current object.
 	 * @throws     PropelException
 	 */
 	public function copy($deepCopy = false)
@@ -839,116 +771,215 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	 * same instance for all member of this class. The method could therefore
 	 * be static, but this would prevent one from overriding the behavior.
 	 *
-	 * @return     CourseDisciplineAssociationPeer
+	 * @return     DisciplinePeer
 	 */
 	public function getPeer()
 	{
 		if (self::$peer === null) {
-			self::$peer = new CourseDisciplineAssociationPeer();
+			self::$peer = new DisciplinePeer();
 		}
 		return self::$peer;
 	}
 
 	/**
-	 * Declares an association between this object and a Course object.
+	 * Clears out the collCourseDisciplineAssociations collection (array).
 	 *
-	 * @param      Course $v
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addCourseDisciplineAssociations()
+	 */
+	public function clearCourseDisciplineAssociations()
+	{
+		$this->collCourseDisciplineAssociations = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collCourseDisciplineAssociations collection (array).
+	 *
+	 * By default this just sets the collCourseDisciplineAssociations collection to an empty array (like clearcollCourseDisciplineAssociations());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initCourseDisciplineAssociations()
+	{
+		$this->collCourseDisciplineAssociations = array();
+	}
+
+	/**
+	 * Gets an array of CourseDisciplineAssociation objects which contain a foreign key that references this object.
+	 *
+	 * If this collection has already been initialized with an identical Criteria, it returns the collection.
+	 * Otherwise if this Discipline has previously been saved, it will retrieve
+	 * related CourseDisciplineAssociations from storage. If this Discipline is new, it will return
+	 * an empty collection or the current collection, the criteria is ignored on a new object.
+	 *
+	 * @param      PropelPDO $con
+	 * @param      Criteria $criteria
+	 * @return     array CourseDisciplineAssociation[]
 	 * @throws     PropelException
 	 */
-	public function setCourse(Course $v = null)
+	public function getCourseDisciplineAssociations($criteria = null, PropelPDO $con = null)
 	{
-		if ($v === null) {
-			$this->setCourseId(NULL);
+		if ($criteria === null) {
+			$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
+		}
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCourseDisciplineAssociations === null) {
+			if ($this->isNew()) {
+			   $this->collCourseDisciplineAssociations = array();
+			} else {
+
+				$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+				CourseDisciplineAssociationPeer::addSelectColumns($criteria);
+				$this->collCourseDisciplineAssociations = CourseDisciplineAssociationPeer::doSelect($criteria, $con);
+			}
 		} else {
-			$this->setCourseId($v->getId());
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return the collection.
+
+
+				$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+				CourseDisciplineAssociationPeer::addSelectColumns($criteria);
+				if (!isset($this->lastCourseDisciplineAssociationCriteria) || !$this->lastCourseDisciplineAssociationCriteria->equals($criteria)) {
+					$this->collCourseDisciplineAssociations = CourseDisciplineAssociationPeer::doSelect($criteria, $con);
+				}
+			}
 		}
-
-		$this->aCourse = $v;
-
-		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Course object, it will not be re-added.
-		if ($v !== null) {
-			$v->addCourseDisciplineAssociation($this);
-		}
-
-		return $this;
-	}
-
-
-	/**
-	 * Get the associated Course object
-	 *
-	 * @param      PropelPDO Optional Connection object.
-	 * @return     Course The associated Course object.
-	 * @throws     PropelException
-	 */
-	public function getCourse(PropelPDO $con = null)
-	{
-		if ($this->aCourse === null && (($this->course_id !== "" && $this->course_id !== null))) {
-			$c = new Criteria(CoursePeer::DATABASE_NAME);
-			$c->add(CoursePeer::ID, $this->course_id);
-			$this->aCourse = CoursePeer::doSelectOne($c, $con);
-			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aCourse->addCourseDisciplineAssociations($this);
-			 */
-		}
-		return $this->aCourse;
+		$this->lastCourseDisciplineAssociationCriteria = $criteria;
+		return $this->collCourseDisciplineAssociations;
 	}
 
 	/**
-	 * Declares an association between this object and a Discipline object.
+	 * Returns the number of related CourseDisciplineAssociation objects.
 	 *
-	 * @param      Discipline $v
-	 * @return     CourseDisciplineAssociation The current object (for fluent API support)
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related CourseDisciplineAssociation objects.
 	 * @throws     PropelException
 	 */
-	public function setDiscipline(Discipline $v = null)
+	public function countCourseDisciplineAssociations(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if ($v === null) {
-			$this->setDisciplineId(NULL);
+		if ($criteria === null) {
+			$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
 		} else {
-			$this->setDisciplineId($v->getId());
+			$criteria = clone $criteria;
 		}
 
-		$this->aDiscipline = $v;
-
-		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Discipline object, it will not be re-added.
-		if ($v !== null) {
-			$v->addCourseDisciplineAssociation($this);
+		if ($distinct) {
+			$criteria->setDistinct();
 		}
 
-		return $this;
+		$count = null;
+
+		if ($this->collCourseDisciplineAssociations === null) {
+			if ($this->isNew()) {
+				$count = 0;
+			} else {
+
+				$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+				$count = CourseDisciplineAssociationPeer::doCount($criteria, $con);
+			}
+		} else {
+			// criteria has no effect for a new object
+			if (!$this->isNew()) {
+				// the following code is to determine if a new query is
+				// called for.  If the criteria is the same as the last
+				// one, just return count of the collection.
+
+
+				$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+				if (!isset($this->lastCourseDisciplineAssociationCriteria) || !$this->lastCourseDisciplineAssociationCriteria->equals($criteria)) {
+					$count = CourseDisciplineAssociationPeer::doCount($criteria, $con);
+				} else {
+					$count = count($this->collCourseDisciplineAssociations);
+				}
+			} else {
+				$count = count($this->collCourseDisciplineAssociations);
+			}
+		}
+		return $count;
+	}
+
+	/**
+	 * Method called to associate a CourseDisciplineAssociation object to this object
+	 * through the CourseDisciplineAssociation foreign key attribute.
+	 *
+	 * @param      CourseDisciplineAssociation $l CourseDisciplineAssociation
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addCourseDisciplineAssociation(CourseDisciplineAssociation $l)
+	{
+		if ($this->collCourseDisciplineAssociations === null) {
+			$this->initCourseDisciplineAssociations();
+		}
+		if (!in_array($l, $this->collCourseDisciplineAssociations, true)) { // only add it if the **same** object is not already associated
+			array_push($this->collCourseDisciplineAssociations, $l);
+			$l->setDiscipline($this);
+		}
 	}
 
 
 	/**
-	 * Get the associated Discipline object
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Discipline is new, it will return
+	 * an empty collection; or if this Discipline has previously
+	 * been saved, it will retrieve related CourseDisciplineAssociations from storage.
 	 *
-	 * @param      PropelPDO Optional Connection object.
-	 * @return     Discipline The associated Discipline object.
-	 * @throws     PropelException
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Discipline.
 	 */
-	public function getDiscipline(PropelPDO $con = null)
+	public function getCourseDisciplineAssociationsJoinCourse($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		if ($this->aDiscipline === null && ($this->discipline_id !== null)) {
-			$c = new Criteria(DisciplinePeer::DATABASE_NAME);
-			$c->add(DisciplinePeer::ID, $this->discipline_id);
-			$this->aDiscipline = DisciplinePeer::doSelectOne($c, $con);
-			/* The following can be used additionally to
-			   guarantee the related object contains a reference
-			   to this object.  This level of coupling may, however, be
-			   undesirable since it could result in an only partially populated collection
-			   in the referenced object.
-			   $this->aDiscipline->addCourseDisciplineAssociations($this);
-			 */
+		if ($criteria === null) {
+			$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
 		}
-		return $this->aDiscipline;
+		elseif ($criteria instanceof Criteria)
+		{
+			$criteria = clone $criteria;
+		}
+
+		if ($this->collCourseDisciplineAssociations === null) {
+			if ($this->isNew()) {
+				$this->collCourseDisciplineAssociations = array();
+			} else {
+
+				$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+				$this->collCourseDisciplineAssociations = CourseDisciplineAssociationPeer::doSelectJoinCourse($criteria, $con, $join_behavior);
+			}
+		} else {
+			// the following code is to determine if a new query is
+			// called for.  If the criteria is the same as the last
+			// one, just return the collection.
+
+			$criteria->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $this->id);
+
+			if (!isset($this->lastCourseDisciplineAssociationCriteria) || !$this->lastCourseDisciplineAssociationCriteria->equals($criteria)) {
+				$this->collCourseDisciplineAssociations = CourseDisciplineAssociationPeer::doSelectJoinCourse($criteria, $con, $join_behavior);
+			}
+		}
+		$this->lastCourseDisciplineAssociationCriteria = $criteria;
+
+		return $this->collCourseDisciplineAssociations;
 	}
 
 	/**
@@ -963,18 +994,22 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
+			if ($this->collCourseDisciplineAssociations) {
+				foreach ((array) $this->collCourseDisciplineAssociations as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
-			$this->aCourse = null;
-			$this->aDiscipline = null;
+		$this->collCourseDisciplineAssociations = null;
 	}
 
 
   public function __call($method, $arguments)
   {
-    if (!$callable = sfMixer::getCallable('BaseCourseDisciplineAssociation:'.$method))
+    if (!$callable = sfMixer::getCallable('BaseDiscipline:'.$method))
     {
-      throw new sfException(sprintf('Call to undefined method BaseCourseDisciplineAssociation::%s', $method));
+      throw new sfException(sprintf('Call to undefined method BaseDiscipline::%s', $method));
     }
 
     array_unshift($arguments, $this);
@@ -983,4 +1018,4 @@ abstract class BaseCourseDisciplineAssociation extends BaseObject  implements Pe
   }
 
 
-} // BaseCourseDisciplineAssociation
+} // BaseDiscipline

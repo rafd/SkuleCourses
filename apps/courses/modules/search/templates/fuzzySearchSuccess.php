@@ -50,8 +50,8 @@
 		<tr>
 			<td>
 				<ul>
-					<?php foreach ($programList as $enumObj):?>
-					<li><?php echo link_to($enumObj->getDescr(), "search/searchByProgram?program=".$enumObj->getId()."&year=0")?></li>
+					<?php foreach ($programList as $discipline):?>
+					<li><?php echo link_to($discipline->getDescr(), "search/searchByProgram?program=".$discipline->getId()."&year=0")?></li>
 					<?php endforeach;?>
 				</ul>
 			</td>

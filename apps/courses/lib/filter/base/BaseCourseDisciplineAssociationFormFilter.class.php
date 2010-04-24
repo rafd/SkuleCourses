@@ -16,13 +16,13 @@ class BaseCourseDisciplineAssociationFormFilter extends BaseFormFilterPropel
   {
     $this->setWidgets(array(
       'course_id'     => new sfWidgetFormPropelChoice(array('model' => 'Course', 'add_empty' => true)),
-      'discipline_id' => new sfWidgetFormPropelChoice(array('model' => 'EnumItem', 'add_empty' => true)),
+      'discipline_id' => new sfWidgetFormPropelChoice(array('model' => 'Discipline', 'add_empty' => true)),
       'year_of_study' => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
       'course_id'     => new sfValidatorPropelChoice(array('required' => false, 'model' => 'Course', 'column' => 'id')),
-      'discipline_id' => new sfValidatorPropelChoice(array('required' => false, 'model' => 'EnumItem', 'column' => 'id')),
+      'discipline_id' => new sfValidatorPropelChoice(array('required' => false, 'model' => 'Discipline', 'column' => 'id')),
       'year_of_study' => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
     ));
 

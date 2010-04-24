@@ -118,7 +118,7 @@ class searchActions extends sfActions
     $today = getdate();
     
     $this->searchType = searchActions::SEARCH_BY_PROGRAM;
-    $rawProgList = EnumItemPeer::getAllForParentNodeId(EnumItemPeer::DISCIPLINES_NODE_ID, $conn);
+    $rawProgList = DisciplinePeer::doSelectAll($conn);
     $this->programList = array();
     foreach ($rawProgList as $obj){
       $this->programList[$obj->getId()] = $obj->getDescr();
@@ -132,9 +132,9 @@ class searchActions extends sfActions
       if (helperFunctions::isMaliciousString($this->year)) $this->forward404();
       
       // get result set
-      $enum = EnumItemPeer::retrieveByPK($this->programId, $conn);
-      if (!is_object($enum)) $this->forward404();
-      $this->resultTitle = "Results for ".$enum->getDescr();
+      $discipline = DisciplinePeer::retrieveByPK($this->programId, $conn);
+      if (!is_object($discipline)) $this->forward404();
+      $this->resultTitle = "Results for ".$discipline->getDescr();
       
       $this->results = CoursePeer::findCoursesByDisciplineIdAndYear($this->programId, $this->year, $conn);
       

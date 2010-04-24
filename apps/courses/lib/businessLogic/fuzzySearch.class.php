@@ -77,13 +77,11 @@ class fuzzySearch
 
       // search for programs
       $c = new Criteria();
-      $descrCrit = $c->getNewCriterion(EnumItemPeer::DESCR, "%".$refQuery."%", Criteria::LIKE);
-      $parentCrit = $c->getNewCriterion(EnumItemPeer::PARENT_ID, EnumItemPeer::DISCIPLINES_NODE_ID);
-      $c->addAnd($parentCrit);
+      $descrCrit = $c->getNewCriterion(DisciplinePeer::DESCR, "%".$refQuery."%", Criteria::LIKE);
       $c->addAnd($descrCrit);
       $c->setDistinct();
-      $c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
-      $this->_programList = EnumItemPeer::doSelect($c, $propelConnection);
+      $c->addAscendingOrderByColumn(DisciplinePeer::DESCR);
+      $this->_programList = DisciplinePeer::doSelect($c, $propelConnection);
     }
   }
 }

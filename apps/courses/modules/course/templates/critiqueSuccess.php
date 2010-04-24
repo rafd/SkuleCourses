@@ -28,14 +28,15 @@
 				<th width="100">Number Enrolled</th>
 				<th width="100">Number Responded</th>
 				<th width="150">Aggregated Rating<center><a class="help">
-				<span>The aggregated rating is the arithmetic average of the mean ratings of all questions below.</span></a></center></th>
-				<th width="100">Percent Retake</th>
+				<span>The aggregated rating is the arithmetic average of the mean ratings of all the questions below.</span></a></center></th>
+				<th width="100">Percent Retake<center><a class="help">
+				<span>Considering students' experience with the course and disregarding their need for it to meet program or degree requirements, how many would still have taken this course?</span></a></center></th>
 			</tr>
 			<tr>
 				<td><?php if (isset($numberEnrolled)) echo $numberEnrolled; else echo "?";?></td>
 				<td><?php if (isset($numberResponded)) echo $numberResponded; else echo "?";?></td>
 				<td><?php echo round($aggregatedRating,2) ?></td>
-				<td><?php if (isset($retake)) echo $retake."%"; else echo "?";?></td>
+				<td><?php if (isset($retakeYes) && isset($retakeNo)) echo round($retakeYes/($retakeYes+$retakeNo)*100, 2)."%"; else echo "?";?></td>
 			</tr>
 		</table>
 	</div></div>

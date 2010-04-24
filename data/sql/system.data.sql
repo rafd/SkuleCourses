@@ -155,8 +155,8 @@ INSERT INTO `department` (`id`,`descr`) VALUES
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
-INSERT INTO `rating_field` VALUES (3, 'Ignore', 23, 1);
-INSERT INTO `rating_field` VALUES (4, 'Percent retake', 23, 1);
+INSERT INTO `rating_field` VALUES (3, 'Percent retake, YES?', 23, 1);
+INSERT INTO `rating_field` VALUES (4, 'Percent retake, NO?', 23, 1);
 
 
 # user

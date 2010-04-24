@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'enum_item' table.
+ * Base static class for performing query and update operations on the 'discipline' table.
  *
  * 
  *
@@ -11,16 +11,16 @@
  *
  * @package    lib.model.om
  */
-abstract class BaseEnumItemPeer {
+abstract class BaseDisciplinePeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'enum_item';
+	const TABLE_NAME = 'discipline';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'lib.model.EnumItem';
+	const CLASS_DEFAULT = 'lib.model.Discipline';
 
 	/** The total number of columns. */
 	const NUM_COLUMNS = 3;
@@ -29,19 +29,19 @@ abstract class BaseEnumItemPeer {
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'enum_item.ID';
-
-	/** the column name for the PARENT_ID field */
-	const PARENT_ID = 'enum_item.PARENT_ID';
+	const ID = 'discipline.ID';
 
 	/** the column name for the DESCR field */
-	const DESCR = 'enum_item.DESCR';
+	const DESCR = 'discipline.DESCR';
+
+	/** the column name for the SHORT_DESCR field */
+	const SHORT_DESCR = 'discipline.SHORT_DESCR';
 
 	/**
-	 * An identiy map to hold any loaded instances of EnumItem objects.
+	 * An identiy map to hold any loaded instances of Discipline objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array EnumItem[]
+	 * @var        array Discipline[]
 	 */
 	public static $instances = array();
 
@@ -58,10 +58,10 @@ abstract class BaseEnumItemPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'ParentId', 'Descr', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'parentId', 'descr', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::PARENT_ID, self::DESCR, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'parent_id', 'descr', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Descr', 'ShortDescr', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'descr', 'shortDescr', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::DESCR, self::SHORT_DESCR, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'descr', 'short_descr', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
@@ -72,10 +72,10 @@ abstract class BaseEnumItemPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'ParentId' => 1, 'Descr' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'parentId' => 1, 'descr' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::PARENT_ID => 1, self::DESCR => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'parent_id' => 1, 'descr' => 2, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Descr' => 1, 'ShortDescr' => 2, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'descr' => 1, 'shortDescr' => 2, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DESCR => 1, self::SHORT_DESCR => 2, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'descr' => 1, 'short_descr' => 2, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, )
 	);
 
@@ -86,7 +86,7 @@ abstract class BaseEnumItemPeer {
 	public static function getMapBuilder()
 	{
 		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new EnumItemMapBuilder();
+			self::$mapBuilder = new DisciplineMapBuilder();
 		}
 		return self::$mapBuilder;
 	}
@@ -136,12 +136,12 @@ abstract class BaseEnumItemPeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. EnumItemPeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. DisciplinePeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(EnumItemPeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(DisciplinePeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -158,11 +158,11 @@ abstract class BaseEnumItemPeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 
-		$criteria->addSelectColumn(EnumItemPeer::ID);
+		$criteria->addSelectColumn(DisciplinePeer::ID);
 
-		$criteria->addSelectColumn(EnumItemPeer::PARENT_ID);
+		$criteria->addSelectColumn(DisciplinePeer::DESCR);
 
-		$criteria->addSelectColumn(EnumItemPeer::DESCR);
+		$criteria->addSelectColumn(DisciplinePeer::SHORT_DESCR);
 
 	}
 
@@ -182,27 +182,27 @@ abstract class BaseEnumItemPeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(EnumItemPeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(DisciplinePeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			EnumItemPeer::addSelectColumns($criteria);
+			DisciplinePeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseEnumItemPeer', $criteria, $con);
+      call_user_func($callable, 'BaseDisciplinePeer', $criteria, $con);
     }
 
 
@@ -222,7 +222,7 @@ abstract class BaseEnumItemPeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     EnumItem
+	 * @return     Discipline
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -230,7 +230,7 @@ abstract class BaseEnumItemPeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = EnumItemPeer::doSelect($critcopy, $con);
+		$objects = DisciplinePeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -247,7 +247,7 @@ abstract class BaseEnumItemPeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return EnumItemPeer::populateObjects(EnumItemPeer::doSelectStmt($criteria, $con));
+		return DisciplinePeer::populateObjects(DisciplinePeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -265,19 +265,19 @@ abstract class BaseEnumItemPeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doSelectStmt:doSelectStmt') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doSelectStmt:doSelectStmt') as $callable)
     {
-      call_user_func($callable, 'BaseEnumItemPeer', $criteria, $con);
+      call_user_func($callable, 'BaseDisciplinePeer', $criteria, $con);
     }
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			EnumItemPeer::addSelectColumns($criteria);
+			DisciplinePeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -295,10 +295,10 @@ abstract class BaseEnumItemPeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      EnumItem $value A EnumItem object.
+	 * @param      Discipline $value A Discipline object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(EnumItem $obj, $key = null)
+	public static function addInstanceToPool(Discipline $obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -316,18 +316,18 @@ abstract class BaseEnumItemPeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A EnumItem object or a primary key value.
+	 * @param      mixed $value A Discipline object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof EnumItem) {
+			if (is_object($value) && $value instanceof Discipline) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or EnumItem object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Discipline object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -342,7 +342,7 @@ abstract class BaseEnumItemPeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     EnumItem Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     Discipline Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -396,12 +396,12 @@ abstract class BaseEnumItemPeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = EnumItemPeer::getOMClass();
+		$cls = DisciplinePeer::getOMClass();
 		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = EnumItemPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = EnumItemPeer::getInstanceFromPool($key))) {
+			$key = DisciplinePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = DisciplinePeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -411,120 +411,12 @@ abstract class BaseEnumItemPeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				EnumItemPeer::addInstanceToPool($obj, $key);
+				DisciplinePeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
 		return $results;
 	}
-
-	/**
-	 * Returns the number of rows matching criteria, joining all related tables
-	 *
-	 * @param      Criteria $c
-	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     int Number of matching rows.
-	 */
-	public static function doCountJoinAll(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		// we're going to modify criteria, so copy it first
-		$criteria = clone $criteria;
-
-		// We need to set the primary table name, since in the case that there are no WHERE columns
-		// it will be impossible for the BasePeer::createSelectSql() method to determine which
-		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(EnumItemPeer::TABLE_NAME);
-
-		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->setDistinct();
-		}
-
-		if (!$criteria->hasSelectClause()) {
-			EnumItemPeer::addSelectColumns($criteria);
-		}
-
-		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-
-		// Set the correct dbName
-		$criteria->setDbName(self::DATABASE_NAME);
-
-		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-
-
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doCount:doCount') as $callable)
-    {
-      call_user_func($callable, 'BaseEnumItemPeer', $criteria, $con);
-    }
-
-
-		$stmt = BasePeer::doCount($criteria, $con);
-
-		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$count = (int) $row[0];
-		} else {
-			$count = 0; // no rows returned; we infer that means 0 matches.
-		}
-		$stmt->closeCursor();
-		return $count;
-	}
-
-	/**
-	 * Selects a collection of EnumItem objects pre-filled with all related objects.
-	 *
-	 * @param      Criteria  $c
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of EnumItem objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doSelectJoinAll:doSelectJoinAll') as $callable)
-    {
-      call_user_func($callable, 'BaseEnumItemPeer', $c, $con);
-    }
-
-
-		$c = clone $c;
-
-		// Set the correct dbName if it has not been overridden
-		if ($c->getDbName() == Propel::getDefaultDB()) {
-			$c->setDbName(self::DATABASE_NAME);
-		}
-
-		EnumItemPeer::addSelectColumns($c);
-		$startcol2 = (EnumItemPeer::NUM_COLUMNS - EnumItemPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$stmt = BasePeer::doSelect($c, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = EnumItemPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = EnumItemPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://propel.phpdb.org/trac/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$omClass = EnumItemPeer::getOMClass();
-
-				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				EnumItemPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
 
   static public function getUniqueColumnNames()
   {
@@ -553,13 +445,13 @@ abstract class BaseEnumItemPeer {
 	 */
 	public static function getOMClass()
 	{
-		return EnumItemPeer::CLASS_DEFAULT;
+		return DisciplinePeer::CLASS_DEFAULT;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a EnumItem or Criteria object.
+	 * Method perform an INSERT on the database, given a Discipline or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or EnumItem object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or Discipline object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -568,9 +460,9 @@ abstract class BaseEnumItemPeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doInsert:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doInsert:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseEnumItemPeer', $values, $con);
+      $ret = call_user_func($callable, 'BaseDisciplinePeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -579,13 +471,17 @@ abstract class BaseEnumItemPeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from EnumItem object
+			$criteria = $values->buildCriteria(); // build Criteria from Discipline object
+		}
+
+		if ($criteria->containsKey(DisciplinePeer::ID) && $criteria->keyContainsValue(DisciplinePeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.DisciplinePeer::ID.')');
 		}
 
 
@@ -604,18 +500,18 @@ abstract class BaseEnumItemPeer {
 		}
 
 		
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doInsert:post') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doInsert:post') as $callable)
     {
-      call_user_func($callable, 'BaseEnumItemPeer', $values, $con, $pk);
+      call_user_func($callable, 'BaseDisciplinePeer', $values, $con, $pk);
     }
 
     return $pk;
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a EnumItem or Criteria object.
+	 * Method perform an UPDATE on the database, given a Discipline or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or EnumItem object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or Discipline object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -624,9 +520,9 @@ abstract class BaseEnumItemPeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doUpdate:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doUpdate:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseEnumItemPeer', $values, $con);
+      $ret = call_user_func($callable, 'BaseDisciplinePeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -635,7 +531,7 @@ abstract class BaseEnumItemPeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -643,10 +539,10 @@ abstract class BaseEnumItemPeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(EnumItemPeer::ID);
-			$selectCriteria->add(EnumItemPeer::ID, $criteria->remove(EnumItemPeer::ID), $comparison);
+			$comparison = $criteria->getComparison(DisciplinePeer::ID);
+			$selectCriteria->add(DisciplinePeer::ID, $criteria->remove(DisciplinePeer::ID), $comparison);
 
-		} else { // $values is EnumItem object
+		} else { // $values is Discipline object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -657,30 +553,31 @@ abstract class BaseEnumItemPeer {
 		$ret = BasePeer::doUpdate($selectCriteria, $criteria, $con);
 	
 
-    foreach (sfMixer::getCallables('BaseEnumItemPeer:doUpdate:post') as $callable)
+    foreach (sfMixer::getCallables('BaseDisciplinePeer:doUpdate:post') as $callable)
     {
-      call_user_func($callable, 'BaseEnumItemPeer', $values, $con, $ret);
+      call_user_func($callable, 'BaseDisciplinePeer', $values, $con, $ret);
     }
 
     return $ret;
   }
 
 	/**
-	 * Method to DELETE all rows from the enum_item table.
+	 * Method to DELETE all rows from the discipline table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += BasePeer::doDeleteAll(EnumItemPeer::TABLE_NAME, $con);
+			$affectedRows += DisciplinePeer::doOnDeleteCascade(new Criteria(DisciplinePeer::DATABASE_NAME), $con);
+			$affectedRows += BasePeer::doDeleteAll(DisciplinePeer::TABLE_NAME, $con);
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -690,9 +587,9 @@ abstract class BaseEnumItemPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a EnumItem or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a Discipline or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or EnumItem object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or Discipline object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -703,20 +600,20 @@ abstract class BaseEnumItemPeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			EnumItemPeer::clearInstancePool();
+			DisciplinePeer::clearInstancePool();
 
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof EnumItem) {
+		} elseif ($values instanceof Discipline) {
 			// invalidate the cache for this single object
-			EnumItemPeer::removeInstanceFromPool($values);
+			DisciplinePeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else {
@@ -725,11 +622,11 @@ abstract class BaseEnumItemPeer {
 
 
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(EnumItemPeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(DisciplinePeer::ID, (array) $values, Criteria::IN);
 
 			foreach ((array) $values as $singleval) {
 				// we can invalidate the cache for this single object
-				EnumItemPeer::removeInstanceFromPool($singleval);
+				DisciplinePeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -742,8 +639,21 @@ abstract class BaseEnumItemPeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
+			$affectedRows += DisciplinePeer::doOnDeleteCascade($criteria, $con);
+			
+				// Because this db requires some delete cascade/set null emulation, we have to
+				// clear the cached instance *after* the emulation has happened (since
+				// instances get re-added by the select statement contained therein).
+				if ($values instanceof Criteria) {
+					DisciplinePeer::clearInstancePool();
+				} else { // it's a PK or object
+					DisciplinePeer::removeInstanceFromPool($values);
+				}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
+
+			// invalidate objects in CourseDisciplineAssociationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
+			CourseDisciplineAssociationPeer::clearInstancePool();
 
 			$con->commit();
 			return $affectedRows;
@@ -754,24 +664,56 @@ abstract class BaseEnumItemPeer {
 	}
 
 	/**
-	 * Validates all modified columns of given EnumItem object.
+	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
+	 * feature (like MySQL or SQLite).
+	 *
+	 * This method is not very speedy because it must perform a query first to get
+	 * the implicated records and then perform the deletes by calling those Peer classes.
+	 *
+	 * This method should be used within a transaction if possible.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      PropelPDO $con
+	 * @return     int The number of affected rows (if supported by underlying database driver).
+	 */
+	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
+	{
+		// initialize var to track total num of affected rows
+		$affectedRows = 0;
+
+		// first find the objects that are implicated by the $criteria
+		$objects = DisciplinePeer::doSelect($criteria, $con);
+		foreach ($objects as $obj) {
+
+
+			// delete related CourseDisciplineAssociation objects
+			$c = new Criteria(CourseDisciplineAssociationPeer::DATABASE_NAME);
+			
+			$c->add(CourseDisciplineAssociationPeer::DISCIPLINE_ID, $obj->getId());
+			$affectedRows += CourseDisciplineAssociationPeer::doDelete($c, $con);
+		}
+		return $affectedRows;
+	}
+
+	/**
+	 * Validates all modified columns of given Discipline object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      EnumItem $obj The object to validate.
+	 * @param      Discipline $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(EnumItem $obj, $cols = null)
+	public static function doValidate(Discipline $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(EnumItemPeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(EnumItemPeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(DisciplinePeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(DisciplinePeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -787,11 +729,11 @@ abstract class BaseEnumItemPeer {
 
 		}
 
-		$res =  BasePeer::doValidate(EnumItemPeer::DATABASE_NAME, EnumItemPeer::TABLE_NAME, $columns);
+		$res =  BasePeer::doValidate(DisciplinePeer::DATABASE_NAME, DisciplinePeer::TABLE_NAME, $columns);
     if ($res !== true) {
         $request = sfContext::getInstance()->getRequest();
         foreach ($res as $failed) {
-            $col = EnumItemPeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
+            $col = DisciplinePeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
         }
     }
 
@@ -803,23 +745,23 @@ abstract class BaseEnumItemPeer {
 	 *
 	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     EnumItem
+	 * @return     Discipline
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = EnumItemPeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = DisciplinePeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(EnumItemPeer::DATABASE_NAME);
-		$criteria->add(EnumItemPeer::ID, $pk);
+		$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
+		$criteria->add(DisciplinePeer::ID, $pk);
 
-		$v = EnumItemPeer::doSelect($criteria, $con);
+		$v = DisciplinePeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -835,30 +777,30 @@ abstract class BaseEnumItemPeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(EnumItemPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(DisciplinePeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(EnumItemPeer::DATABASE_NAME);
-			$criteria->add(EnumItemPeer::ID, $pks, Criteria::IN);
-			$objs = EnumItemPeer::doSelect($criteria, $con);
+			$criteria = new Criteria(DisciplinePeer::DATABASE_NAME);
+			$criteria->add(DisciplinePeer::ID, $pks, Criteria::IN);
+			$objs = DisciplinePeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BaseEnumItemPeer
+} // BaseDisciplinePeer
 
 // This is the static code needed to register the MapBuilder for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the EnumItemPeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the EnumItemPeer class:
+// NOTE: This static code cannot call methods on the DisciplinePeer class, because it is not defined yet.
+// If you need to use overridden methods, you can add this code to the bottom of the DisciplinePeer class:
 //
-// Propel::getDatabaseMap(EnumItemPeer::DATABASE_NAME)->addTableBuilder(EnumItemPeer::TABLE_NAME, EnumItemPeer::getMapBuilder());
+// Propel::getDatabaseMap(DisciplinePeer::DATABASE_NAME)->addTableBuilder(DisciplinePeer::TABLE_NAME, DisciplinePeer::getMapBuilder());
 //
 // Doing so will effectively overwrite the registration below.
 
-Propel::getDatabaseMap(BaseEnumItemPeer::DATABASE_NAME)->addTableBuilder(BaseEnumItemPeer::TABLE_NAME, BaseEnumItemPeer::getMapBuilder());
+Propel::getDatabaseMap(BaseDisciplinePeer::DATABASE_NAME)->addTableBuilder(BaseDisciplinePeer::TABLE_NAME, BaseDisciplinePeer::getMapBuilder());
 

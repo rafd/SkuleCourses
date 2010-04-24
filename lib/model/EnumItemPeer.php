@@ -7,7 +7,6 @@ class EnumItemPeer extends BaseEnumItemPeer
   const USER_TYPES_NODE_ID = 10;
   const RATING_TYPES_NODE_ID = 20;
   const EXAM_TYPES_NODE_ID = 60;
-  const DISCIPLINES_NODE_ID = 100;
   const MAPPING_ITEMS_NODE_ID = 220; 
   
   // mapping file types

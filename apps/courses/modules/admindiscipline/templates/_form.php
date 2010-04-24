@@ -103,12 +103,19 @@
       	<td>
       		<table class="inputlayout">
       			<tr>
-			        <th>Title</th>
+			        <th>Description</th>
 			        <td>
 			          <?php echo $form['descr'] ?>
 			        </td>
 			    </tr>
 			    <tr><td></td><td class="error"><?php echo $form['descr']->renderError() ?></td></tr>
+			    <tr>
+			        <th>Abbreviations</th>
+			        <td>
+			          <?php echo $form['short_descr'] ?>
+			        </td>
+			    </tr>
+			    <tr><td></td><td class="error"><?php echo $form['short_descr']->renderError() ?></td></tr>
       		</table>
       	</td>
       </tr>

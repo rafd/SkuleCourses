@@ -40,7 +40,7 @@ propel:
     _attributes:       { phpName: CourseDisciplineAssociation }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
     course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, index: true, onDelete: cascade }
-    discipline_id:     { type: integer, required: true, foreignTable: enum_item, foreignReference: id, index: true, onDelete: cascade }
+    discipline_id:     { type: integer, required: true, foreignTable: discipline, foreignReference: id, index: true, onDelete: cascade }
     year_of_study:     { type: tinyint, required: true }
     
   course_rating_data:
@@ -71,6 +71,12 @@ propel:
     _attributes:       { phpName: Department }
     id:                { type: varchar(4), required: true, primaryKey: true }
     descr:             { type: varchar(255), required: true, index: true }
+    
+  discipline:
+    _attributes:       { phpName: Discipline }
+    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    descr:             { type: varchar(255), required: true }
+    short_descr:       { type: varchar(255), required: true, index: true }
     
   enum_item:
     _attributes:       { phpName: EnumItem }

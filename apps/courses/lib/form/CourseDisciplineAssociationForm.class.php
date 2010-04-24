@@ -13,17 +13,17 @@ class CourseDisciplineAssociationForm extends BaseCourseDisciplineAssociationFor
   public function configure()
   {
   	$c= new Criteria();
-    $c->add(EnumItemPeer::PARENT_ID, skuleadminConst::DISCIPLINE_PARENT_ID);
+    $c->addAscendingOrderByColumn(DisciplinePeer::DESCR);
     unset($this['course_id']);
     $this->setWidgets(array(
 	  'id'            => new sfWidgetFormInputHidden(),
-	  'discipline_id' => new sfWidgetFormPropelChoice(array('model' => 'EnumItem', 'add_empty' => false, 'criteria' => $c)),
+	  'discipline_id' => new sfWidgetFormPropelChoice(array('model' => 'Discipline', 'add_empty' => false, 'criteria' => $c)),
 	  'year_of_study' => new sfWidgetFormInput(),
 	));
 	
 	$this->setValidators(array(
 	  'id'            => new sfValidatorPropelChoice(array('model' => 'CourseDisciplineAssociation', 'column' => 'id', 'required' => false)),
-	  'discipline_id' => new sfValidatorPropelChoice(array('model' => 'EnumItem', 'column' => 'id')),
+	  'discipline_id' => new sfValidatorPropelChoice(array('model' => 'Discipline', 'column' => 'id')),
 	  'year_of_study' => new sfValidatorInteger(),
 	));
     $this->widgetSchema->setNameFormat('course_discipline_association[%s]');
