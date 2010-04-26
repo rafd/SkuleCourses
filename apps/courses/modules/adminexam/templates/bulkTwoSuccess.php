@@ -7,7 +7,7 @@
 
 <form>
 	<fieldset>
-		<legend>Step 2</legend>
+		<legend>Step 2 - Upload Exams</legend>
 		<center>
 		<applet codebase="classes" code="Client/Client.class" archive='/applets/appletExamsUploader.jar' width=720 height=500>
 			<?php include(sfContext::getInstance()->getConfigCache()->checkConfig('config/skuleGlobal.yml')) ?>

@@ -126,6 +126,32 @@ class helperFunctions
       }
     }
   }
+  
+  /**
+   * Find the sum from start to end. If no array is passed in, the
+   * indices are summed
+   * @param $start Starting index (an integer)
+   * @param $end Ending index (an integer)
+   * @param $array Array to be summed
+   * @return unknown_type
+   */
+  public static function sum($start, $end, $array=null){
+    if (!is_int($start) || !is_int($end)) throw new Exception("Start or end not integers");
+    if ($end<$start) throw new Exception("The ending index is smaller than the starting index $end");
+    
+    $sum = 0;
+    if (isset($array)){
+      for ($i=$start; $i<=$end; $i++){
+        $sum += $array($i);
+      }
+    } else {
+      for ($i=$start; $i<=$end; $i++){
+        $sum += $i;
+      }
+    }
+    
+    return $sum;
+  }
 
   /**
    * This function is called from event handler in the front controller to realize

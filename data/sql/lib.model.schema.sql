@@ -394,7 +394,7 @@ CREATE TABLE `import_mapping`
 	`mapping` INTEGER  NOT NULL,
 	`rating_field_id` INTEGER,
 	`question_rating` TINYINT,
-	PRIMARY KEY (`column`,`import_file_type`,`mapping`),
+	PRIMARY KEY (`column`,`import_file_type`),
 	INDEX `import_mapping_FI_1` (`import_file_type`),
 	CONSTRAINT `import_mapping_FK_1`
 		FOREIGN KEY (`import_file_type`)

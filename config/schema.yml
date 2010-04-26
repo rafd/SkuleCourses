@@ -123,7 +123,7 @@ propel:
     _attributes:       { phpName: ImportMapping }
     column:            { type: smallint, required: true, primaryKey: true }
     import_file_type:  { type: integer, required: true, primaryKey: true, foreignTable: enum_item, foreignReference: id }
-    mapping:           { type: integer, required: true, primaryKey: true, foreignTable: enum_item, foreignReference: id }
+    mapping:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id }
     rating_field_id:   { type: integer, required: false, foreignTable: rating_field, foreignReference: id, onDelete: cascade }
     question_rating:   { type: tinyint, required: false }
 

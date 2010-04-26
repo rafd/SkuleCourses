@@ -79,6 +79,7 @@ function br2nl(text) {
  * @param text
  * @return string
  */
+//FIXME make it happen
 function addSlash(str) {
   str=str.replace(/\'/g,'\\\'');
   return str;
