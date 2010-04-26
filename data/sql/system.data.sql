@@ -23,41 +23,6 @@ INSERT INTO `enum_item` (`id`,`parent_id`,`descr`) VALUES
  (62,60,'Test'),
  (63,60,'Exam'),
  (64,60,'Problem Set'),
- (100,1,'DISCIPLINES'),
- (101,100,'Chemical Engineering'),
- (102,100,'Electrical Engineering'),
- (103,100,'Civil Engineering'),
- (104,100,'Computer Engineering'),
- (105,100,'Engineering Science'),
- (106,100,'Engineering Science - Aerospace Option'),
- (107,100,'Engineering Science - Biomedical Option'),
- (108,100,'Engineering Science - Computer Option'),
- (109,100,'Engineering Science - Electrical Option'),
- (110,100,'Engineering Science - Energy Option'),
- (111,100,'Engineering Science - Infra Option'),
- (112,100,'Engineering Science - Manu Option'),
- (113,100,'Engineering Science - Nano Option'),
- (114,100,'Engineering Science - Physics Option'),
- (115,100,'Environemental Engineering'),
- (116,100,'Industrial Engineering'),
- (117,100,'Materials Engineering'),
- (118,100,'Mechanical Engineering'),
- (119,100,'Mineral Engineering'),
- (120,100,'Track One'),
- (121,100,'Unknown'),
- (122,100,'Computer Engineering - Photonics & Semiconductor'),
- (123,100,'Computer Engineering - EM & Energy Systems'),
- (124,100,'Computer Engineering - Analog & Digital Electronics'),
- (125,100,'Computer Engineering - Control, Comm & Signal Processing'),
- (126,100,'Computer Engineering - Computer Hardware & Networks'),
- (127,100,'Computer Engineering - Software'),
- (128,100,'Electrical Engineering - Photonics & Semiconductor'),
- (129,100,'Electrical Engineering - EM & Energy Systems'),
- (130,100,'Electrical Engineering - Analog & Digital Electronics'),
- (131,100,'Electrical Engineering - Control, Comm & Signal Processing'),
- (132,100,'Electrical Engineering - Computer Hardware & Networks'),
- (133,100,'Electrical Engineering - Software'),
- (134,100,'Engineering Science - Electrical and Computer Option'),
  (200,1,'IMPORT_FILE_TYPES'),
  (201,200,'CSV'),
  (202,200,'XML'),
@@ -155,8 +120,7 @@ INSERT INTO `department` (`id`,`descr`) VALUES
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
 INSERT INTO `rating_field` VALUES (2, 'How many responded?', 23, 1);
-INSERT INTO `rating_field` VALUES (3, 'Percent retake, YES?', 23, 1);
-INSERT INTO `rating_field` VALUES (4, 'Percent retake, NO?', 23, 1);
+INSERT INTO `rating_field` VALUES (3, 'Would you take this course again?', 21, 1);
 
 
 # user

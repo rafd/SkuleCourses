@@ -75,6 +75,16 @@ function br2nl(text) {
 }
 
 /**
+ * Add slash in front of the desired char
+ * @param text
+ * @return string
+ */
+function addSlash(str) {
+  str=str.replace(/\'/g,'\\\'');
+  return str;
+}
+
+/**
  * splice the string into arrays
  * @param string string to be spliced
  * @param separator

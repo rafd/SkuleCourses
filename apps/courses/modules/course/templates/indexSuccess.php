@@ -1,19 +1,21 @@
 <?php include_partial("global/submenu", array("menuOption"=>subMenuOptions::COURSE, "courseId"=>$courseObj->getId(), "ratingYearArray"=>$ratingYearArray, "examYearArray"=>$examYearArray))?>
 
-<script type="text/javascript" src="/js/toggleBox.js"></script>
+<?php use_javascript('/sfProtoculousPlugin/js/prototype.js')?>
+<?php use_javascript('/sfProtoculousPlugin/js/scriptaculous.js?load=effects')?>
 <script type="text/javascript">
 	function showExamDetails(year){
 		document.getElementById("btn_show_"+year).style.display = "none";
 		document.getElementById("btn_hide_"+year).style.display = "block";
-		toggleTransitionOn("exam_block_"+year);
+		var el = document.getElementById("exam_block_"+year);
+		//el.style.display = "block";
+		new Effect.BlindDown(el, {duration:0.6});
 	}
 
 	function hideExamDetails(year){
 		document.getElementById("btn_show_"+year).style.display = "block";
 		document.getElementById("btn_hide_"+year).style.display = "none";
-		el = document.getElementById("exam_block_"+year); 
+		el = document.getElementById("exam_block_"+year);
 		el.style.display = "none";
-		el.style.height = "0px";
 	}
 </script>
 
@@ -125,7 +127,7 @@
 						<tr>
 							<td></td>
 							<td>
-								<div class="exam_block" id="exam_block_<?php echo $year?>" style="max-height:200px">
+								<div class="exam_block" id="exam_block_<?php echo $year?>" style="display:none">
 									<?php $examArr = $examData[$year]?>
 									<?php foreach ($examArr as $type => $arr):?>
 										<div class="critique_block">

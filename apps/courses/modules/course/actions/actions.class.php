@@ -139,15 +139,15 @@ class courseActions extends sfActions
             if (isset($this->numberResponded)) $this->numberResponded += $obj->getNumber();
             else $this->numberResponded = $obj->getNumber();
             break;
-          case RatingFieldPeer::RETAKE_YES:
+          case RatingFieldPeer::RETAKE:
             // percent retake
-            if (isset($this->retakeYes)) $this->retakeYes += $obj->getNumber();
-            else $this->retakeYes = $obj->getNumber();
-            break;
-          case RatingFieldPeer::RETAKE_NO:
-            // percent retake
-            if (isset($this->retakeNo)) $this->retakeNo += $obj->getNumber();
-            else $this->retakeNo = $obj->getNumber();
+            if ($obj->getRating()==1){
+	          if (isset($this->retakeYes)) $this->retakeYes += $obj->getNumber();
+	          else $this->retakeYes = $obj->getNumber();
+            } else {
+              if (isset($this->retakeNo)) $this->retakeNo += $obj->getNumber();
+              else $this->retakeNo = $obj->getNumber();
+            }
             break;
           default:
             // ordinary rating data

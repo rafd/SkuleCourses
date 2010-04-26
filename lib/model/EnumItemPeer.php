@@ -37,9 +37,9 @@ class EnumItemPeer extends BaseEnumItemPeer
   const USER_GUEST = 13;
   const USER_NORMAL = 14;
     
-  public static function getAllForParentNodeId($parentId, PropelPDO $propelConnection=null)
+  public static function getAllForParentNodeId($parentId, PropelPDO $propelConnection=null, Criteria $c=null)
   {
-    $c = new Criteria();
+    if (!isset($c)) $c = new Criteria();
     $c->add(EnumItemPeer::PARENT_ID, $parentId);
     $c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
     return EnumItemPeer::doselect($c, $propelConnection);

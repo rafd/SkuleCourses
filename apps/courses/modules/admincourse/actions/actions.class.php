@@ -162,7 +162,7 @@ class admincourseActions extends sfActions
       $courseList = $fuzzySearch->getCourseList();
     } catch (Exception $e){
       echo "<li>No match found</li>";
-      exit();
+      return sfView::NONE;
     }
     
     if (!isset($courseList) || count($courseList) == 0) {

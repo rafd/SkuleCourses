@@ -5,12 +5,12 @@ class CourseDisciplineAssociationPeer extends BaseCourseDisciplineAssociationPee
   public static function getRelatedDisciplinesForCourse(Course $course, PropelPDO $propelConnection)
   {
     $c = new Criteria();
-    $c->addAscendingOrderByColumn(EnumItemPeer::DESCR);
-    $rawResults = $course->getCourseDisciplineAssociationsJoinEnumItem($c,$propelConnection);
+    $c->addAscendingOrderByColumn(DisciplinePeer::DESCR);
+    $rawResults = $course->getCourseDisciplineAssociationsJoinDiscipline($c,$propelConnection);
     
     $retResults = array();
     foreach ($rawResults as $result){
-      $en = $result->getEnumItem();
+      $en = $result->getDiscipline();
       $retResults[] = array("programName"=>$en->getDescr(), "year"=>helperFunctions::getYearOfStudy($result->getYearOfStudy()), 
       	"disciplineId"=>$en->getId(), "numYear"=>$result->getYearOfStudy());
     }

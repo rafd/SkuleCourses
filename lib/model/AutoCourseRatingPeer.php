@@ -26,7 +26,7 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     $c->addAscendingOrderByColumn(AutoCourseRatingPeer::FIELD_ID);
     $c->addAscendingOrderByColumn(AutoCourseRatingPeer::ID);
     $c->addAscendingOrderByColumn(AutoCourseRatingPeer::RATING);
-    return AutoCourseRatingPeer::doSelect($c, $propelConnection);
+    return AutoCourseRatingPeer::doSelectJoinAll($c, $propelConnection);
   }
   
   public static function getAvailableInstructorsForCourseIdAndYear($courseId, $year, PropelPDO $conn){
@@ -47,12 +47,61 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     }
     $c->addAscendingOrderByColumn(InstructorPeer::LAST_NAME);
     $c->addAscendingOrderByColumn(InstructorPeer::FIRST_NAME);
-    $raw = CourseInstructorAssociationPeer::doSelect($c, $conn);
+    $raw = CourseInstructorAssociationPeer::doSelectJoinInstructor($c, $conn);
     
     foreach ($raw as $obj){
       $results[] = $obj->getInstructor();
     }
     
     return $results;
+  }
+  
+  /**
+   * Used in import history to display the number of good and mismatched entries
+   * grouped by import_dt
+   * @param PropelPDO $conn
+   * @return an associative array with [datetime, number of good entries, number of
+   * bad entries]
+   */
+  public static function getImportHistory(PropelPDO $conn=null)
+  {
+    if (!isset($conn)) $conn = Propel::getConnection();
+    
+    $table = AutoCourseRatingPeer::IMPORT_DT;
+    $pos = strrpos($table, '.');
+    $IMPORT_DT = substr($table, $pos+1);
+    
+    $query = "SELECT DISTINCT c.%s AS import_dt,
+    (SELECT COUNT(1) FROM %s a WHERE a.%s = c.%s) AS num_good,
+    (SELECT COUNT(1) FROM %s a WHERE a.%s = c.%s) AS num_mismatched
+    FROM %s c
+    ORDER BY c.%s DESC";
+    
+    $query = sprintf($query, $IMPORT_DT, AutoCourseRatingPeer::TABLE_NAME, 
+      $IMPORT_DT, $IMPORT_DT, AutoCourseRatingMismatchedPeer::TABLE_NAME,
+      $IMPORT_DT, $IMPORT_DT, AutoCourseRatingPeer::TABLE_NAME, $IMPORT_DT);
+      
+    $statement = $conn->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    
+    return $results;
+  }
+  
+  public static function getMatchedRowsForDt($importDt, PropelPDO $conn=null)
+  {
+    if (!isset($conn)) $conn = Propel::getConnection();
+    
+    $c = new Criteria();
+    $c->addJoin(AutoCourseRatingPeer::COURSE_INS_ID, CourseInstructorAssociationPeer::ID);
+    $c->addJoin(AutoCourseRatingPeer::FIELD_ID, RatingFieldPeer::ID);
+    $crit = $c->getNewCriterion(AutoCourseRatingPeer::IMPORT_DT, $importDt);
+    $c->addAnd($crit);
+    $c->addAscendingOrderByColumn(CourseInstructorAssociationPeer::YEAR);
+    $c->addAscendingOrderByColumn(CourseInstructorAssociationPeer::COURSE_ID);
+    $c->addAscendingOrderByColumn(RatingFieldPeer::ID);
+    $c->addAscendingOrderByColumn(AutoCourseRatingPeer::RATING);
+    
+    return AutoCourseRatingPeer::doSelectJoinAll($c, $conn);
   }
 }
