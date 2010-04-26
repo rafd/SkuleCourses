@@ -1,7 +1,7 @@
-<table>
+<table style='width:330px'>
 	<thead>
 		<tr>
-			<th><?php echo link_to(" ", 'adminratingCriteria/list', array("class"=>"addbtn", "title"=>"Add a new rating criterion"))?></th>
+			<th width="30"><?php echo link_to(" ", 'adminratingCriteria/list', array("class"=>"addbtn", "title"=>"Add a new rating criterion"))?></th>
     		<th style="width:260px">Question</th>
     	</tr>
 	</thead>
@@ -25,7 +25,6 @@
 			<td<?php if ($sf_request->hasParameter('id') && $sf_request->getParameter('id')==$rating_field->getId()):?> style='background:#FFE87C'<?php endif;?>><?php echo $rating_field->getDescr() ?></td>
 		</tr>
 	    <?php endforeach; ?>
-	    <?php include_partial('global/paging', array('pagelist' => $rating_field_list, 'location' => 'adminratingCriteria')) ?>
-		<tr><td colspan="2" style="text-align: center"> <a href="<?php echo url_for('adminratingCriteria/list') ?>">New Rating Criteria</a> </td></tr>
+	    <?php include_partial('global/paging', array('pagelist' => $rating_field_list, 'location' => skuleadminConst::decomposeURL($sf_context, $sf_request))) ?>
 	</tbody>
 </table>

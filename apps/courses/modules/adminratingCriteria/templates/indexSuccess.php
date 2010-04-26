@@ -17,7 +17,7 @@ this list.
 </td>
 <td style="vertical-align:top">
 <h3>
-<?php echo link_to('Rating Import Manager', 'adminratingCriteria/list')?>
+<?php echo link_to('Rating Import Manager', 'adminratingCriteria/importIndex')?>
 </h3>
 <p>
 Use this manager to view import history and import new critique data.
