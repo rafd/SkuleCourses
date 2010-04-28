@@ -191,7 +191,8 @@ CREATE TABLE `auto_course_rating_data`
 	`number` SMALLINT  NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `auto_course_rating_data_I_1`(`field_id`),
-	KEY `auto_course_rating_data_I_2`(`course_ins_id`),
+	KEY `auto_course_rating_data_I_2`(`import_dt`),
+	KEY `auto_course_rating_data_I_3`(`course_ins_id`),
 	CONSTRAINT `auto_course_rating_data_FK_1`
 		FOREIGN KEY (`field_id`)
 		REFERENCES `rating_field` (`id`),
