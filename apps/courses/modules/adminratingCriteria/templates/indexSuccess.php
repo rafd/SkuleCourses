@@ -20,7 +20,8 @@ this list.
 <?php echo link_to('Rating Import Manager', 'adminratingCriteria/importIndex')?>
 </h3>
 <p>
-Use this manager to view import history and import new critique data.
+Use this manager to view import history and import new critique data. Due to the amount of data involved, this
+module may take a while to load.
 </p>
 </td></tr></table>
 </div></div>

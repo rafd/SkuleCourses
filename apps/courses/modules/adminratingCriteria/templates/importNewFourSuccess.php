@@ -11,12 +11,12 @@
 
 	<fieldset>
 		<legend>Step 4</legend>
-		
+
 		<?php if (isset($error)):?>
 			<?php if ($error==1):?>
 			<script type="text/javascript">
 				alert("Column mappings are not compatible with the import file. You need to go back and make sure that the mappings are correct.");
-				history.go(-1);
+				history.go(-2);
 			</script>
 			<?php else:?>
 			Unknown error occurred. Import failed.
@@ -24,7 +24,7 @@
 		<?php else:?>
 			Import successful.
 		<?php endif;?>
-		
+
 	</fieldset>
 
 </form>
