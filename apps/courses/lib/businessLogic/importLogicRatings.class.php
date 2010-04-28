@@ -1,9 +1,8 @@
 <?php
 
+// TODO need to save unimported rows into the mismatched table
 class importLogicRatings
-{
-  //FIXME untested
-  
+{  
   // _ratingArr[rowNumber][ratingField][rating] = number of people
   private $_ratingArr;
   // _infoArr[rowNumber]["courseCode", etc] = datum
@@ -22,12 +21,17 @@ class importLogicRatings
     unset($this->_ratingArr);
     unset($this->_infoArr);
     
-    $this->_mappingArr = $this->getMappingData();
+    $this->_mappingArr = ImportMappingPeer::getAll();
     
     $rowNum = 0;
     $fh = fopen($filePath, "r");
+    $firstRow = true;
     while (($data = fgetcsv($fh, 0, ",")) !== false)
     {
+      if ($firstRow){
+        $firstRow = false;
+        continue;
+      }
       $this->interpretData($data, $rowNum);
       $rowNum++;
     }
@@ -39,19 +43,30 @@ class importLogicRatings
     {
       $err = "";
       $conn = Propel::getConnection();
-      $dt = date("Y-m-d, H:i:s");
+      $dt = date("Y-m-d H:i:s");
       
       $len = count($this->_infoArr);
       for ($i=0; $i<$len; $i++)
       {
-        $course = CoursePeer::retrieveByPK($this->_infoArr[$i]["courseCode"]);
+        $courseCode = substr($this->_infoArr[$i]["courseCode"], 0, 8);
+        $deptId = substr($courseCode, 0, 3);
+        $deptObj = DepartmentPeer::retrieveByPK($deptId, $conn);
+        if (!isset($deptObj)){
+          // new department found, save to db
+          $deptObj = new Department();
+          $deptObj->setId($deptId);
+          $deptObj->setDescr($deptId);
+          $deptObj->save($conn);
+        }
+        
+        $course = CoursePeer::retrieveByPK($courseCode, $conn);
         if (!isset($course)){
           // new course found, save to db
           $course = new Course();
           $course->setDescr($this->_infoArr[$i]["courseName"]);
           $course->setIsEng(1);
-          $course->setDeptId(substr($this->_infoArr[$i]["courseCode"], 0, 3));
-          $course->setId($this->_infoArr[$i]["courseCode"]);
+          $course->setDeptId($deptId);
+          $course->setId($courseCode);
           $course->save($conn);
         } elseif ($course->getDescr() == $course->getId()){
           // exam importer registers course description as course id
@@ -81,7 +96,7 @@ class importLogicRatings
         try {
           $assoc = CourseInstructorAssociationPeer::findForYearAndInstructorIdAndCourseId($this->_year, $course->getId(), $instr->getId(), $conn);
         } catch (Exception $e){
-          if ($e->getCode() == 1){
+          if ($e->getCode()==1){
             // create new object
             $assoc = new CourseInstructorAssociation();
             $assoc->setYear($this->_year);
@@ -95,6 +110,26 @@ class importLogicRatings
           }
         }
         
+        // enrolled and responded
+        if (isset($this->_infoArr[$i]["enrolled"])){
+          $ratingObj = new AutoCourseRating();
+          $ratingObj->setFieldId(RatingFieldPeer::NUMBER_ENROLLED);
+          $ratingObj->setRating(0);
+          $ratingObj->setImportDt($dt);
+          $ratingObj->setNumber($this->_infoArr[$i]["enrolled"]);
+          $ratingObj->setCourseInsId($assoc->getId());
+          $ratingObj->save($conn);
+        }
+        if (isset($this->_infoArr[$i]["response"])){
+          $ratingObj = new AutoCourseRating();
+          $ratingObj->setFieldId(RatingFieldPeer::NUMBER_RESPONDED);
+          $ratingObj->setRating(0);
+          $ratingObj->setImportDt($dt);
+          $ratingObj->setNumber($this->_infoArr[$i]["response"]);
+          $ratingObj->setCourseInsId($assoc->getId());
+          $ratingObj->save($conn);
+        }
+        
         // we can now save the real rating data
         $ratingArr = $this->_ratingArr[$i];
         foreach ($ratingArr as $fieldId => $data){
@@ -105,7 +140,7 @@ class importLogicRatings
             $ratingObj->setNumber($number);
             $ratingObj->setImportDt($dt);
             $ratingObj->setCourseInsId($assoc->getId());
-            $ratingObj->save();
+            $ratingObj->save($conn);
           }
         }
         
@@ -120,6 +155,10 @@ class importLogicRatings
   private function interpretData($rawData, $rowNum)
   {
     $totCol = count($rawData);
+    $lenMappings = count($this->_mappingArr);
+    
+    if ($lenMappings != $totCol) throw new Exception("Mappings don't match with cols.", 1);
+    
     for ($i=0; $i<$totCol; $i++)
     {
       $importMapping = $this->_mappingArr[$i];
@@ -150,15 +189,5 @@ class importLogicRatings
           continue;
       }
     }
-  }
-  
-  private function getMappingData()
-  {    
-    $conn = Propel::getConnection();
-    $c = new Criteria();
-    $c->add(ImportMappingPeer::IMPORT_FILE_TYPE, EnumItemPeer::CSV_TYPE);
-    $c->addAscendingOrderByColumn(ImportMappingPeer::COLUMN);
-    
-    return ImportMappingPeer::doselect($c, $conn);
   }
 }

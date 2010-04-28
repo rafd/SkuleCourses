@@ -58,7 +58,7 @@ class CourseInstructorAssociationPeer extends BaseCourseInstructorAssociationPee
     $c->addAnd($crit3);
     $results = self::doSelect($c, $conn);
     
-    if (!isset($results) && count($results) == 0){
+    if (!isset($results) || count($results) == 0){
       throw new Exception("no association found", 1);
     } elseif (count($results) == 1){
       return $results[0];

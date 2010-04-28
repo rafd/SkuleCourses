@@ -51,9 +51,9 @@ class adminratingCriteriaActions extends sfActions
       AutoCourseRatingPeer::doDelete($c);
     
       $c = new Criteria();
-      $crit = $c->getNewCriterion(AutoCourseRatingMismatched::IMPORT_DT, $dt);
+      $crit = $c->getNewCriterion(AutoCourseRatingMismatchedPeer::IMPORT_DT, $dt);
       $c->addAnd($crit);
-      AutoCourseRatingMismatched::doDelete($c);
+      AutoCourseRatingMismatchedPeer::doDelete($c);
       
       $this->redirect("adminratingCriteria/importIndex");
     } catch (Exception $e){
@@ -70,6 +70,8 @@ class adminratingCriteriaActions extends sfActions
     if (!$request->isMethod(sfWebRequest::POST) || !$request->hasParameter("critique_year") || !$request->hasParameter("critique_term"))
       $this->forward404("not enough parameters");
       
+    $this->repeat = AutoCourseRatingPeer::isYearPresent($request->getParameter("critique_year").$request->getParameter("critique_term"));
+    
     $this->data = ImportMappingPeer::getAll();
     $c = new Criteria();
     $c->addAscendingOrderByColumn(EnumItemPeer::ID);
@@ -82,12 +84,34 @@ class adminratingCriteriaActions extends sfActions
       $this->forward404("not enough parameters");
   }
   
+  // tell the user which rows have been imported, which ones haven't
   public function executeImportNewFour(sfWebRequest $request)
   {
     if (!$request->isMethod(sfWebRequest::POST) || !$request->hasParameter("critique_year") || !$request->hasParameter("critique_term"))
       $this->forward404("not enough parameters");
       
+    $year = $request->getParameter("critique_year").$request->getParameter("critique_term");
+    $files = $request->getFiles();
+    $file = $files['data_file'];
     
+    if (isset($file) && strtoupper(substr($file['name'], -3, 3)) == 'CSV'){
+      
+      try{
+        $importLogic = new importLogicRatings($year);
+        $importLogic->readCsv($file['tmp_name']);
+        $importLogic->saveToDatabase();
+      } catch (Exception $e){
+        if ($e->getCode()==1){
+          $this->error = 1;
+        } else {
+          $this->error = 99;
+        }
+      }
+      
+    } else {
+      die($file['name']);
+      throw new Exception("Only CSV file is accepted here");
+    }
   }
   
   public function executeAjaxDeleteLastMapping(sfWebRequest $request)
@@ -95,7 +119,9 @@ class adminratingCriteriaActions extends sfActions
     if (!$request->isXmlHttpRequest()) $this->forward404();
     if (!$request->hasParameter("mappingDel")) throw new Exception("ajax_query does not exist");
     
-    echo "Success";
+    $col = $request->getParameter("mappingDel");
+    $mapping = ImportMappingPeer::retrieveByPK($col, EnumItemPeer::CSV_TYPE);
+    if (isset($mapping)) $mapping->delete();
     
     return sfView::NONE;
   }
@@ -137,12 +163,16 @@ class adminratingCriteriaActions extends sfActions
         echo "Failed";
         return sfView::NONE;
       }
+    } elseif ($enum->getId() == EnumItemPeer::MAPPING_NUMBER_ENROLLED){
+      $criterion = RatingFieldPeer::retrieveByPK(RatingFieldPeer::NUMBER_ENROLLED);
+    } elseif ($enum->getId() == EnumItemPeer::MAPPING_NUMBER_RESPONSE){
+      $criterion = RatingFieldPeer::retrieveByPK(RatingFieldPeer::NUMBER_RESPONDED);
     }
     
     // deal with rating
     if ($rating == "") $rating = 0;
-    elseif ($rating == "True") $rating = 1;
-    elseif ($rating == "False") $rating = 0;
+    elseif ($rating == "Yes") $rating = 1;
+    elseif ($rating == "No") $rating = 0;
     
     // save
     $mappingObj = ImportMappingPeer::retrieveByPK($col, EnumItemPeer::CSV_TYPE);

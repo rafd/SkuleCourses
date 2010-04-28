@@ -17,6 +17,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
 
+// FIXME need to filter out non-pdf files
 public class AppletPane extends javax.swing.JPanel {
     
     private Vector<FileNode> _roots;

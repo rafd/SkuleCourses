@@ -17,6 +17,8 @@ class EnumItemPeer extends BaseEnumItemPeer
   const MAPPING_COURSE_CODE = 222;
   const MAPPING_COURSE_NAME = 223;
   const MAPPING_INSTRUCTOR_NAME = 224;
+  const MAPPING_NUMBER_ENROLLED = 225;
+  const MAPPING_NUMBER_RESPONSE = 226;
   const MAPPING_QUESTION = 227;
   const MAPPING_NUMBER = 231;
   

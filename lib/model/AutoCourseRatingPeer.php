@@ -1,7 +1,7 @@
 <?php
 
 class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
-{
+{  
   public static function getAvailableYearsForCourseId($courseId, PropelPDO $propelConnection)
   {
     $query = "SELECT DISTINCT %s as y FROM %s JOIN %s ON %s=%s WHERE %s='%s' ORDER BY y DESC";
@@ -86,6 +86,18 @@ class AutoCourseRatingPeer extends BaseAutoCourseRatingPeer
     $results = $statement->fetchAll();
     
     return $results;
+  }
+  
+  public static function isYearPresent($year, PropelPDO $conn=null){
+    if (!isset($conn)) $conn = Propel::getConnection();
+    $query = "SELECT 1 FROM %s JOIN %s ON %s=%s WHERE %s = %s";
+    $query = sprintf($query, AutoCourseRatingPeer::TABLE_NAME, CourseInstructorAssociationPeer::TABLE_NAME, 
+      CourseInstructorAssociationPeer::ID, AutoCourseRatingPeer::COURSE_INS_ID, CourseInstructorAssociationPeer::YEAR, $year);
+    $statement = $conn->prepare($query);
+    $statement->execute();
+    $results = $statement->fetchAll();
+    if (count($results) >= 1) return true;
+    else return false;
   }
   
   public static function getMatchedRowsForDt($importDt, PropelPDO $conn=null)

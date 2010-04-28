@@ -11,6 +11,13 @@
 <?php $delBtnStr = "<a class='deletebtn' onclick='mappingDelete()' title='delete the last column mapping' style='margin-left:0'></a><input type='hidden' name='mappingDel' id='mappingDel' />" ?>
 
 <script type="text/javascript">
+	<?php if (isset($repeat) && $repeat==true):?>
+	var repeatYO = confirm("Critique data already exists for this year and term. You should not import the same file twice. Are you sure you want to continue?");
+	if (!repeatYO){
+		history.go(-1);
+	}
+	<?php endif; ?>
+
 	var mapping_len = <?php echo $len?>;
 	var selected_row_index = NaN;
 	var validation_requirements = new Array();
@@ -20,12 +27,11 @@
 		if (res){
 			// remove the last row
 			var table = document.getElementById("mapping_table");
-			document.getElementById("mappingDel").value = trim(table.rows[mapping_len].cells[4].innerHTML);
+			document.getElementById("mappingDel").value = trim(table.rows[mapping_len].cells[2].innerHTML);
 			document.getElementById("ajax_del_mapping").click();
 			table.deleteRow(mapping_len);
 			mapping_len -= 1;
 			
-
 			// give the second last row the delete button
 			row = table.rows[mapping_len];
 			row.cells[1].innerHTML = "<?php echo $delBtnStr?>";
@@ -43,6 +49,7 @@
 		row.innerHTML = "<td></td><td></td><td>"+mapping_len+"</td><td></td><td></td><td></td>";
 		row.cells[0].innerHTML = "<a class='select' onclick='mappingSelection(\"mapping_tr_"+(mapping_len-1)+"\")' title='select to edit'></a>";
 		row.cells[1].innerHTML = "<?php echo $delBtnStr?>";
+		row.cells[3].innerHTML = "<?php echo $mappingTypes[0]?>";
 
 		// remove the previous row's delete button
 		row = table.rows[mapping_len-1];
@@ -143,7 +150,13 @@
 				for (var j=0; j<len_req; j++){
 					if (validation_requirements[j][1]==descr){
 						validation_requirements[j][0]++;
-						validation_requirements[j][4] += parseInt(rating);
+						if (rating=="Yes"){
+							validation_requirements[j][4] += 1;
+						} else if (rating=="No"){
+						  	validation_requirements[j][4] += 0;
+						} else{
+							validation_requirements[j][4] += parseInt(rating);
+						}
 						break;
 					}
 				}
@@ -230,6 +243,9 @@
 					<?php if ($row->getRatingFieldId()!=RatingFieldPeer::NUMBER_ENROLLED 
 					  && $row->getRatingFieldId()!=RatingFieldPeer::NUMBER_RESPONDED && $row->getRatingFieldId()!=RatingFieldPeer::RETAKE):?>
 				    <?php echo $row->getQuestionRating()?>
+				    <?php elseif ($row->getRatingFieldId()!=RatingFieldPeer::NUMBER_ENROLLED 
+					  && $row->getRatingFieldId()!=RatingFieldPeer::NUMBER_RESPONDED && $row->getRatingFieldId()==RatingFieldPeer::RETAKE):?>
+				    <?php if ($row->getQuestionRating()=="1"):?>Yes<?php else:?>No<?php endif;?>
 				    <?php endif;?>
 				</td>
 			</tr>

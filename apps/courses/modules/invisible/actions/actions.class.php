@@ -7,9 +7,7 @@ class invisibleActions extends sfActions
    */
   public function executeBulkExamsHandler(sfWebRequest $request)
   {
-    /*
-	 * check http basic authentication
-	 */
+    // check http basic authentication
 	if ( !isset($_SERVER['PHP_AUTH_USER']))
 	{
 	  echo 'Access denied';
@@ -29,9 +27,7 @@ class invisibleActions extends sfActions
 	  }
 	}
 	
-	/*
-	 * check if something has been uploaded
-	 */
+	// check if something has been uploaded
 	if ( !isset($_FILES) or !count ($_FILES) or !isset ( $_FILES['uploadfile'] ) )
 	{
 	  echo "No file data received (File might be to large).";
@@ -42,9 +38,7 @@ class invisibleActions extends sfActions
 	  return sfView::HEADER_ONLY;
 	}
 	
-	/*
-	 * check file size
-	 */
+	// check file size
 	$maxfilesize = 10000; //kByte
 	if ($_FILES['uploadfile']['size'] > $maxfilesize*1024)
 	{
@@ -66,45 +60,33 @@ class invisibleActions extends sfActions
 	  }
 	}
 	
-	/*
-	 * get file info
-	 */
+	// get file info
 	$tmp_name  = $_FILES['uploadfile']['tmp_name'];
 	$file_name = $_FILES['uploadfile']['name'];
 	
-	/*
-	 * check file name for validity
-	 */
-	
-	if ( strstr($file_name, ".." ) )
+	// check file name for validity
+	if (strtoupper(substr($file_name, -3, 3)) != 'PDF')
 	{
-	  echo "Illegal filename.";
+	  echo "Only PDF file is allowed here.";
 	  return sfView::HEADER_ONLY;
 	}
-	
 	$tgt_path = $tgt_path."/".$file_name;
 	
-	/*
-	 * check if file exists
-	 */
+	// check if file exists
 	if ( file_exists ( $tgt_path) )
 	{
 	  echo "File {$_FILES['uploadfile']['name']} exists - not uploaded.";
 	  return sfView::HEADER_ONLY;
 	}
 	
-	/*
-	 * move temporary file to target location and check for errors
-	 */
+	// move temporary file to target location and check for errors
 	if ( !move_uploaded_file( $tmp_name, $tgt_path ) )
 	{
 	  echo "Problem occurred during upload.";
 	  return sfView::HEADER_ONLY;
 	}
 	
-	/*
-	 * report upload succes
-	 */
+	// report upload succes
 	echo "Upload successful.";
 	return sfView::HEADER_ONLY;
   }
@@ -114,9 +96,7 @@ class invisibleActions extends sfActions
    */
   public function executeBulkExamsRegistration(sfWebRequest $request)
   {
-	/*
-	 * check http basic authentication
-	 */
+	// check http basic authentication
 	if ( !isset($_SERVER['PHP_AUTH_USER']))
 	{
 	  echo 'Access denied';
@@ -136,9 +116,7 @@ class invisibleActions extends sfActions
 	  }
 	}
 	
-	/*
-	 * check if all necessary parameters have been posted
-	 */
+	// check if all necessary parameters have been posted
 	if (!isset($_POST['year'])) die ("No year info received.");
 	
 	$logicObj = new importLogicBulkExams("exams/bulk/".$_POST['year'], $_POST['year']);
