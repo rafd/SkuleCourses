@@ -116,6 +116,42 @@ INSERT INTO `department` (`id`,`descr`) VALUES
  ('RLG','Religion');
 
 
+# discipline
+
+INSERT INTO `discipline` (`id`,`descr`,`short_descr`) VALUES 
+ (101,'Chemical Engineering','AECHEBASC'),
+ (102,'Electrical and Computer Engineering','AECPEBASC'),
+ (103,'Civil Engineering','AECIVBASC'),
+ (104,'Computer Engineering','AECPEBASC'),
+ (105,'Engineering Science','AEESCBASE'),
+ (106,'Engineering Science - Aerospace Option','AEESCBASEA'),
+ (107,'Engineering Science - Biomedical Option','AEESCBASEB'),
+ (110,'Engineering Science - Energy Systems Option','AEESCBASEJ'),
+ (111,'Engineering Science - Infrastructure Option','AEESCBASEI'),
+ (113,'Engineering Science - Nanoengineering Option','AEESCBASEO'),
+ (114,'Engineering Science - Physics Option','AEESCBASEP'),
+ (116,'Industrial Engineering','AEINDBASC'),
+ (117,'Materials Engineering','AEMMSBASC'),
+ (118,'Mechanical Engineering','AEMECBASC'),
+ (119,'Mineral Engineering','AELMEBASC'),
+ (120,'Track One',''),
+ (122,'Computer Engineering - Photonics & Semiconductor','AECPEBASC'),
+ (123,'Computer Engineering - EM & Energy Systems','AECPEBASC'),
+ (124,'Computer Engineering - Analog & Digital Electronics','AECPEBASC'),
+ (125,'Computer Engineering - Control, Comm & Signal Processing','AECPEBASC'),
+ (126,'Computer Engineering - Computer Hardware & Networks','AECPEBASC'),
+ (127,'Computer Engineering - Software','AECPEBASC'),
+ (128,'Electrical and Computer Engineering - Photonics & Semiconductor','AECPEBASC'),
+ (129,'Electrical and Computer Engineering - EM & Energy Systems','AECPEBASC'),
+ (130,'Electrical and Computer Engineering - Analog & Digital Electronics','AECPEBASC'),
+ (131,'Electrical and Computer Engineering - Control, Comm & Signal Processing','AECPEBASC'),
+ (132,'Electrical and Computer Engineering - Computer Hardware & Networks','AECPEBASC'),
+ (133,'Electrical and Computer Engineering - Software','AECPEBASC'),
+ (134,'Engineering Science - Electrical and Computer Option','AEESCBASER'),
+ (135,'T-Program',''),
+ (136,'Engineering Science - Manufacturing Option','AEESCBASEM');
+
+
 # rating_field
 
 INSERT INTO `rating_field` VALUES (1, 'How many enrolled?', 23, 1);
