@@ -7,6 +7,7 @@ package Client;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.Vector;
 
 public class FileNode{
@@ -33,12 +34,13 @@ public class FileNode{
     };
     
     // gets all non hidden files + directories
-    public static FileFilter fileFilter = new FileFilter() {
-        public boolean accept(File file){
-            return (!file.isDirectory() && !file.isHidden());
+    public static FilenameFilter fileFilter = new FilenameFilter() {
+        public boolean accept(File file, String name){
+            String refName = name.toUpperCase();
+            return (refName.endsWith("PDF"));
         }
     };
-    
+
     public FileNode(File f){
         _file = f;
         _children = new Vector<FileNode>();
