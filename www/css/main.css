@@ -4,7 +4,8 @@
 #main input[type=button], #left input[type=submit]{ font: 10pt verdana;}
 #main ul {margin: 2px; padding-left: 10px}
 #main ul li, #main ol li {margin-left: 10px;}
-#main h3 {padding-bottom: 5px;}
+#main h2 { font-size: 20px; font-weight:bold; }
+#main h3 {padding-bottom: 5px; font-size: 18px;}
 #main h4 { color: #5a5b5b; font-size: 11px; font-weight: bold; margin-bottom: 5px; border-bottom: none !important; letter-spacing: 1px;text-transform: uppercase; margin-top: 5px;}
 
 #left input[type=text], #left input[type=file], #left select { font: 10pt verdana; width: 200px;}
