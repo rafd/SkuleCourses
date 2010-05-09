@@ -41,7 +41,16 @@ INSERT INTO `enum_item` (`id`,`parent_id`,`descr`) VALUES
  (228,220,'Question Mean'),
  (229,220,'Question Median'),
  (230,220,'Department Name'),
- (231,220,'Number');
+ (231,220,'Number'),
+ (250,1,'SECTION_TYPES'),
+ (251,250,'LEC'),
+ (252,250,'TUT'),
+ (253,250,'PRA'),
+ (260,1,'COURSE_TYPES'),
+ (261,260,'Technical Electives'),
+ (262,260,'HSS'),
+ (263,260,'Humanity'),
+ (264,260,'Science');
 
 
 # department
