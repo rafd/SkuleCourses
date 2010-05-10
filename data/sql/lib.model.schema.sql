@@ -91,6 +91,55 @@ CREATE TABLE `course_detail`
 )Type=InnoDB;
 
 #-----------------------------------------------------------------------------
+#-- course_section
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `course_section`;
+
+
+CREATE TABLE `course_section`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`course_id` VARCHAR(9)  NOT NULL,
+	`section_type` INTEGER  NOT NULL,
+	`term` TINYINT  NOT NULL,
+	`section_num` INTEGER  NOT NULL,
+	`meeting_time` TIME  NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `course_section_I_1`(`course_id`),
+	KEY `course_section_I_2`(`section_type`),
+	KEY `course_section_I_3`(`meeting_time`),
+	CONSTRAINT `course_section_FK_1`
+		FOREIGN KEY (`course_id`)
+		REFERENCES `course` (`id`)
+		ON DELETE CASCADE
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
+#-- course_type_assoc
+#-----------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS `course_type_assoc`;
+
+
+CREATE TABLE `course_type_assoc`
+(
+	`id` INTEGER  NOT NULL AUTO_INCREMENT,
+	`type_id` INTEGER  NOT NULL,
+	`course_id` VARCHAR(9)  NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `course_type_assoc_I_1`(`type_id`),
+	KEY `course_type_assoc_I_2`(`course_id`),
+	CONSTRAINT `course_type_assoc_FK_1`
+		FOREIGN KEY (`type_id`)
+		REFERENCES `enum_item` (`id`),
+	CONSTRAINT `course_type_assoc_FK_2`
+		FOREIGN KEY (`course_id`)
+		REFERENCES `course` (`id`)
+		ON DELETE CASCADE
+)Type=InnoDB;
+
+#-----------------------------------------------------------------------------
 #-- course_instructor_assoc
 #-----------------------------------------------------------------------------
 

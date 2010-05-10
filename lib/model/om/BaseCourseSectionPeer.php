@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base static class for performing query and update operations on the 'course' table.
+ * Base static class for performing query and update operations on the 'course_section' table.
  *
  * 
  *
@@ -11,40 +11,46 @@
  *
  * @package    lib.model.om
  */
-abstract class BaseCoursePeer {
+abstract class BaseCourseSectionPeer {
 
 	/** the default database name for this class */
 	const DATABASE_NAME = 'propel';
 
 	/** the table name for this class */
-	const TABLE_NAME = 'course';
+	const TABLE_NAME = 'course_section';
 
 	/** A class that can be returned by this peer. */
-	const CLASS_DEFAULT = 'lib.model.Course';
+	const CLASS_DEFAULT = 'lib.model.CourseSection';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 4;
+	const NUM_COLUMNS = 6;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** the column name for the ID field */
-	const ID = 'course.ID';
+	const ID = 'course_section.ID';
 
-	/** the column name for the DEPT_ID field */
-	const DEPT_ID = 'course.DEPT_ID';
+	/** the column name for the COURSE_ID field */
+	const COURSE_ID = 'course_section.COURSE_ID';
 
-	/** the column name for the DESCR field */
-	const DESCR = 'course.DESCR';
+	/** the column name for the SECTION_TYPE field */
+	const SECTION_TYPE = 'course_section.SECTION_TYPE';
 
-	/** the column name for the IS_ENG field */
-	const IS_ENG = 'course.IS_ENG';
+	/** the column name for the TERM field */
+	const TERM = 'course_section.TERM';
+
+	/** the column name for the SECTION_NUM field */
+	const SECTION_NUM = 'course_section.SECTION_NUM';
+
+	/** the column name for the MEETING_TIME field */
+	const MEETING_TIME = 'course_section.MEETING_TIME';
 
 	/**
-	 * An identiy map to hold any loaded instances of Course objects.
+	 * An identiy map to hold any loaded instances of CourseSection objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
 	 * queries.
-	 * @var        array Course[]
+	 * @var        array CourseSection[]
 	 */
 	public static $instances = array();
 
@@ -61,11 +67,11 @@ abstract class BaseCoursePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'DeptId', 'Descr', 'IsEng', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'deptId', 'descr', 'isEng', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::DEPT_ID, self::DESCR, self::IS_ENG, ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'dept_id', 'descr', 'is_eng', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'CourseId', 'SectionType', 'Term', 'SectionNum', 'MeetingTime', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'courseId', 'sectionType', 'term', 'sectionNum', 'meetingTime', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::COURSE_ID, self::SECTION_TYPE, self::TERM, self::SECTION_NUM, self::MEETING_TIME, ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'course_id', 'section_type', 'term', 'section_num', 'meeting_time', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -75,11 +81,11 @@ abstract class BaseCoursePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'DeptId' => 1, 'Descr' => 2, 'IsEng' => 3, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'deptId' => 1, 'descr' => 2, 'isEng' => 3, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::DEPT_ID => 1, self::DESCR => 2, self::IS_ENG => 3, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'dept_id' => 1, 'descr' => 2, 'is_eng' => 3, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'CourseId' => 1, 'SectionType' => 2, 'Term' => 3, 'SectionNum' => 4, 'MeetingTime' => 5, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'courseId' => 1, 'sectionType' => 2, 'term' => 3, 'sectionNum' => 4, 'meetingTime' => 5, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::COURSE_ID => 1, self::SECTION_TYPE => 2, self::TERM => 3, self::SECTION_NUM => 4, self::MEETING_TIME => 5, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'course_id' => 1, 'section_type' => 2, 'term' => 3, 'section_num' => 4, 'meeting_time' => 5, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -89,7 +95,7 @@ abstract class BaseCoursePeer {
 	public static function getMapBuilder()
 	{
 		if (self::$mapBuilder === null) {
-			self::$mapBuilder = new CourseMapBuilder();
+			self::$mapBuilder = new CourseSectionMapBuilder();
 		}
 		return self::$mapBuilder;
 	}
@@ -139,12 +145,12 @@ abstract class BaseCoursePeer {
 	 *		$c->addJoin(TablePeer::alias("alias1", TablePeer::PRIMARY_KEY_COLUMN), TablePeer::PRIMARY_KEY_COLUMN);
 	 * </code>
 	 * @param      string $alias The alias for the current table.
-	 * @param      string $column The column name for current table. (i.e. CoursePeer::COLUMN_NAME).
+	 * @param      string $column The column name for current table. (i.e. CourseSectionPeer::COLUMN_NAME).
 	 * @return     string
 	 */
 	public static function alias($alias, $column)
 	{
-		return str_replace(CoursePeer::TABLE_NAME.'.', $alias.'.', $column);
+		return str_replace(CourseSectionPeer::TABLE_NAME.'.', $alias.'.', $column);
 	}
 
 	/**
@@ -161,13 +167,17 @@ abstract class BaseCoursePeer {
 	public static function addSelectColumns(Criteria $criteria)
 	{
 
-		$criteria->addSelectColumn(CoursePeer::ID);
+		$criteria->addSelectColumn(CourseSectionPeer::ID);
 
-		$criteria->addSelectColumn(CoursePeer::DEPT_ID);
+		$criteria->addSelectColumn(CourseSectionPeer::COURSE_ID);
 
-		$criteria->addSelectColumn(CoursePeer::DESCR);
+		$criteria->addSelectColumn(CourseSectionPeer::SECTION_TYPE);
 
-		$criteria->addSelectColumn(CoursePeer::IS_ENG);
+		$criteria->addSelectColumn(CourseSectionPeer::TERM);
+
+		$criteria->addSelectColumn(CourseSectionPeer::SECTION_NUM);
+
+		$criteria->addSelectColumn(CourseSectionPeer::MEETING_TIME);
 
 	}
 
@@ -187,27 +197,27 @@ abstract class BaseCoursePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(CoursePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(CourseSectionPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			CoursePeer::addSelectColumns($criteria);
+			CourseSectionPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
 		$criteria->setDbName(self::DATABASE_NAME); // Set the correct dbName
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $criteria, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $criteria, $con);
     }
 
 
@@ -227,7 +237,7 @@ abstract class BaseCoursePeer {
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
-	 * @return     Course
+	 * @return     CourseSection
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
@@ -235,7 +245,7 @@ abstract class BaseCoursePeer {
 	{
 		$critcopy = clone $criteria;
 		$critcopy->setLimit(1);
-		$objects = CoursePeer::doSelect($critcopy, $con);
+		$objects = CourseSectionPeer::doSelect($critcopy, $con);
 		if ($objects) {
 			return $objects[0];
 		}
@@ -252,7 +262,7 @@ abstract class BaseCoursePeer {
 	 */
 	public static function doSelect(Criteria $criteria, PropelPDO $con = null)
 	{
-		return CoursePeer::populateObjects(CoursePeer::doSelectStmt($criteria, $con));
+		return CourseSectionPeer::populateObjects(CourseSectionPeer::doSelectStmt($criteria, $con));
 	}
 	/**
 	 * Prepares the Criteria object and uses the parent doSelect() method to execute a PDOStatement.
@@ -270,19 +280,19 @@ abstract class BaseCoursePeer {
 	public static function doSelectStmt(Criteria $criteria, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doSelectStmt:doSelectStmt') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doSelectStmt:doSelectStmt') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $criteria, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $criteria, $con);
     }
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		if (!$criteria->hasSelectClause()) {
 			$criteria = clone $criteria;
-			CoursePeer::addSelectColumns($criteria);
+			CourseSectionPeer::addSelectColumns($criteria);
 		}
 
 		// Set the correct dbName
@@ -300,10 +310,10 @@ abstract class BaseCoursePeer {
 	 * to the cache in order to ensure that the same objects are always returned by doSelect*()
 	 * and retrieveByPK*() calls.
 	 *
-	 * @param      Course $value A Course object.
+	 * @param      CourseSection $value A CourseSection object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Course $obj, $key = null)
+	public static function addInstanceToPool(CourseSection $obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -321,18 +331,18 @@ abstract class BaseCoursePeer {
 	 * methods in your stub classes -- you may need to explicitly remove objects
 	 * from the cache in order to prevent returning objects that no longer exist.
 	 *
-	 * @param      mixed $value A Course object or a primary key value.
+	 * @param      mixed $value A CourseSection object or a primary key value.
 	 */
 	public static function removeInstanceFromPool($value)
 	{
 		if (Propel::isInstancePoolingEnabled() && $value !== null) {
-			if (is_object($value) && $value instanceof Course) {
+			if (is_object($value) && $value instanceof CourseSection) {
 				$key = (string) $value->getId();
 			} elseif (is_scalar($value)) {
 				// assume we've been passed a primary key
 				$key = (string) $value;
 			} else {
-				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or Course object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
+				$e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or CourseSection object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value,true)));
 				throw $e;
 			}
 
@@ -347,7 +357,7 @@ abstract class BaseCoursePeer {
 	 * a multi-column primary key, a serialize()d version of the primary key will be returned.
 	 *
 	 * @param      string $key The key (@see getPrimaryKeyHash()) for this instance.
-	 * @return     Course Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
+	 * @return     CourseSection Found object or NULL if 1) no instance exists for specified key or 2) instance pooling has been disabled.
 	 * @see        getPrimaryKeyHash()
 	 */
 	public static function getInstanceFromPool($key)
@@ -401,12 +411,12 @@ abstract class BaseCoursePeer {
 		$results = array();
 	
 		// set the class once to avoid overhead in the loop
-		$cls = CoursePeer::getOMClass();
+		$cls = CourseSectionPeer::getOMClass();
 		$cls = substr('.'.$cls, strrpos('.'.$cls, '.') + 1);
 		// populate the object(s)
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key = CoursePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj = CoursePeer::getInstanceFromPool($key))) {
+			$key = CourseSectionPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj = CourseSectionPeer::getInstanceFromPool($key))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj->hydrate($row, 0, true); // rehydrate
@@ -416,7 +426,7 @@ abstract class BaseCoursePeer {
 				$obj = new $cls();
 				$obj->hydrate($row);
 				$results[] = $obj;
-				CoursePeer::addInstanceToPool($obj, $key);
+				CourseSectionPeer::addInstanceToPool($obj, $key);
 			} // if key exists
 		}
 		$stmt->closeCursor();
@@ -424,7 +434,7 @@ abstract class BaseCoursePeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Department table
+	 * Returns the number of rows matching criteria, joining the related Course table
 	 *
 	 * @param      Criteria $c
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -432,7 +442,7 @@ abstract class BaseCoursePeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinDepartment(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinCourse(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -440,14 +450,14 @@ abstract class BaseCoursePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(CoursePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(CourseSectionPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			CoursePeer::addSelectColumns($criteria);
+			CourseSectionPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -456,15 +466,15 @@ abstract class BaseCoursePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(CoursePeer::DEPT_ID,), array(DepartmentPeer::ID,), $join_behavior);
+		$criteria->addJoin(array(CourseSectionPeer::COURSE_ID,), array(CoursePeer::ID,), $join_behavior);
 
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $criteria, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $criteria, $con);
     }
 
 
@@ -481,20 +491,20 @@ abstract class BaseCoursePeer {
 
 
 	/**
-	 * Selects a collection of Course objects pre-filled with their Department objects.
+	 * Selects a collection of CourseSection objects pre-filled with their Course objects.
 	 * @param      Criteria  $c
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Course objects.
+	 * @return     array Array of CourseSection objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinDepartment(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinCourse(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doSelectJoin:doSelectJoin') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doSelectJoin:doSelectJoin') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $c, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $c, $con);
     }
 
 
@@ -505,45 +515,45 @@ abstract class BaseCoursePeer {
 			$c->setDbName(self::DATABASE_NAME);
 		}
 
+		CourseSectionPeer::addSelectColumns($c);
+		$startcol = (CourseSectionPeer::NUM_COLUMNS - CourseSectionPeer::NUM_LAZY_LOAD_COLUMNS);
 		CoursePeer::addSelectColumns($c);
-		$startcol = (CoursePeer::NUM_COLUMNS - CoursePeer::NUM_LAZY_LOAD_COLUMNS);
-		DepartmentPeer::addSelectColumns($c);
 
-		$c->addJoin(array(CoursePeer::DEPT_ID,), array(DepartmentPeer::ID,), $join_behavior);
+		$c->addJoin(array(CourseSectionPeer::COURSE_ID,), array(CoursePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CoursePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CoursePeer::getInstanceFromPool($key1))) {
+			$key1 = CourseSectionPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CourseSectionPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
 
-				$omClass = CoursePeer::getOMClass();
+				$omClass = CourseSectionPeer::getOMClass();
 
 				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				CoursePeer::addInstanceToPool($obj1, $key1);
+				CourseSectionPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = DepartmentPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = CoursePeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = DepartmentPeer::getInstanceFromPool($key2);
+				$obj2 = CoursePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = DepartmentPeer::getOMClass();
+					$omClass = CoursePeer::getOMClass();
 
 					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					DepartmentPeer::addInstanceToPool($obj2, $key2);
+					CoursePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (Course) to $obj2 (Department)
-				$obj2->addCourse($obj1);
+				// Add the $obj1 (CourseSection) to $obj2 (Course)
+				$obj2->addCourseSection($obj1);
 
 			} // if joined row was not null
 
@@ -571,14 +581,14 @@ abstract class BaseCoursePeer {
 		// We need to set the primary table name, since in the case that there are no WHERE columns
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(CoursePeer::TABLE_NAME);
+		$criteria->setPrimaryTableName(CourseSectionPeer::TABLE_NAME);
 
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
 
 		if (!$criteria->hasSelectClause()) {
-			CoursePeer::addSelectColumns($criteria);
+			CourseSectionPeer::addSelectColumns($criteria);
 		}
 
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
@@ -587,14 +597,14 @@ abstract class BaseCoursePeer {
 		$criteria->setDbName(self::DATABASE_NAME);
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(array(CoursePeer::DEPT_ID,), array(DepartmentPeer::ID,), $join_behavior);
+		$criteria->addJoin(array(CourseSectionPeer::COURSE_ID,), array(CoursePeer::ID,), $join_behavior);
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doCount:doCount') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doCount:doCount') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $criteria, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $criteria, $con);
     }
 
 
@@ -610,21 +620,21 @@ abstract class BaseCoursePeer {
 	}
 
 	/**
-	 * Selects a collection of Course objects pre-filled with all related objects.
+	 * Selects a collection of CourseSection objects pre-filled with all related objects.
 	 *
 	 * @param      Criteria  $c
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Course objects.
+	 * @return     array Array of CourseSection objects.
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
 	public static function doSelectJoinAll(Criteria $c, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doSelectJoinAll:doSelectJoinAll') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doSelectJoinAll:doSelectJoinAll') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $c, $con);
+      call_user_func($callable, 'BaseCourseSectionPeer', $c, $con);
     }
 
 
@@ -635,49 +645,49 @@ abstract class BaseCoursePeer {
 			$c->setDbName(self::DATABASE_NAME);
 		}
 
+		CourseSectionPeer::addSelectColumns($c);
+		$startcol2 = (CourseSectionPeer::NUM_COLUMNS - CourseSectionPeer::NUM_LAZY_LOAD_COLUMNS);
+
 		CoursePeer::addSelectColumns($c);
-		$startcol2 = (CoursePeer::NUM_COLUMNS - CoursePeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + (CoursePeer::NUM_COLUMNS - CoursePeer::NUM_LAZY_LOAD_COLUMNS);
 
-		DepartmentPeer::addSelectColumns($c);
-		$startcol3 = $startcol2 + (DepartmentPeer::NUM_COLUMNS - DepartmentPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$c->addJoin(array(CoursePeer::DEPT_ID,), array(DepartmentPeer::ID,), $join_behavior);
+		$c->addJoin(array(CourseSectionPeer::COURSE_ID,), array(CoursePeer::ID,), $join_behavior);
 		$stmt = BasePeer::doSelect($c, $con);
 		$results = array();
 
 		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = CoursePeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = CoursePeer::getInstanceFromPool($key1))) {
+			$key1 = CourseSectionPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CourseSectionPeer::getInstanceFromPool($key1))) {
 				// We no longer rehydrate the object, since this can cause data loss.
 				// See http://propel.phpdb.org/trac/ticket/509
 				// $obj1->hydrate($row, 0, true); // rehydrate
 			} else {
-				$omClass = CoursePeer::getOMClass();
+				$omClass = CourseSectionPeer::getOMClass();
 
 				$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 				$obj1 = new $cls();
 				$obj1->hydrate($row);
-				CoursePeer::addInstanceToPool($obj1, $key1);
+				CourseSectionPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined Department rows
+			// Add objects for joined Course rows
 
-			$key2 = DepartmentPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = CoursePeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = DepartmentPeer::getInstanceFromPool($key2);
+				$obj2 = CoursePeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$omClass = DepartmentPeer::getOMClass();
+					$omClass = CoursePeer::getOMClass();
 
 
 					$cls = substr('.'.$omClass, strrpos('.'.$omClass, '.') + 1);
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					DepartmentPeer::addInstanceToPool($obj2, $key2);
+					CoursePeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Course) to the collection in $obj2 (Department)
-				$obj2->addCourse($obj1);
+				// Add the $obj1 (CourseSection) to the collection in $obj2 (Course)
+				$obj2->addCourseSection($obj1);
 			} // if joined row not null
 
 			$results[] = $obj1;
@@ -714,13 +724,13 @@ abstract class BaseCoursePeer {
 	 */
 	public static function getOMClass()
 	{
-		return CoursePeer::CLASS_DEFAULT;
+		return CourseSectionPeer::CLASS_DEFAULT;
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Course or Criteria object.
+	 * Method perform an INSERT on the database, given a CourseSection or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Course object containing data that is used to create the INSERT statement.
+	 * @param      mixed $values Criteria or CourseSection object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
 	 * @return     mixed The new primary key.
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -729,9 +739,9 @@ abstract class BaseCoursePeer {
 	public static function doInsert($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doInsert:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doInsert:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseCoursePeer', $values, $con);
+      $ret = call_user_func($callable, 'BaseCourseSectionPeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -740,13 +750,17 @@ abstract class BaseCoursePeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 		} else {
-			$criteria = $values->buildCriteria(); // build Criteria from Course object
+			$criteria = $values->buildCriteria(); // build Criteria from CourseSection object
+		}
+
+		if ($criteria->containsKey(CourseSectionPeer::ID) && $criteria->keyContainsValue(CourseSectionPeer::ID) ) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key ('.CourseSectionPeer::ID.')');
 		}
 
 
@@ -765,18 +779,18 @@ abstract class BaseCoursePeer {
 		}
 
 		
-    foreach (sfMixer::getCallables('BaseCoursePeer:doInsert:post') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doInsert:post') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $values, $con, $pk);
+      call_user_func($callable, 'BaseCourseSectionPeer', $values, $con, $pk);
     }
 
     return $pk;
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Course or Criteria object.
+	 * Method perform an UPDATE on the database, given a CourseSection or Criteria object.
 	 *
-	 * @param      mixed $values Criteria or Course object containing data that is used to create the UPDATE statement.
+	 * @param      mixed $values Criteria or CourseSection object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 * @throws     PropelException Any exceptions caught during processing will be
@@ -785,9 +799,9 @@ abstract class BaseCoursePeer {
 	public static function doUpdate($values, PropelPDO $con = null)
 	{
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doUpdate:pre') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doUpdate:pre') as $callable)
     {
-      $ret = call_user_func($callable, 'BaseCoursePeer', $values, $con);
+      $ret = call_user_func($callable, 'BaseCourseSectionPeer', $values, $con);
       if (false !== $ret)
       {
         return $ret;
@@ -796,7 +810,7 @@ abstract class BaseCoursePeer {
 
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		$selectCriteria = new Criteria(self::DATABASE_NAME);
@@ -804,10 +818,10 @@ abstract class BaseCoursePeer {
 		if ($values instanceof Criteria) {
 			$criteria = clone $values; // rename for clarity
 
-			$comparison = $criteria->getComparison(CoursePeer::ID);
-			$selectCriteria->add(CoursePeer::ID, $criteria->remove(CoursePeer::ID), $comparison);
+			$comparison = $criteria->getComparison(CourseSectionPeer::ID);
+			$selectCriteria->add(CourseSectionPeer::ID, $criteria->remove(CourseSectionPeer::ID), $comparison);
 
-		} else { // $values is Course object
+		} else { // $values is CourseSection object
 			$criteria = $values->buildCriteria(); // gets full criteria
 			$selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
 		}
@@ -818,31 +832,30 @@ abstract class BaseCoursePeer {
 		$ret = BasePeer::doUpdate($selectCriteria, $criteria, $con);
 	
 
-    foreach (sfMixer::getCallables('BaseCoursePeer:doUpdate:post') as $callable)
+    foreach (sfMixer::getCallables('BaseCourseSectionPeer:doUpdate:post') as $callable)
     {
-      call_user_func($callable, 'BaseCoursePeer', $values, $con, $ret);
+      call_user_func($callable, 'BaseCourseSectionPeer', $values, $con, $ret);
     }
 
     return $ret;
   }
 
 	/**
-	 * Method to DELETE all rows from the course table.
+	 * Method to DELETE all rows from the course_section table.
 	 *
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
 	public static function doDeleteAll($con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 		$affectedRows = 0; // initialize var to track total num of affected rows
 		try {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += CoursePeer::doOnDeleteCascade(new Criteria(CoursePeer::DATABASE_NAME), $con);
-			$affectedRows += BasePeer::doDeleteAll(CoursePeer::TABLE_NAME, $con);
+			$affectedRows += BasePeer::doDeleteAll(CourseSectionPeer::TABLE_NAME, $con);
 			$con->commit();
 			return $affectedRows;
 		} catch (PropelException $e) {
@@ -852,9 +865,9 @@ abstract class BaseCoursePeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Course or Criteria object OR a primary key value.
+	 * Method perform a DELETE on the database, given a CourseSection or Criteria object OR a primary key value.
 	 *
-	 * @param      mixed $values Criteria or Course object or primary key or array of primary keys
+	 * @param      mixed $values Criteria or CourseSection object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
 	 * @param      PropelPDO $con the connection to use
 	 * @return     int 	The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -865,20 +878,20 @@ abstract class BaseCoursePeer {
 	 public static function doDelete($values, PropelPDO $con = null)
 	 {
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
 		}
 
 		if ($values instanceof Criteria) {
 			// invalidate the cache for all objects of this type, since we have no
 			// way of knowing (without running a query) what objects should be invalidated
 			// from the cache based on this Criteria.
-			CoursePeer::clearInstancePool();
+			CourseSectionPeer::clearInstancePool();
 
 			// rename for clarity
 			$criteria = clone $values;
-		} elseif ($values instanceof Course) {
+		} elseif ($values instanceof CourseSection) {
 			// invalidate the cache for this single object
-			CoursePeer::removeInstanceFromPool($values);
+			CourseSectionPeer::removeInstanceFromPool($values);
 			// create criteria based on pk values
 			$criteria = $values->buildPkeyCriteria();
 		} else {
@@ -887,11 +900,11 @@ abstract class BaseCoursePeer {
 
 
 			$criteria = new Criteria(self::DATABASE_NAME);
-			$criteria->add(CoursePeer::ID, (array) $values, Criteria::IN);
+			$criteria->add(CourseSectionPeer::ID, (array) $values, Criteria::IN);
 
 			foreach ((array) $values as $singleval) {
 				// we can invalidate the cache for this single object
-				CoursePeer::removeInstanceFromPool($singleval);
+				CourseSectionPeer::removeInstanceFromPool($singleval);
 			}
 		}
 
@@ -904,39 +917,8 @@ abstract class BaseCoursePeer {
 			// use transaction because $criteria could contain info
 			// for more than one table or we could emulating ON DELETE CASCADE, etc.
 			$con->beginTransaction();
-			$affectedRows += CoursePeer::doOnDeleteCascade($criteria, $con);
-			
-				// Because this db requires some delete cascade/set null emulation, we have to
-				// clear the cached instance *after* the emulation has happened (since
-				// instances get re-added by the select statement contained therein).
-				if ($values instanceof Criteria) {
-					CoursePeer::clearInstancePool();
-				} else { // it's a PK or object
-					CoursePeer::removeInstanceFromPool($values);
-				}
 			
 			$affectedRows += BasePeer::doDelete($criteria, $con);
-
-			// invalidate objects in CourseCommentPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseCommentPeer::clearInstancePool();
-
-			// invalidate objects in CourseDetailPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseDetailPeer::clearInstancePool();
-
-			// invalidate objects in CourseSectionPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseSectionPeer::clearInstancePool();
-
-			// invalidate objects in CourseTypeAssociationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseTypeAssociationPeer::clearInstancePool();
-
-			// invalidate objects in CourseInstructorAssociationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseInstructorAssociationPeer::clearInstancePool();
-
-			// invalidate objects in CourseDisciplineAssociationPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			CourseDisciplineAssociationPeer::clearInstancePool();
-
-			// invalidate objects in ExamPeer instance pool, since one or more of them may be deleted by ON DELETE CASCADE rule.
-			ExamPeer::clearInstancePool();
 
 			$con->commit();
 			return $affectedRows;
@@ -947,92 +929,24 @@ abstract class BaseCoursePeer {
 	}
 
 	/**
-	 * This is a method for emulating ON DELETE CASCADE for DBs that don't support this
-	 * feature (like MySQL or SQLite).
-	 *
-	 * This method is not very speedy because it must perform a query first to get
-	 * the implicated records and then perform the deletes by calling those Peer classes.
-	 *
-	 * This method should be used within a transaction if possible.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      PropelPDO $con
-	 * @return     int The number of affected rows (if supported by underlying database driver).
-	 */
-	protected static function doOnDeleteCascade(Criteria $criteria, PropelPDO $con)
-	{
-		// initialize var to track total num of affected rows
-		$affectedRows = 0;
-
-		// first find the objects that are implicated by the $criteria
-		$objects = CoursePeer::doSelect($criteria, $con);
-		foreach ($objects as $obj) {
-
-
-			// delete related CourseComment objects
-			$c = new Criteria(CourseCommentPeer::DATABASE_NAME);
-			
-			$c->add(CourseCommentPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseCommentPeer::doDelete($c, $con);
-
-			// delete related CourseDetail objects
-			$c = new Criteria(CourseDetailPeer::DATABASE_NAME);
-			
-			$c->add(CourseDetailPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseDetailPeer::doDelete($c, $con);
-
-			// delete related CourseSection objects
-			$c = new Criteria(CourseSectionPeer::DATABASE_NAME);
-			
-			$c->add(CourseSectionPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseSectionPeer::doDelete($c, $con);
-
-			// delete related CourseTypeAssociation objects
-			$c = new Criteria(CourseTypeAssociationPeer::DATABASE_NAME);
-			
-			$c->add(CourseTypeAssociationPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseTypeAssociationPeer::doDelete($c, $con);
-
-			// delete related CourseInstructorAssociation objects
-			$c = new Criteria(CourseInstructorAssociationPeer::DATABASE_NAME);
-			
-			$c->add(CourseInstructorAssociationPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseInstructorAssociationPeer::doDelete($c, $con);
-
-			// delete related CourseDisciplineAssociation objects
-			$c = new Criteria(CourseDisciplineAssociationPeer::DATABASE_NAME);
-			
-			$c->add(CourseDisciplineAssociationPeer::COURSE_ID, $obj->getId());
-			$affectedRows += CourseDisciplineAssociationPeer::doDelete($c, $con);
-
-			// delete related Exam objects
-			$c = new Criteria(ExamPeer::DATABASE_NAME);
-			
-			$c->add(ExamPeer::COURSE_ID, $obj->getId());
-			$affectedRows += ExamPeer::doDelete($c, $con);
-		}
-		return $affectedRows;
-	}
-
-	/**
-	 * Validates all modified columns of given Course object.
+	 * Validates all modified columns of given CourseSection object.
 	 * If parameter $columns is either a single column name or an array of column names
 	 * than only those columns are validated.
 	 *
 	 * NOTICE: This does not apply to primary or foreign keys for now.
 	 *
-	 * @param      Course $obj The object to validate.
+	 * @param      CourseSection $obj The object to validate.
 	 * @param      mixed $cols Column name or array of column names.
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Course $obj, $cols = null)
+	public static function doValidate(CourseSection $obj, $cols = null)
 	{
 		$columns = array();
 
 		if ($cols) {
-			$dbMap = Propel::getDatabaseMap(CoursePeer::DATABASE_NAME);
-			$tableMap = $dbMap->getTable(CoursePeer::TABLE_NAME);
+			$dbMap = Propel::getDatabaseMap(CourseSectionPeer::DATABASE_NAME);
+			$tableMap = $dbMap->getTable(CourseSectionPeer::TABLE_NAME);
 
 			if (! is_array($cols)) {
 				$cols = array($cols);
@@ -1048,11 +962,11 @@ abstract class BaseCoursePeer {
 
 		}
 
-		$res =  BasePeer::doValidate(CoursePeer::DATABASE_NAME, CoursePeer::TABLE_NAME, $columns);
+		$res =  BasePeer::doValidate(CourseSectionPeer::DATABASE_NAME, CourseSectionPeer::TABLE_NAME, $columns);
     if ($res !== true) {
         $request = sfContext::getInstance()->getRequest();
         foreach ($res as $failed) {
-            $col = CoursePeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
+            $col = CourseSectionPeer::translateFieldname($failed->getColumn(), BasePeer::TYPE_COLNAME, BasePeer::TYPE_PHPNAME);
         }
     }
 
@@ -1062,25 +976,25 @@ abstract class BaseCoursePeer {
 	/**
 	 * Retrieve a single object by pkey.
 	 *
-	 * @param      string $pk the primary key.
+	 * @param      int $pk the primary key.
 	 * @param      PropelPDO $con the connection to use
-	 * @return     Course
+	 * @return     CourseSection
 	 */
 	public static function retrieveByPK($pk, PropelPDO $con = null)
 	{
 
-		if (null !== ($obj = CoursePeer::getInstanceFromPool((string) $pk))) {
+		if (null !== ($obj = CourseSectionPeer::getInstanceFromPool((string) $pk))) {
 			return $obj;
 		}
 
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria = new Criteria(CoursePeer::DATABASE_NAME);
-		$criteria->add(CoursePeer::ID, $pk);
+		$criteria = new Criteria(CourseSectionPeer::DATABASE_NAME);
+		$criteria->add(CourseSectionPeer::ID, $pk);
 
-		$v = CoursePeer::doSelect($criteria, $con);
+		$v = CourseSectionPeer::doSelect($criteria, $con);
 
 		return !empty($v) > 0 ? $v[0] : null;
 	}
@@ -1096,30 +1010,30 @@ abstract class BaseCoursePeer {
 	public static function retrieveByPKs($pks, PropelPDO $con = null)
 	{
 		if ($con === null) {
-			$con = Propel::getConnection(CoursePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+			$con = Propel::getConnection(CourseSectionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
 		$objs = null;
 		if (empty($pks)) {
 			$objs = array();
 		} else {
-			$criteria = new Criteria(CoursePeer::DATABASE_NAME);
-			$criteria->add(CoursePeer::ID, $pks, Criteria::IN);
-			$objs = CoursePeer::doSelect($criteria, $con);
+			$criteria = new Criteria(CourseSectionPeer::DATABASE_NAME);
+			$criteria->add(CourseSectionPeer::ID, $pks, Criteria::IN);
+			$objs = CourseSectionPeer::doSelect($criteria, $con);
 		}
 		return $objs;
 	}
 
-} // BaseCoursePeer
+} // BaseCourseSectionPeer
 
 // This is the static code needed to register the MapBuilder for this table with the main Propel class.
 //
-// NOTE: This static code cannot call methods on the CoursePeer class, because it is not defined yet.
-// If you need to use overridden methods, you can add this code to the bottom of the CoursePeer class:
+// NOTE: This static code cannot call methods on the CourseSectionPeer class, because it is not defined yet.
+// If you need to use overridden methods, you can add this code to the bottom of the CourseSectionPeer class:
 //
-// Propel::getDatabaseMap(CoursePeer::DATABASE_NAME)->addTableBuilder(CoursePeer::TABLE_NAME, CoursePeer::getMapBuilder());
+// Propel::getDatabaseMap(CourseSectionPeer::DATABASE_NAME)->addTableBuilder(CourseSectionPeer::TABLE_NAME, CourseSectionPeer::getMapBuilder());
 //
 // Doing so will effectively overwrite the registration below.
 
-Propel::getDatabaseMap(BaseCoursePeer::DATABASE_NAME)->addTableBuilder(BaseCoursePeer::TABLE_NAME, BaseCoursePeer::getMapBuilder());
+Propel::getDatabaseMap(BaseCourseSectionPeer::DATABASE_NAME)->addTableBuilder(BaseCourseSectionPeer::TABLE_NAME, BaseCourseSectionPeer::getMapBuilder());
 

@@ -29,6 +29,21 @@ propel:
     last_offered:      { type: date, required: false }
     course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
     
+  course_section:
+    _attributes:       { phpName: CourseSection }
+    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
+    section_type:      { type: integer, required: true, foreginTable: enum_item, foreignReference: id, index: true }
+    term:              { type: tinyint, required: true }
+    section_num:       { type: integer, required: true }
+    meeting_time:      { type: time, required: true, index: true }
+    
+  course_type_assoc:
+    _attributes:       { phpName: CourseTypeAssociation }
+    id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
+    type_id:           { type: integer, required: true, foreignTable: enum_item, foreignReference: id, index: true }
+    course_id:         { type: varchar(9), required: true, foreignTable: course, foreignReference: id, onDelete: cascade, index: true }
+    
   course_instructor_assoc:
     _attributes:       { phpName: CourseInstructorAssociation }
     id:                { type: integer, required: true, primaryKey: true, autoIncrement: true }
