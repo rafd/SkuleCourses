@@ -104,11 +104,11 @@ CREATE TABLE `course_section`
 	`section_type` INTEGER  NOT NULL,
 	`term` TINYINT  NOT NULL,
 	`section_num` INTEGER  NOT NULL,
-	`meeting_time` TIME  NOT NULL,
+	`meet_time` VARCHAR(11)  NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `course_section_I_1`(`course_id`),
 	KEY `course_section_I_2`(`section_type`),
-	KEY `course_section_I_3`(`meeting_time`),
+	KEY `course_section_I_3`(`meet_time`),
 	CONSTRAINT `course_section_FK_1`
 		FOREIGN KEY (`course_id`)
 		REFERENCES `course` (`id`)

@@ -53,6 +53,11 @@ class helperFunctions
     return $request->getCookie("username");
   }
 
+  
+  const WINTER = 1;
+  const SUMMER = 5;
+  const FALL = 9;
+  
   /**
    * Translates the raw database year into something more conventional
    *
@@ -65,17 +70,46 @@ class helperFunctions
     $term = substr($year, 4);
     switch ($term)
     {
-      case 1:
+      case self::WINTER:
         return $actYear." Winter";
-      case 5:
+      case self::SUMMER:
         return $actYear." Summer";
-      case 9:
+      case self::FALL:
         return $actYear." Fall";
       default:
         throw new Exception("unknown term");
     }
   }
+  
+  
+  const MONDAY = 1;
+  const TUESDAY = 2;
+  const WEDNESDAY = 3;
+  const THURSDAY = 4;
+  const FRIDAY = 5;
+  const SATURDAY = 6;
+  const SUNDAY = 7;
 
+  public static function translateWeekDayAbbrv($abbrv){
+    switch ($abbrv){
+      case "M":
+        return self::MONDAY;
+      case "T":
+        return self::TUESDAY;
+      case "W":
+        return self::WEDNESDAY;
+      case "R":
+        return self::THURSDAY;
+      case "F":
+        return self::FRIDAY;
+      case "S":
+        return self::SATURDAY;
+      case "U":
+        return self::SUNDAY;
+      default:
+        throw new Exception("unknown weekday");
+    }
+  }
 
   /**
    * Finds the mean value from an array, with indices being values and

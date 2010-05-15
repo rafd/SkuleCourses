@@ -36,7 +36,7 @@ propel:
     section_type:      { type: integer, required: true, foreginTable: enum_item, foreignReference: id, index: true }
     term:              { type: tinyint, required: true }
     section_num:       { type: integer, required: true }
-    meeting_time:      { type: time, required: true, index: true }
+    meet_time:         { type: varchar(11), required: true, index: true }
     
   course_type_assoc:
     _attributes:       { phpName: CourseTypeAssociation }
