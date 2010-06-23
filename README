@@ -18,7 +18,8 @@ Initial Configuration
 7. Delete all files and subdirectories under /cache
 8. Change php.ini max_upload_size and max_form_size to 10M, max_execution_time and 
 max_input_time to 900, max_file_uploads to 200
-9. Require third party (from skule.ca) screen.css in www/css, and images in
+9. Copy /doc/databases.yml and /doc/skuleGlobal.yml into /config
+10. Require third party (from skule.ca) screen.css in www/css, and images in
 www
 
 Gateways

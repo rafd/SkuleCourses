@@ -1,0 +1,18 @@
+# This config file is used to store custom skule parameters
+
+mail_notification:
+  sender_address:        engscipraxis@gmail.com
+  sender_ssl:            true
+  sender_smtp:           smtp.gmail.com
+  sender_username:       engscipraxis
+  sender_password:       JasonFoster
+  receiver:              {1:wildabyss@gmail.com}
+  
+global:
+  domain:                localhost
+  port:                  81
+  login_redirect:        www.skule.ca/login.php
+  
+applet_uploader:
+  username:              skule_uploader
+  password:              3kULE
