@@ -4,8 +4,8 @@ dev:
       classname:  DebugPDO
       hostspec:   localhost
       username:   root
-      password:   root
-      database:   skulecourses
+      password:   
+      database:   webdev_staging
       phptype:    mysql
 
 test:
@@ -18,9 +18,9 @@ all:
     class:        sfPropelDatabase
     param:
       classname:  PropelPDO
-      dsn:        mysql:dbname=skulecourses;host=localhost
+      dsn:        mysql:dbname=webdev_staging;host=localhost
       username:   root
-      password:   root
+      password:   
       encoding:   utf8
       persistent: true
       pooling:    true
