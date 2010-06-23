@@ -6,7 +6,7 @@ mail_notification:
   sender_smtp:           smtp.gmail.com
   sender_username:       engscipraxis
   sender_password:       JasonFoster
-  receiver:              {1:wildabyss@gmail.com}
+  receiver:              {1:mail4alberto@gmail.com}
   
 global:
   domain:                localhost

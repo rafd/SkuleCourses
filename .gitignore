@@ -13,3 +13,4 @@ www/exams/custom/**/*
 www/images/**/*
 www/images/*
 www/css/screen.css
+config/database.yml
