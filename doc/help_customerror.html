@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="help.css" />
+	<title>Skule Courses Development Documentation</title>
+</head>
+
+<body>
+	<h2>Custom Error Handling</h2>
+	<p>There are two types of errors that the site can catch: a 404 resource not found error, or a 500
+	internal error. A 404 error happens when a URL was not formatted correctly; or in the case of a scripting
+	environment like PHP, 404 is usually the intentional redirect result of missing URL parameters.
+	A 500 error, on the other hand, is usually the result of a PHP error, warning or logical error. Although Symfony catches
+	known exceptions (Exception objects only), the default way of PHP error handling is to hang the app and display
+	the line where the error occurred. This is obviously not satisfactory as it exposes security vulnerabilities
+	as well as being unaesthetic.</p>
+	
+	<p>The custom error handling, as a result, attempts to accomplish the following:</p>
+	<ol>
+		<li>Have a generic, non-threatening message when a script fails</li>
+		<li>Hide the default PHP error handling so that no source code is leaked out</li>
+		<li>Email notify everyone on the mailing list (as specified in skuleGlobal) so that the problem could be fixed in a timely fashion</li>
+	</ol>
+	
+	<p>The error is trapped only in the production environment. In the index.php (or any other app's production entry point), the following
+	is necessary to trap the error:</p>
+	<div class="box">
+		$old_error_handler = set_error_handler("skuleErrorHandler");<br />
+		register_shutdown_function('skuleShutdown');
+	</div>
+	
+	<p>The function skuleShutdown is defined in the same file:</p>
+	<div class="box">
+		function skuleShutdown()<br />
+		{<br />
+		  &nbsp;&nbsp;if ($error = error_get_last()){<br />
+		    &nbsp;&nbsp;&nbsp;&nbsp;if ($error['type'] == E_ERROR)<br />
+		      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;helperFunctions::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);<br />
+		    &nbsp;&nbsp;}<br />
+		}<br />
+	</div>
+	
+	<p>And the function skuleErrorHandler is defined as follows:</p>
+	<div class="box">
+		function skuleErrorHandler($errno, $errstr, $errfile, $errline)<br/>
+		{<br/>
+		  &nbsp;&nbsp;helperFunctions::errorHandler($errno, $errstr, $errfile, $errline);<br/>
+		<br/>
+		  &nbsp;&nbsp;/* Don't execute PHP internal error handler */<br/>
+		  &nbsp;&nbsp;return true;<br/>
+		}<br/>
+	</div>
+	
+	<p>In helperFunctions, the method errorHandler registers the error and does the email messaging.</p>
+</body>
+
+</html>

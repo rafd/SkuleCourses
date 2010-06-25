@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="help.css" />
+	<title>Skule Courses Development Documentation</title>
+</head>
+
+<body>
+	<h2>Database and Propel Models</h2>
+	
+	<p>Propel is an object relational modeler for Relational Database Management System (RDBMS), such as MySQL. Propel extends
+	from the native PHP Database Objects (PDO) to create a databse abstraction layer for Symfony. By using the database objects,
+	instead of writing native SQL code, the application is much more robust and flexible.</p>
+	
+	<p>To facilitate database creation and management, the database structure is defined in a single yml file: /config/schema.yml.
+	The Propel models are generated through the following command:</p>
+	<div class="box">symfony propel:build-model</div>
+	<p>You can also generate the SQL script necessary to create the actual tables in the database through:</p>
+	<div class="box">symfony propel:build-sql</div>
+	
+	<p>For each table, Propel generates a base class, stored in the <i>om</i> directory. Customized classes are also created inheriting
+	the base classes. Note that the base classes are automatically overwritten each time with the model generation, while the customized classes
+	are not. A peer class is also generated with each table. Peer can be considered as a factory class and all static methods relating to 
+	the table class should be put in there instead of in the table class itself.</p>
+	
+	<p>The following are the tables and their associated models in Skule Courses:</p>
+	
+	<ul>
+		<li><b>enum_item (class EnumItem)</b> 
+		<p>Consists of system data vital for system functionality. Each row is indexed by an id and a parent_id. The data in this table should not be lightly modified, added or deleted.</p>
+		</li>
+		<li><b>course (class Course)</b>
+		<p>Contains basic course data, ID'ed by the varchar course code (e.g. AER301H1)</p>
+		</li>
+		<li><b>course_detail (class CourseDetail)</b>
+		<p>Contains detailed course info. 1-to-1 with course</p>
+		</li>
+		<li><b>course_section (class CourseSection)</b>
+		<p>Contains information about course sections (e.g. section 0101)</p>
+		</li>
+		<li><b>course_type_assoc (class CourseTypeAssociation)</b>
+		<p>A many-to-many table linking courses and types (e.g. Life Sci, Humanity, CS)</p>
+		</li>
+		<li><b>instructor (class Instructor)</b>
+		<p>Contains basic instructor data</p>
+		</li>
+		<li><b>department (class Department)</b>
+		<p>(e.g. id=AER, descr=Institute of Aerospace Studies)</p>
+		</li>
+		<li><b>discipline (class Discipline)</b>
+		<p>(e.g. id=1, descr=Engineering Science)</p>
+		</li>
+		<li><b>course_instructor_assoc (class CourseInstructorAssociation)</b>
+		<p>a many-to-many table linking courses and instructors</p>
+		</li>
+		<li><b>course_discipline_assoc (class CourseDisciplineAssociation)</b>
+		<p>a many-to-many table linking courses and disciplines</p>
+		</li>
+		<li><b>exam (class Exam)</b>
+		<p>a many-to-1 table against course storing the exam information, including their physical locations</p>
+		</li>
+		<li><b>course_comment (class CourseComment)</b>
+		<p>users' comments on the courses</p>
+		</li>
+		<li><b>rating_field (class RatingField)</b>
+		<p>Contain a list of questions used in course critiques (e.g. The instructor's enthusiasm to the presentation of the course materials is…)</p>
+		</li>
+		<li><b>auto_course_rating (class AutoCourseRating)</b>
+		<p>Contains the actual course critique data</p>
+		</li>
+		<li><b>import_mapping (class ImportMapping)</b>
+		<p>This table maps system data types to the import file's columns. Can be used on multiple import file types</p>
+		</li>
+		<li><b>user (class User)</b>
+		<p>ID'ed by username and contains users of varying privileges</p>
+		</li>
+	</ul>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Skule Courses Development Documentation</title>
+	<link rel="stylesheet" type="text/css" href="help.css" />
+</head>
+
+<body>
+	<h2>SwiftMailer Code Snippet</h2>
+	
+	<div class="box" style="width:inherit">
+		$connection = new Swift_Connection_SMTP($mailNotificationParams['sender_smtp'], 465, Swift_Connection_SMTP::ENC_SSL));<br />
+		$connection->setUsername("username");<br />
+		$connection->setPassword("password);<br />
+		<br />
+		$mailer = new Swift($connection);<br />
+		$message = new Swift_Message("A test msg", "Hello world!");<br />
+		<br />
+		$recipients = new Swift_RecipientList();<br />
+		$recipients->addTo("test_recipient@test.com");<br />
+		<br />
+		$mailer->send($message, $recipients, "test_sender@test.com);<br />
+		$mailer->disconnect();<br />
+	</div>
+
+</body>
+
+</html>

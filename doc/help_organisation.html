@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="help.css" />
+	<title>Skule Courses Development Documentation</title>
+</head>
+
+<body>
+	<h2>Organisation of the Skule Courses Code Base</h2>
+	<p>The following are the root directory structure of the code base.
+	If it is not familiar to you, refer to the section on <a href="help_php.html">PHP and Symfony.</a></p>
+	
+	<h3>config</h3>
+	<ul>
+		<li>
+			<b>databases.yml</b>
+			<p>The database settings are in this file. You need to change the dbname, username and password
+			to your local settings, or to the staging/production server settings.</p>
+		</li>
+		<li>
+			<b>skuleGlobal.yml</b>
+			<p>This file stores all the global settings to be used in the apps. Currently, the file is split
+			into three sections:</p>
+			<ol>
+				<li><b>mail_notification:</b> in the production environment of the courses app, a mail notification is sent
+				every time a PHP error occurs. In both the development and production environment, a mail notification is sent
+				every time a comment or exam has been submitted. Change sender/receiver parameters to suit the circumstances.</li>
+				<li><b>global:</b> Currently not in use by any app.</li>
+				<li><b>applet_uploader: </b>Sets the authentication for the Java Applet based multifile uploader used in adminexam by
+				the courses app.</li>
+			</ol>
+		</li>
+	</ul>
+	
+	<h3>lib</h3>
+	<ul>
+		<li>
+			<b>model</b>
+			<p>This directory stores the Propel database models. The <i>om</i> and <i>map</i> directories are automatically generated
+			by Propel and therefore should not be modified. All other files under this directory are inherited from the <i>base</i>
+			classes and can be customized to suit the development needs.</p>
+			<p>Refer to the section on <a href="help_database.html">Skule Courses Database Layer</a> if you are unfamiliar with the database organization.</p>
+		</li>
+		<li>
+			<b>SwiftMailer</b>
+			<p>This is a third party package used for sending mails through SMTP. SwiftMailer supports ttl and ssl.</p>
+			<p>See <a href="help_swiftmailer.html">here</a> for a sample snippet on how to use SwiftMailer to send an email.</p>
+		</li>
+		<li>
+			<b>functions.class.php</b>
+			<p>This class only contains static methods. These methods are all used to facilitate the development of Skule Courses
+			globally, serving as helper functions.</p>
+		</li>
+		<li>
+			<b>skuleGlobalConfigHandler.php</b>
+			<p>Defines how skuleGlobal.yml should be interpreted.</p>
+		</li>
+	</ul>
+</body>
+
+</html>
