@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="help.css" />
+	<title>Skule Courses Development Documentation</title>
+</head>
+
+<body>
+	<h2>SkuleScheduler High-Level Concept</h2>
+	The entire project can be classed into two completely separate processes:
+	<ol>
+		<li><a href="help_scheduler_data.html">Data gathering</a></li>
+		<li>Course filtering and decision making</li>
+	</ol>
+	
+	<p>The data for course sections and their meeting times must be gathered ahead of time
+	and stored in the database to allow the filtering process to work. The data gathering
+	is done by parsing the sections/meeting time data through the UT academic calendar websites.
+	Because each professional school/campus has its own calendar (e.g. Engineering, Arts and Science, etc.),
+	multiple parsing formats are required. The data gathering is expected to be done automatically, periodically
+	and regularly.</p>
+	
+	<p>Assuming that the data have been properly gathered, users must be able to obtain the results
+	through some filtering and displaying process. Since a user is assumed to have a core time table
+	comprising of the courses that are mandatory or already chosen, it is more efficient if
+	the program can filter out as many incompatible courses as possible without the inclusion
+	of additional user defined constraints.</p>
+	
+	<p>As a result, the filtering process is separated into two components: <a href="help_scheduler_filteringserver.html">the server-side filtering</a>
+	and <a href="help_scheduler_filteringclient.html">the client-side filtering</a>. The server-side filtering passes only the course data that are compatible
+	with the core time table to the client-side, while the client-side filtering works in Javascript
+	to meet the mutable user defined constraints.</p>
+</body>
+
+</html>
